@@ -1,0 +1,17 @@
+
+
+// Variables
+@import "variables";
+
+// Bootstrap
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+//Font-awesome
+@import "node_modules/font-awesome/scss/font-awesome.scss";
+//弹出层组件
+@import "node_modules/sweetalert/dev/sweetalert";
+//select2
+@import "node_modules/select2/src/scss/core.scss";
+
+//style.scss
+@import "style";
