@@ -22,3 +22,17 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
         'remember_token' => str_random(10),
     ];
 });
+
+
+//商品测试数据插入
+$factory->define(App\Models\Goods::class, function (Faker\Generator $faker) {
+    return [
+        'name' => '测试商品插入',
+        'price' => '99.99',
+        'image' => 'http://iph.href.lu/1000x1000',
+        'sm_image' => 'http://iph.href.lu/50x40',
+        'mid_image' => 'http://iph.href.lu/200x150',
+        'big_image' => 'http://iph.href.lu/500x400',
+        'category_id' => 1,
+    ];
+});

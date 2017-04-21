@@ -11,6 +11,10 @@
 |
 */
 
+Route::get('/test', function (){
+
+});
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -35,13 +39,17 @@ Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.ad
 //        dd(auth('admin')->user()->hasRole('admin'));
         return view('admin.index');
     });
+
+    //商品管理区域
+    Route::resource('goods', 'GoodsController');
+
     //权限管理
 //    Route::get('/permission/get_nest_perm_list','PermissionController@getNestPermList')->name('menu.index');
-    Route::resource('permission','PermissionController');
+    Route::resource('permissions','PermissionController');
     //角色管理
-    Route::get('/role/dt_roles','RoleController@DtRoles')->name('role.index');
-    Route::resource('role','RoleController');
+    Route::get('/roles/dt_roles','RoleController@DtRoles')->name('role.index');
+    Route::resource('roles','RoleController');
     //管理员管理
-    Route::get('/admin/dt_admins','AdminController@DtAdmins')->name('admin.index');;
-    Route::resource('admin','AdminController');
+    Route::get('/admins/dt_admins','AdminController@DtAdmins')->name('admin.index');;
+    Route::resource('admins','AdminController');
 });

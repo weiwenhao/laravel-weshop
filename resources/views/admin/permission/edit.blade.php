@@ -22,7 +22,7 @@
 
                 </div>
             </div>
-            <form action="{{ url('/admin/permission/'.$perm->id) }}" method="post" class="form-horizontal">
+            <form action="{{ url('/admin/permissions/'.$perm->id) }}" method="post" class="form-horizontal">
                 <div class="box-body">
                     <div class="col-md-10 col-md-offset-1" >
                         {{ csrf_field() }}
@@ -108,7 +108,7 @@
                             <div class="form-group {{ $errors->has('name')?'has-error':'' }}">
                                 <label class="col-md-3 control-label" for="inputError">权限值</label>
                                 <div class="col-md-6">
-                                    <input type="text" name="name" value="{{ old('name', $perm->name) }}" class="form-control" id="inputError" placeholder="例:  role.list 用于菜单高亮, 并且还会和路由名称进行判断.">
+                                    <input type="text" name="name" value="{{ old('name', $perm->name) }}" class="form-control" id="inputError" placeholder="例:前缀请使用复数形式  roles.list 用于菜单高亮, 并且还会和路由名称进行判断.">
                                     @if($errors->has('name'))
                                         <span class="help-block">{{ $errors->first('name') }}</span>
                                     @endif
@@ -155,7 +155,7 @@
                             <div class="form-group {{ $errors->has('name')?'has-error':'' }}">
                                 <label class="col-md-3 control-label" for="inputError">权限值</label>
                                 <div class="col-md-6">
-                                    <input type="text" name="name" value="{{ old('name', $perm->name) }}" class="form-control" id="inputError" placeholder="例: role.create   role.edit   role.destroy">
+                                    <input type="text" name="name" value="{{ old('name', $perm->name) }}" class="form-control" id="inputError" placeholder="前缀请使用复数形式 例: roles.create   roles.edit   roles.destroy">
                                     @if($errors->has('name'))
                                         <span class="help-block">{{ $errors->first('name') }}</span>
                                     @endif
@@ -176,7 +176,7 @@
                 <!-- /.box-body -->
                 <div class="box-footer">
                     <div class="col-md-2 col-md-offset-4">
-                        <a href="{{ url('/admin/permission') }}" class="btn btn-block btn-default btn-flat">返回</a>
+                        <a href="{{ url('/admin/permissions') }}" class="btn btn-block btn-default btn-flat">返回</a>
                     </div>
                     <div class="col-md-2">
                         <button type="submit" class="btn btn-block btn-primary btn-flat">提交</button>

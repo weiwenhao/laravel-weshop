@@ -17,11 +17,11 @@
     {{--继承css--}}
     @yield('css')
 
-    <!-- Theme style -->
-    <link rel="stylesheet" href="/back/css/AdminLTE.min.css">
+    {{--<!-- Theme style -->
+    <link rel="stylesheet" href="/back/css/AdminLTE.min.css">--}}
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="/back/css/skins/_all-skins.min.css">
+    {{--<link rel="stylesheet" href="/back/css/skins/_all-skins.min.css">--}}
     <script>
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
@@ -199,6 +199,17 @@
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-check"></i> {{ session('success') }}</h4>
+            </div>
+        @elseif(session('error'))
+            <div class="alert alert-warning alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-warning"></i> {{ session('error') }}</h4>
+            </div>
+        @endif
         @yield('content')
     </div>
     <!-- /.content-wrapper -->
@@ -221,19 +232,10 @@
 </div>
 <!-- ./wrapper -->
 
-<!-- jQuery 2.2.3 -->
-<script src="/plugins/jQuery/jquery-2.2.3.min.js"></script>
-<!-- Bootstrap 3.3.6 -->
-<script src="/bootstrap/js/bootstrap.min.js"></script>
-<!-- SlimScroll -->
-<script src="/plugins/slimScroll/jquery.slimscroll.min.js"></script>
-<!-- FastClick -->
-<script src="/plugins/fastclick/fastclick.js"></script>
-<!-- AdminLTE App -->
-<script src="/back/js/app.min.js"></script>
-<script src="/back/js/demo.js"></script>
+
 {{--webpack打包js--}}
 <script src="{{ mix('/js/admin.js') }}"></script>
+
 <script>
     /**
      * 菜单高亮

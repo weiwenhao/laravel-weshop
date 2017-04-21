@@ -61,9 +61,9 @@ class AdminController extends Controller
     {
         $res = $this->admin->create($request->all());
         if(!$res)
-            return redirect('/admin/admin/create')->withError('系统错误,添加失败')->withInput();
+            return redirect('/admin/admins/create')->withError('系统错误,添加失败')->withInput();
         $res->roles()->attach($request->get('role_ids'));
-        return redirect('/admin/admin')->withSuccess('添加成功');
+        return redirect('/admin/admins')->withSuccess('添加成功');
     }
 
     /**
@@ -109,10 +109,10 @@ class AdminController extends Controller
         $res = $admin->save();
 
         if(!$res)
-            return redirect('/admin/admin/'.$id.'/edit')->withError('系统错误,修改失败')->withInput();
+            return redirect('/admin/admins/'.$id.'/edit')->withError('系统错误,修改失败')->withInput();
         //进行中间表的修改
         $admin->roles()->sync($request->get('role_ids',[]));
-        return redirect('/admin/admin')->withSuccess('修改成功');
+        return redirect('/admin/admins')->withSuccess('修改成功');
     }
 
     /**

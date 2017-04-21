@@ -7,22 +7,11 @@
 @section('content')
     <!-- Main content -->
     <section class="content">
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <h4><i class="icon fa fa-check"></i> {{ session('success') }}</h4>
-            </div>
-        @elseif(session('error'))
-            <div class="alert alert-warning alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <h4><i class="icon fa fa-warning"></i> {{ session('error') }}</h4>
-            </div>
-        @endif
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title">权限列表</h3>
                 <div class="box-tools pull-right">
-                    <a href="{{ url('/admin/permission/create') }}" class="btn bg-olive" title="Collapse">
+                    <a href="{{ url('/admin/permissions/create') }}" class="btn bg-olive" title="Collapse">
                         <i class="fa fa-plus"></i>
                     </a>
                 </div>
@@ -42,8 +31,8 @@
                             <td>{{ $perm->id }}</td>
                             <td>{{ str_repeat('- - - - | ',$perm->level).$perm->display_name }}</td>
                             <td>
-                                <a href="{{ url('/admin/permission/'.$perm->id.'/edit') }}" class="btn btn-info"><i class="fa fa-edit"></i></a>
-                                <form action="{{ url('/admin/permission/'.$perm->id) }}" method="post" style="display: inline">
+                                <a href="{{ url('/admin/permissions/'.$perm->id.'/edit') }}" class="btn btn-info"><i class="fa fa-edit"></i></a>
+                                <form action="{{ url('/admin/permissions/'.$perm->id) }}" method="post" style="display: inline">
                                     {{ csrf_field() }} {{ method_field('delete') }}
                                     <button type="submit" class="btn btn-danger" onclick="javascript:return confirm('该权限的子权限将一并删除, 你确定要删除该权限吗?')">
                                         <i class="fa  fa-trash"></i>

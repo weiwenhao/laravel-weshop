@@ -1,7 +1,5 @@
 @extends('admin.layouts.layout')
 @section('css')
-    <!-- Select2 -->
-    <link rel="stylesheet" href="/plugins/select2/select2.min.css">
     <style>
 
     </style>
@@ -24,7 +22,7 @@
                    {{--todo--}}
                 </div>
             </div>
-            <form class="form-horizontal" role="form" method="POST" action="/admin/admin/{{ $admin->id }}">
+            <form class="form-horizontal" role="form" method="POST" action="/admin/admins/{{ $admin->id }}">
                 <div class="box-body">
                     <div class="col-md-10 col-md-offset-1">
                         {{ csrf_field() }}
@@ -101,7 +99,7 @@
                 <!-- /.box-body -->
                 <div class="box-footer">
                     <div class="col-md-2 col-md-offset-4">
-                        <a href="{{ url('/admin/admin') }}" class="btn btn-block btn-default btn-flat">返回</a>
+                        <a href="{{ url('/admin/admins') }}" class="btn btn-block btn-default btn-flat">返回</a>
                     </div>
                     <div class="col-md-2">
                         <button type="submit" class="btn btn-block btn-primary btn-flat">提交</button>
@@ -117,8 +115,6 @@
     <!-- /.content -->
 @stop
 @section('js')
-    <!-- Select2 -->
-    <script src="/plugins/select2/select2.full.min.js"></script>
     <script>
         $(".select2").select2();
     </script>

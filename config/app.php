@@ -179,8 +179,6 @@ return [
 
         //ide-helper
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-        //browser-debug
-        Barryvdh\Debugbar\ServiceProvider::class,
         //entrust
         Zizaco\Entrust\EntrustServiceProvider::class,
         //datatables
@@ -189,7 +187,10 @@ return [
         App\Providers\ComposerServiceProvider::class,
         //导航高亮
         HieuLe\Active\ActiveServiceProvider::class,
-
+        //wechat
+        Overtrue\LaravelWechat\ServiceProvider::class,
+        //ue
+        Overtrue\LaravelUEditor\UEditorServiceProvider::class,
     ],
 
     /*
@@ -238,9 +239,9 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
         'Active' => HieuLe\Active\Facades\Active::class,
+        'EasyWeChat' => Overtrue\LaravelWechat\Facade::class,
     ],
 
 ];

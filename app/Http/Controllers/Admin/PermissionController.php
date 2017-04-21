@@ -78,10 +78,10 @@ class PermissionController extends Controller
         }*/
 
         if(!$perm)
-            return redirect('/admin/permission/create')->withInput()->with('error', '系统错误，添加失败');
+            return redirect('/admin/permissions/create')->withInput()->with('error', '系统错误，添加失败');
         \Cache::forget('perm_list');
         \Cache::forget('nest_perm_list');
-        return redirect('/admin/permission')->withSuccess('添加成功');
+        return redirect('/admin/permissions')->withSuccess('添加成功');
     }
 
     /**
@@ -120,10 +120,10 @@ class PermissionController extends Controller
     {
         $res = $this->permission->update($request->all(), $id);
         if (!$res)
-            return redirect('/admin/permission/'.$id.'/edit')->withInput()->withError('系统错误，修改失败');
+            return redirect('/admin/permissions/'.$id.'/edit')->withInput()->withError('系统错误，修改失败');
         \Cache::forget('perm_list');//刷新缓存
         \Cache::forget('nest_perm_list');
-        return redirect('/admin/permission')->withSuccess('修改成功');
+        return redirect('/admin/permissions')->withSuccess('修改成功');
     }
 
     /**
@@ -141,10 +141,10 @@ class PermissionController extends Controller
         $perm_child_ids = $this->permission->getChildPermIds($id);
         $res = $this->permission->delete($perm_child_ids); //返回删除的记录数
         if(!$res){
-            return redirect('/admin/permission')->withError('系统错误,删除失败');
+            return redirect('/admin/permissions')->withError('系统错误,删除失败');
         }
         \Cache::forget('perm_list');
         \Cache::forget('nest_perm_list');
-        return redirect('/admin/permission')->withSuccess('删除成功');
+        return redirect('/admin/permissions')->withSuccess('删除成功');
     }
 }

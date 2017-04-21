@@ -8,6 +8,21 @@ window.axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest'
 };
 
+window.$ = window.jQuery = require('jquery');
+
+
+require('bootstrap-sass');
+//弹出层组件
+require('sweetalert');
+require('select2')
+//日期选择控件
+// require('laydate')
+
+//adminlet后台
+require('./admin/fastclick')
+require('./admin/jquery.slimscroll')
+require('./admin/app')
+require('./admin/demo')
 
 
 // 引入element组件库

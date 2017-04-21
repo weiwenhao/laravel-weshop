@@ -22,7 +22,7 @@
 
                 </div>
             </div>
-            <form action="{{ url('/admin/permission') }}" method="post" class="form-horizontal">
+            <form action="{{ url('/admin/permissions') }}" method="post" class="form-horizontal">
             <div class="box-body">
                 <div class="col-md-10 col-md-offset-1" >
                         {{ csrf_field() }}
@@ -75,7 +75,7 @@
                         <div class="form-group {{ $errors->has('sort')?'has-error':'' }}">
                             <label class="col-md-3 control-label" for="inputError">权重</label>
                             <div class="col-md-6">
-                                <input type="text" name="sort" value="{{ old('sort',100) }}" class="form-control" id="inputError" placeholder="">
+                                <input type="text" name="sort" value="{{ old('sort',100) }}" class="form-control" id="inputError" placeholder="数值越小越靠前">
                                 @if($errors->has('sort'))
                                     <span class="help-block">{{ $errors->first('sort') }}</span>
                                 @endif
@@ -104,7 +104,7 @@
                         <div class="form-group {{ $errors->has('name')?'has-error':'' }}">
                             <label class="col-md-3 control-label" for="inputError">权限值</label>
                             <div class="col-md-6">
-                                <input type="text" name="name" value="{{ old('name') }}" class="form-control" id="inputError" placeholder="例:  role.list">
+                                <input type="text" name="name" value="{{ old('name') }}" class="form-control" id="inputError" placeholder="前缀请使用复数形式 例:  roles.list ">
                                 @if($errors->has('name'))
                                     <span class="help-block">{{ $errors->first('name') }}</span>
                                 @endif
@@ -122,7 +122,7 @@
                         <div class="form-group {{ $errors->has('sort')?'has-error':'' }}">
                             <label class="col-md-3 control-label" for="inputError">权重</label>
                             <div class="col-md-6">
-                                <input type="text" name="sort" value="{{ old('sort',100) }}" class="form-control" id="inputError" placeholder="">
+                                <input type="text" name="sort" value="{{ old('sort',100) }}" class="form-control" id="inputError" placeholder="数值越小越靠前">
                                 @if($errors->has('sort'))
                                     <span class="help-block">{{ $errors->first('sort') }}</span>
                                 @endif
@@ -151,7 +151,7 @@
                         <div class="form-group {{ $errors->has('name')?'has-error':'' }}">
                             <label class="col-md-3 control-label" for="inputError">权限值</label>
                             <div class="col-md-6">
-                                <input type="text" name="name" value="{{ old('name') }}" class="form-control" id="inputError" placeholder="例: role.create   role.edit   role.destroy">
+                                <input type="text" name="name" value="{{ old('name') }}" class="form-control" id="inputError" placeholder="例:前缀请使用复数形式 例: roles.create   roles.edit   roles.destroy">
                                 @if($errors->has('name'))
                                     <span class="help-block">{{ $errors->first('name') }}</span>
                                 @endif
@@ -172,7 +172,7 @@
             <!-- /.box-body -->
             <div class="box-footer">
                 <div class="col-md-2 col-md-offset-4">
-                    <a href="{{ url('/admin/permission') }}" class="btn btn-block btn-default btn-flat">返回</a>
+                    <a href="{{ url('/admin/permissions') }}" class="btn btn-block btn-default btn-flat">返回</a>
                 </div>
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-block btn-primary btn-flat">提交</button>
@@ -196,8 +196,10 @@
         created(){
 
         },
+
         methods : {
             changeForm(){
+                 console.log(123);
                  var level = $('#select option:selected').attr('level')*1 + 1;
                  this.level[0] = false;
                  for (let i=0;i < this.level.length; i++){

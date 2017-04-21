@@ -12,92 +12,156 @@ class PermissionsTableSeeder extends Seeder
      */
     public function run()
     {
-        /**
-         * RABC
-         */
-        $rabc = Permission::create([
-            'name' => 'dash',
-            'display_name' => '控制台',
-            'icon' => 'fa-unlock',
-            'description' => '控制台',
+        /*商品管理*/
+        //一级
+        $shop_admin =  Permission::create([
+            'name' => 'shop_admin',
+            'display_name' => '商品管理',
+            'icon' => 'fa-shopping-cart',
+            'sort' => 60,
+        ]);
+        //二级
+        $goods = Permission::create([
+            'name' => 'goods.list',
+            'display_name' => '商品列表',
+            'url' => 'goods',
+            'parent_id' => $shop_admin->id,
+            'description' => '商品列表',
+        ]);
+        //三级
+        Permission::create([
+            'name' => 'goods.create',
+            'display_name' => '添加商品',
+            'parent_id' => $goods->id,
+            'description' => '添加商品',
+        ]);
+        Permission::create([
+            'name' => 'goods.edit',
+            'display_name' => '修改商品',
+            'parent_id' => $goods->id,
+            'description' => '修改商品',
+        ]);
+        Permission::create([
+            'name' => 'goods.destroy',
+            'display_name' => '删除商品',
+            'parent_id' => $goods->id,
+            'description' => '删除商品',
         ]);
 
+
+
+
+
+        /**
+         * 控制台系列
+         */
+        //顶级
+        $dash =  Permission::create([
+            'name' => 'dash',
+            'display_name' => '控制台',
+            'icon' => 'fa-dashboard',
+            'sort' => 50,
+        ]);
+        //二级
+        Permission::create([
+            'name' => 'index',
+            'display_name' => '主页',
+            'url' => 'index',
+            'parent_id' => $dash->id,
+            'description' => '后台首页,主控制台',
+        ]);
+
+
+
+
+
+
+
+        /**
+         * 系统设置
+         */
+        $site = Permission::create([
+            'name' => 'dash',
+            'display_name' => '系统设置',
+            'icon' => 'fa-cog',
+            'description' => '系统设置',
+        ]);
         /**
          * 角色管理
          */
         $admin = Permission::create([
-            'name' => 'admin.list',
+            'name' => 'admins.list',
             'display_name' => '用户列表',
-            'url' => 'admin',
-            'parent_id' => $rabc->id,
+            'url' => 'admins',
+            'parent_id' => $site->id,
             'description' => '用户列表',
         ]);
         Permission::create([
-            'name' => 'admin.create',
+            'name' => 'admins.create',
             'display_name' => '添加用户',
             'parent_id' => $admin->id,
             'description' => '添加用户',
         ]);
         Permission::create([
-            'name' => 'admin.edit',
+            'name' => 'admins.edit',
             'display_name' => '修改用户',
             'parent_id' => $admin->id,
             'description' => '修改用户',
         ]);
         Permission::create([
-            'name' => 'admin.destroy',
+            'name' => 'admins.destroy',
             'display_name' => '删除用户',
             'parent_id' => $admin->id,
             'description' => '删除用户',
         ]);
 
         $role = Permission::create([
-            'name' => 'role.list',
+            'name' => 'roles.list',
             'display_name' => '角色列表',
-            'url' => 'role',
-            'parent_id' => $rabc->id,
+            'url' => 'roles',
+            'parent_id' => $site->id,
             'description' => '角色列表',
         ]);
         Permission::create([
-            'name' => 'role.create',
+            'name' => 'roles.create',
             'display_name' => '添加角色',
             'parent_id' => $role->id,
             'description' => '添加角色',
         ]);
         Permission::create([
-            'name' => 'role.edit',
+            'name' => 'roles.edit',
             'display_name' => '修改角色',
             'parent_id' => $role->id,
             'description' => '修改角色',
         ]);
         Permission::create([
-            'name' => 'role.destroy',
+            'name' => 'roles.destroy',
             'display_name' => '删除角色',
             'parent_id' => $role->id,
             'description' => '删除角色',
         ]);
 
         $perm = Permission::create([
-            'name' => 'permission.list',
+            'name' => 'permissions.list',
             'display_name' => '权限列表',
-            'url' => 'permission',
-            'parent_id' => $rabc->id,
+            'url' => 'permissions',
+            'parent_id' => $site->id,
             'description' => '权限列表',
         ]);
         Permission::create([
-            'name' => 'permission.create',
+            'name' => 'permissions.create',
             'display_name' => '添加权限',
             'parent_id' => $perm->id,
             'description' => '添加权限',
         ]);
         Permission::create([
-            'name' => 'permission.edit',
+            'name' => 'permissions.edit',
             'display_name' => '修改权限',
             'parent_id' => $perm->id,
             'description' => '修改权限',
         ]);
         Permission::create([
-            'name' => 'permission.destroy',
+            'name' => 'permissions.destroy',
             'display_name' => '删除权限',
             'parent_id' => $perm->id,
             'description' => '删除权限',

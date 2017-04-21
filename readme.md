@@ -1,17 +1,8 @@
-# RABC权限控制后台模板
+# 微商城
 
 > laravel5.4
 
 > 后台模板adminlet
-
-> entrust
-
-### 示例图片
-![](http://omjq5ny0e.bkt.clouddn.com/17-3-24/20717489-file_1490327092851_3541.png)
-
-![](http://omjq5ny0e.bkt.clouddn.com/17-3-24/13942523-file_1490327120859_1cf4.png)
-
-![](http://omjq5ny0e.bkt.clouddn.com/17-3-24/38781140-file_1490327154306_bb3.png)
 
 ### 安装步骤
 1. 配置 .env

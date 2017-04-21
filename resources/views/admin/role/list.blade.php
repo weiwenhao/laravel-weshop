@@ -9,17 +9,6 @@
 @section('content')
     <!-- Main content -->
     <section class="content">
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <h4><i class="icon fa fa-check"></i> {{ session('success') }}</h4>
-            </div>
-        @elseif(session('error'))
-            <div class="alert alert-warning alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <h4><i class="icon fa fa-warning"></i> {{ session('error') }}</h4>
-            </div>
-        @endif
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
@@ -27,7 +16,7 @@
 
                 <div class="box-tools pull-right">
                     <div class="box-tools pull-right">
-                        <a href="{{ url('/admin/role/create') }}" class="btn bg-olive" title="Collapse">
+                        <a href="{{ url('/admin/roles/create') }}" class="btn bg-olive" title="Collapse">
                             <i class="fa fa-plus"></i>
                         </a>
                     </div>
@@ -96,7 +85,7 @@
                 "regex": true  //正则搜索还是精确搜索
             },
             "ajax": {
-                "url" : '/admin/role/dt_roles',
+                "url" : '/admin/roles/dt_roles',
             },
             "columns": [
                 {
@@ -134,9 +123,9 @@
                     'width' : '15%',
                     render: function(data, type, row, meta) {
                         if(row.name == 'admin'){
-                            return "<a href='/admin/role/"+row.id+"/edit' class='btn btn-info edit'><i class='fa fa-edit'></i></a>";
+                            return "<a href='/admin/roles/"+row.id+"/edit' class='btn btn-info edit'><i class='fa fa-edit'></i></a>";
                         }
-                        return "<a href='/admin/role/"+row.id+"/edit' class='btn btn-info edit'><i class='fa fa-edit'></i></a>  " +
+                        return "<a href='/admin/roles/"+row.id+"/edit' class='btn btn-info edit'><i class='fa fa-edit'></i></a>  " +
                             "<button value="+row.id+" class='btn btn-danger del'><i class='fa fa-trash'></i></button>";
                     }
                 }
@@ -153,7 +142,7 @@
             }
         });
         $('body').on('click', 'button.del', function() {
-            var url = '/admin/role/'+$(this).val(); //this代表删除按钮的DOM对象
+            var url = '/admin/roles/'+$(this).val(); //this代表删除按钮的DOM对象
             if( !confirm('你确定要删除该角色吗?')){
                 return false;
             }

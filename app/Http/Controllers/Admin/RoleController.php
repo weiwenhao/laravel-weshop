@@ -67,10 +67,10 @@ class RoleController extends Controller
     {
         $role = $this->role->create($request->all());
         if (!$role){
-            return redirect('/admin/role/create')->withError('系统错误,添加失败')->withInput();
+            return redirect('/admin/roles/create')->withError('系统错误,添加失败')->withInput();
         }
         $role->perms()->attach($request->get('perm_ids'));
-        return redirect('/admin/role')->withSuccess('添加成功');
+        return redirect('/admin/roles')->withSuccess('添加成功');
     }
 
     /**
@@ -108,9 +108,9 @@ class RoleController extends Controller
     {
         $role = $this->role->update($request->all(),$id);
         if(!$role)
-            return redirect('/admin/role/'.$id.'/edit')->withError('系统错误,修改失败')->withInput();
+            return redirect('/admin/roles/'.$id.'/edit')->withError('系统错误,修改失败')->withInput();
         $role->perms()->sync($request->get('perm_ids',[]));
-        return redirect('/admin/role')->withSuccess('修改成功');
+        return redirect('/admin/roles')->withSuccess('修改成功');
     }
 
     /**

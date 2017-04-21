@@ -33,7 +33,7 @@
                     :props="defaultProps">
             </el-tree>
             <el-button @click="getCheckedKeys">通过 key 获取</el-button>--}}
-            <form action="{{ url('/admin/role/'.$role->id) }}" method="post" class="form-horizontal">
+            <form action="{{ url('/admin/roles/'.$role->id) }}" method="post" class="form-horizontal">
                 <div class="box-body">
                     <div class="col-md-10 col-md-offset-1">
                         {{ csrf_field() }}
@@ -90,7 +90,7 @@
                 <!-- /.box-body -->
                 <div class="box-footer">
                     <div class="col-md-2 col-md-offset-4">
-                        <a href="{{ url('/admin/role') }}" class="btn btn-block btn-default btn-flat">返回</a>
+                        <a href="{{ url('/admin/roles') }}" class="btn btn-block btn-default btn-flat">返回</a>
                     </div>
                     <div class="col-md-2">
                         <button type="submit" class="btn btn-block btn-primary btn-flat">提交</button>
