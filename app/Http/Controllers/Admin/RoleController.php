@@ -45,7 +45,7 @@ class RoleController extends Controller
      */
     public function dtRoles()
     {
-        return Datatables::of($this->role->all())->make(true);
+        return Datatables::of(Role::query())->make(true);
     }
     /**
      * Show the form for creating a new resource.

@@ -12,24 +12,24 @@
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">角色列表</h3>
+                <h3 class="box-title">商品列表</h3>
 
                 <div class="box-tools pull-right">
                     <div class="box-tools pull-right">
-                        <a href="{{ url('/admin/roles/create') }}" class="btn bg-olive" title="Collapse">
+                        <a href="{{ url('/admin/goods/create') }}" class="btn bg-olive" title="Collapse">
                             <i class="fa fa-plus"></i>
                         </a>
                     </div>
                 </div>
             </div>
             <div class="box-body">
-                <table id="roles" class="table table-bordered table-striped">
+                <table id="datatables" class="table table-bordered table-striped">
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>角色值</th>
-                        <th>角色名称</th>
-                        <th>描述</th>
+                        <th>商品名称</th>
+                        <th>价格(元)</th>
+                        <th>图片</th>
                         <th>创建时间</th>
                         <th>操作</th>
                     </tr>
@@ -38,7 +38,6 @@
             </div>
         </div>
         <!-- /.box -->
-
     </section>
     <!-- /.content -->
 @stop
@@ -51,7 +50,7 @@
          * datatables配置
          * @type {jQuery}
          */
-        var table = $('#roles').DataTable( {
+        var table = $('#datatables').DataTable( {
             stateSave: false,//保存当前页面状态,再次刷新进来依旧显示当前状态,比如本页的排序规则,显示记录条数
             language: {
                 "sProcessing": "处理中...",
@@ -84,31 +83,28 @@
                 "regex": true  //正则搜索还是精确搜索
             },
             "ajax": {
-                "url" : '/admin/roles/dt_roles',
+                "url" : '/admin/goods/dt_goods',
             },
             "columns": [
                 {
-                    'data':'id', //对应json中的字段
+                    'data':'id', //对应json中的字段,为取出
                 },
                 {
+                    width : '15%',
                     'data':'name',
                 },
                 {
-                    'data':'display_name',
-                    "orderable" : false,
+                    'data':'price',
                 },
                 {
-                    'data':'description',
+                    searchable: false, //是否参与搜索
+                    'data':'sm_image',
                     "orderable" : false,
                     render : function (data, type, row, meta) {
-                        if(data){
-                            return '<div style="width:100px;overflow: hidden;white-space:nowrap;text-overflow: ellipsis;">'+data+'</div>';
-                        }
-                        return '暂无';
+                        return '<img src="'+data+'" alt="">';
                     }
                 },
                 {
-                    searchable: false,
                     'data':'created_at'
                 },
                 {
@@ -118,9 +114,9 @@
                     'width' : '15%',
                     render: function(data, type, row, meta) {
                         if(row.name == 'admin'){
-                            return "<a href='/admin/roles/"+row.id+"/edit' class='btn btn-info edit'><i class='fa fa-edit'></i></a>";
+                            return "<a href='/admin/goods/"+row.id+"/edit' class='btn btn-info edit'><i class='fa fa-edit'></i></a>";
                         }
-                        return "<a href='/admin/roles/"+row.id+"/edit' class='btn btn-info edit'><i class='fa fa-edit'></i></a>  " +
+                        return "<a href='/admin/goods/"+row.id+"/edit' class='btn btn-info edit'><i class='fa fa-edit'></i></a>  " +
                             "<button value="+row.id+" class='btn btn-danger del'><i class='fa fa-trash'></i></button>";
                     }
                 }
@@ -137,8 +133,8 @@
             }
         });
         $('body').on('click', 'button.del', function() {
-            var url = '/admin/roles/'+$(this).val(); //this代表删除按钮的DOM对象
-            if( !confirm('你确定要删除该角色吗?')){
+            var url = '/admin/goods/'+$(this).val(); //this代表删除按钮的DOM对象
+            if( !confirm('你确定删除该商品吗?')){
                 return false;
             }
             $.ajax({

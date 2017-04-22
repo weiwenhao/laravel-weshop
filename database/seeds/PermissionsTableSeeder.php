@@ -48,6 +48,34 @@ class PermissionsTableSeeder extends Seeder
             'description' => '删除商品',
         ]);
 
+        //二级
+        $category = Permission::create([
+            'name' => 'categories.list',
+            'display_name' => '分类列表',
+            'url' => 'categories',
+            'parent_id' => $shop_admin->id,
+            'description' => '分类列表',
+        ]);
+        //三级
+        Permission::create([
+            'name' => 'categories.create',
+            'display_name' => '添加分类',
+            'parent_id' => $category->id,
+            'description' => '添加分类',
+        ]);
+        Permission::create([
+            'name' => 'categories.edit',
+            'display_name' => '修改分类',
+            'parent_id' => $category->id,
+            'description' => '修改分类',
+        ]);
+        Permission::create([
+            'name' => 'categories.destroy',
+            'display_name' => '删除分类',
+            'parent_id' => $category->id,
+            'description' => '删除分类',
+        ]);
+
 
 
 

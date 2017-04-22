@@ -31,7 +31,6 @@
                         <th>邮箱</th>
                         <th>角色</th>
                         <th>创建时间</th>
-                        <th>修改时间</th>
                         <th>操作</th>
                     </tr>
                     </thead>
@@ -105,10 +104,6 @@
                 {
                     searchable: false,
                     'data':'created_at'
-                },
-                {
-                    searchable: false,
-                    'data':'updated_at'
                 },
                 {
                     searchable: false,

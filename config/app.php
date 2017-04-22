@@ -191,6 +191,8 @@ return [
         Overtrue\LaravelWechat\ServiceProvider::class,
         //ue
         Overtrue\LaravelUEditor\UEditorServiceProvider::class,
+        //img
+        Intervention\Image\ImageServiceProvider::class,
     ],
 
     /*
@@ -242,6 +244,7 @@ return [
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
         'Active' => HieuLe\Active\Facades\Active::class,
         'EasyWeChat' => Overtrue\LaravelWechat\Facade::class,
+        'Image' => Intervention\Image\Facades\Image::class,
     ],
 
 ];

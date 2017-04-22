@@ -11,7 +11,7 @@
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">添加商品</h3>
+                <h3 class="box-title">修改商品</h3>
 
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
@@ -21,8 +21,9 @@
                 </div>
             </div>
             <div class="box-body">
-                <form class="form-horizontal" role="form" method="POST" action="/admin/goods"  enctype="multipart/form-data" >
+                <form class="form-horizontal" role="form" method="POST" action="/admin/goods/{{ $goods->id }}"  enctype="multipart/form-data" >
                     {{ csrf_field() }}
+                        {{ method_field('put') }}
                     <!-- Custom Tabs -->
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs">
@@ -53,7 +54,7 @@
                                         <label for="name" class="col-md-4 control-label">商品名称 *</label>
 
                                         <div class="col-md-4">
-                                            <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="30字限制,可在此填写一些商品的必要信息">
+                                            <input id="name" type="text" class="form-control" name="name" value="{{ old('name', $goods->name) }}" placeholder="30字限制,可在此填写一些商品的必要信息">
 
                                             @if ($errors->has('name'))
                                                 <span class="help-block">
@@ -68,7 +69,7 @@
 
                                         <div class="col-md-4">
                                             <div class="input-group">
-                                                <input name="price" type="text" class="form-control" id="price" value="{{ old('price') }}" placeholder="精确到0.01">
+                                                <input name="price" type="text" class="form-control" id="price" value="{{ old('price', $goods->price) }}" placeholder="精确到0.01">
                                                 <div class="input-group-addon">元</div>
                                             </div>
                                             @if ($errors->has('price'))
@@ -84,7 +85,7 @@
 
                                         <div class="col-md-4">
                                             <div class="input-group">
-                                                <input name="promote_price" type="text" class="form-control" id="" value="{{ old('promote_price') }}" placeholder="精确到0.01">
+                                                <input name="promote_price" type="text" class="form-control" id="" value="{{ old('promote_price', $goods->promote_price) }}" placeholder="精确到0.01">
                                                 <div class="input-group-addon">元</div>
                                             </div>
                                             @if ($errors->has('promote_price'))
@@ -98,7 +99,7 @@
                                     <div class="form-group{{ $errors->has('promote_start_at') || $errors->has('promote_stop_at') ? ' has-error' : '' }}">
                                         <label for="promote_start_at" class="col-md-4 control-label">促销时间</label>
                                         <div class="col-md-2">
-                                            <input name="promote_start_at" class="form-control" id="promote_start_at" value="{{ old('promote_start_at') }}" placeholder="促销开始时间">
+                                            <input name="promote_start_at" class="form-control" id="promote_start_at" value="{{ old('promote_start_at', $goods->promote_start_at) }}" placeholder="促销开始时间">
                                             @if ($errors->has('promote_start_at'))
                                                 <span class="help-block">
                                                     <strong>{{ $errors->first('promote_start_at') }}</strong>
@@ -106,7 +107,7 @@
                                             @endif
                                         </div>
                                         <div class="col-md-2">
-                                            <input name="promote_stop_at" class="form-control" id="promote_stop_at" value="{{ old('promote_stop_at') }}"  placeholder="促销结束时间">
+                                            <input name="promote_stop_at" class="form-control" id="promote_stop_at" value="{{ old('promote_stop_at', $goods->promote_stop_at) }}"  placeholder="促销结束时间">
                                             @if ($errors->has('promote_stop_at'))
                                                 <span class="help-block">
                                                     <strong>{{ $errors->first('promote_stop_at') }}</strong>
@@ -119,7 +120,7 @@
                                         <label for="sort" class="col-md-4 control-label">权重</label>
 
                                         <div class="col-md-4">
-                                            <input name="sort" type="number" class="form-control" value="{{ old('sort',100) }}" id="" placeholder="数字越大,商品展示越靠前">
+                                            <input name="sort" type="number" class="form-control" value="{{ old('sort', $goods->sort) }}" id="" placeholder="数字越大,商品展示越靠前">
                                             @if ($errors->has('sort'))
                                                 <span class="help-block">
                                             <strong>{{ $errors->first('sort') }}</strong>
@@ -133,10 +134,10 @@
 
                                         <div class="col-md-4">
                                             <label class="radio-inline">
-                                                <input type="radio" name="is_on_sale" value="1" {{ old('is_on_sale', 1) == 1?'checked':'' }}> 是
+                                                <input type="radio" name="is_on_sale" value="1" {{ old('is_on_sale', $goods->is_on_sale) == 1?'checked':'' }}> 是
                                             </label>
                                             <label class="radio-inline">
-                                                <input type="radio" name="is_on_sale"  value="0" {{ old('is_on_sale', 1) == 0?'checked':'' }}> 否
+                                                <input type="radio" name="is_on_sale"  value="0" {{ old('is_on_sale', $goods->is_on_sale) == 0?'checked':'' }}> 否
                                             </label>
                                             @if ($errors->has('is_on_sale'))
                                                 <span class="help-block">
@@ -151,10 +152,10 @@
 
                                         <div class="col-md-4">
                                             <label class="radio-inline">
-                                                <input type="radio" name="is_best"  value="1"  {{ old('is_best', 0) == 1?'checked':'' }}> 是
+                                                <input type="radio" name="is_best"  value="1"  {{ old('is_best', $goods->is_best) == 1?'checked':'' }}> 是
                                             </label>
                                             <label class="radio-inline">
-                                                <input type="radio" name="is_best"  value="0"  {{ old('is_best', 0) == 0?'checked':'' }}> 否
+                                                <input type="radio" name="is_best"  value="0"  {{ old('is_best', $goods->is_best) == 0?'checked':'' }}> 否
                                             </label>
                                             @if ($errors->has('is_best'))
                                                 <span class="help-block">
@@ -172,6 +173,8 @@
                                                 <span class="help-block">
                                                     <strong>{{ $errors->first('image') }}</strong>
                                                 </span>
+                                            @else
+                                                <b>若不更换图片,请勿选择任何文件!</b>
                                             @endif
                                         </div>
                                     </div>
@@ -245,7 +248,7 @@
     });
     ue.ready(function() {
         ue.execCommand('serverparam', '_token', '{{ csrf_token() }}'); // 设置 CSRF token.
-        ue.setContent('{!! old('description') !!}');
+        ue.setContent('{!! old('description', $goods->description) !!}');
     });
     //select2
     $(".select2").select2({

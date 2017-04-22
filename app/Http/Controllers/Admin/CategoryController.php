@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\GoodsRequest;
-use App\Models\Goods;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Intervention\Image\Facades\Image;
 use Yajra\Datatables\Facades\Datatables;
 
-class GoodsController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,12 +19,12 @@ class GoodsController extends Controller
     public function index()
     {
         //
-        return view('admin.goods.list');
+        return view('admin.category.list');
     }
 
-    public function dtGoods()
+    public function dtCategories()
     {
-        return Datatables::of(Goods::query())->make(true);
+        return Datatables::of(Category::query())->make(true);
     }
     /**
      * Show the form for creating a new resource.
