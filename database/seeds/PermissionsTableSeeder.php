@@ -76,6 +76,33 @@ class PermissionsTableSeeder extends Seeder
             'description' => '删除分类',
         ]);
 
+        //二级
+        $attribute = Permission::create([
+            'name' => 'attributes.list',
+            'display_name' => '属性列表',
+            'url' => 'categories',
+            'parent_id' => $shop_admin->id,
+            'description' => '属性列表',
+        ]);
+        //三级
+        Permission::create([
+            'name' => 'attributes.create',
+            'display_name' => '添加属性',
+            'parent_id' => $attribute->id,
+            'description' => '添加属性',
+        ]);
+        Permission::create([
+            'name' => 'attributes.edit',
+            'display_name' => '修改属性',
+            'parent_id' => $attribute->id,
+            'description' => '修改属性',
+        ]);
+        Permission::create([
+            'name' => 'attributes.destroy',
+            'display_name' => '删除属性',
+            'parent_id' => $attribute->id,
+            'description' => '删除属性',
+        ]);
 
 
 

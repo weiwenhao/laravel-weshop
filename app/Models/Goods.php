@@ -9,6 +9,11 @@ class Goods extends Model
 {
     protected $guarded = ['id'];
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     public function saveGoodsImage()
     {
         //todo 设置图片比例

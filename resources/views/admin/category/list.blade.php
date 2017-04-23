@@ -108,6 +108,7 @@
             ],
 
         });
+
         /**
          * ajax删除
          */
@@ -118,7 +119,7 @@
         });
         $('body').on('click', 'button.del', function() {
             var url = '/admin/categories/'+$(this).val(); //this代表删除按钮的DOM对象
-            if( !confirm('你确定要删除该角色吗?')){
+            if( !confirm('你确定要删除该分类吗?')){
                 return false;
             }
             $.ajax({

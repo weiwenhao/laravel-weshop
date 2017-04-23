@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\GoodsRequest;
+use App\Models\Category;
 use App\Models\Goods;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -24,7 +25,7 @@ class GoodsController extends Controller
 
     public function dtGoods()
     {
-        return Datatables::of(Goods::query())->make(true);
+        return Datatables::of(Goods::with('category'))->make(true);
     }
     /**
      * Show the form for creating a new resource.
@@ -33,7 +34,8 @@ class GoodsController extends Controller
      */
     public function create()
     {
-        return view('admin.goods.create');
+        $categories = Category::all(['id','name']);
+        return view('admin.goods.create', compact('categories'));
     }
 
     /**
@@ -73,7 +75,8 @@ class GoodsController extends Controller
     public function edit($id)
     {
         $goods = Goods::findOrFail($id);
-        return view('admin.goods.edit', compact('goods'));
+        $categories = Category::all(['id','name']);
+        return view('admin.goods.edit', compact('goods', 'categories'));
     }
 
     /**

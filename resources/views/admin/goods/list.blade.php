@@ -29,6 +29,9 @@
                         <th>ID</th>
                         <th>商品名称</th>
                         <th>价格(元)</th>
+                        <th>分类名称</th>
+                        <th>上架</th>
+                        <th>精品</th>
                         <th>图片</th>
                         <th>创建时间</th>
                         <th>操作</th>
@@ -95,6 +98,31 @@
                 },
                 {
                     'data':'price',
+                },
+                {
+                    'data':'category.name',
+                },
+                {
+                    'data':'is_on_sale',
+                    searchable: false,
+                    render : function (data, type, row, meta) {
+                        // data : '0' or '1'
+                        if(Number(data)){
+                            return '<i class="fa fa-check text-success"></i>';
+                        }
+                        return '<i class="fa fa-close text-danger"></i>';
+                    }
+                },
+                {
+                    'data':'is_best',
+                    searchable: false,
+                    render : function (data, type, row, meta) {
+                        // data : '0' or '1'
+                        if(Number(data)){
+                            return '<i class="fa fa-check text-success"></i>';
+                        }
+                        return '<i class="fa fa-close text-danger"></i>';
+                    }
                 },
                 {
                     searchable: false, //是否参与搜索

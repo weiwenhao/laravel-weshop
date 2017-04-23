@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\GoodsRequest;
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -33,24 +33,22 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('admin.goods.create');
+        return view('admin.category.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param GoodsRequest $request
-     * @param Goods $goods
+     * @param CategoryRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(GoodsRequest $request, Goods $goods)
+    public function store(CategoryRequest $request)
     {
         //得到保存路径
-        $data = array_merge($request->all(), $goods->saveGoodsImage());
-        $goods = Goods::create($data);
-        if(!$goods)//withInput代表的是用户原先的输入,会操作old中的值
-            return redirect('/admin/goods/create')->withInput()->with('error', '系统错误，添加失败');
-        return redirect('/admin/goods')->withSuccess('添加成功');
+        $category = Category::create($request->all());
+        if(!$category)//withInput代表的是用户原先的输入,会操作old中的值
+            return redirect('/admin/categories/create')->withInput()->with('error', '系统错误，添加失败');
+        return redirect('/admin/categories')->withSuccess('添加成功');
     }
 
     /**
@@ -72,31 +70,25 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $goods = Goods::findOrFail($id);
-        return view('admin.goods.edit', compact('goods'));
+        $category = Category::findOrFail($id);
+        return view('admin.category.edit', compact('category'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param GoodsRequest $request
+     * @param CategoryRequest $request
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(GoodsRequest $request, $id)
+    public function update(CategoryRequest $request, $id)
     {
-        $goods = Goods::findOrFail($id);
-        $data = $request->all();
-       if ($request->hasFile('image')){
-           $data = array_merge($data, $goods->saveGoodsImage());
-           //进行原来图片的删除处理
-           $goods->removeGoodsImage();
-       }
+        $category = Category::findOrFail($id);
         //判断用户是否选择了图片
-        $res = $goods->update($data);
+        $res = $category->update($request->all());
        if(!$res )
-           return redirect('/admin/goods/edit/'.$id)->withInput()->with('error', '系统错误，修改失败');
-        return redirect('/admin/goods')->withSuccess('修改成功');
+           return redirect('/admin/categories/edit/'.$id)->withInput()->with('error', '系统错误，修改失败');
+        return redirect('/admin/categories')->withSuccess('修改成功');
     }
 
     /**
@@ -107,11 +99,10 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $goods = Goods::find($id);
-        if (!$goods)
+        $category = Category::find($id);
+        if (!$category)
             return response('删除失败',403);
-        $goods->removeGoodsImage();
-        $res = $goods->delete();
+        $res = $category->delete(); //成功返回1?失败返回0?
         return (string) $res;
     }
 }

@@ -39,9 +39,11 @@
                                         <div class="col-md-4">
                                             <select name="category_id" class="form-control select2" data-placeholder="请选择" style="width: 100%;">
                                                 <option value="">请选择</option>
-                                                <option value="1">校园外卖</option>
-                                                <option value="2">水果超市</option>
-                                                <option value="3">二手市场</option>
+                                                @foreach($categories as $category)
+                                                    <option value="{{ $category->id }}" {{ $category->id==old('category_id', $goods->category_id)?'selected':'' }}>
+                                                        {{ $category->name }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                             @if ($errors->has('category_id'))
                                                 <span class="help-block">
