@@ -12,11 +12,11 @@
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">商品列表</h3>
+                <h3 class="box-title">属性类型列表</h3>
 
                 <div class="box-tools pull-right">
                     <div class="box-tools pull-right">
-                        <a href="{{ url('/admin/goods/create') }}" class="btn bg-olive" title="Collapse">
+                        <a href="{{ url('/admin/types/create') }}" class="btn bg-olive" title="Collapse">
                             <i class="fa fa-plus"></i>
                         </a>
                     </div>
@@ -27,20 +27,15 @@
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>商品名称</th>
-                        <th>价格(元)</th>
                         <th>分类名称</th>
-                        <th>上架</th>
-                        <th>精品</th>
-                        <th>图片</th>
-                        <th>创建时间</th>
-                        <th>操作</th>
+                        <th>操作(属性列表入口)</th>
                     </tr>
                     </thead>
                 </table>
             </div>
         </div>
         <!-- /.box -->
+
     </section>
     <!-- /.content -->
 @stop
@@ -53,7 +48,7 @@
          * datatables配置
          * @type {jQuery}
          */
-        var table = $('#datatables').DataTable( {
+        let table = $('#datatables').DataTable( {
             stateSave: false,//保存当前页面状态,再次刷新进来依旧显示当前状态,比如本页的排序规则,显示记录条数
             language: {
                 "sProcessing": "处理中...",
@@ -78,7 +73,7 @@
             }, //语言国际化
             "order": [[ 0, "desc" ]],
             "serverSide": true,//开启服务器模式
-            'processing': true,
+            processing: true,
             "searchDelay": 1000, //搜索框请求间隔
             // "lengthMenu": [15,25,50], //自定义每页显示条数菜单
 
@@ -86,65 +81,23 @@
                 "regex": true  //正则搜索还是精确搜索
             },
             "ajax": {
-                "url" : '/admin/goods/dt_data',
+                "url" : '/admin/types/dt_data',
             },
             "columns": [
                 {
-                    'data':'id', //对应json中的字段,为取出
+                    'data':'id', //对应json中的字段
                 },
                 {
-                    width : '15%',
                     'data':'name',
-                },
-                {
-                    'data':'price',
-                },
-                {
-                    'data':'category.name',
-                },
-                {
-                    'data':'is_on_sale',
-                    searchable: false,
-                    render : function (data, type, row, meta) {
-                        // data : '0' or '1'
-                        if(Number(data)){
-                            return '<i class="fa fa-check text-success"></i>';
-                        }
-                        return '<i class="fa fa-close text-danger"></i>';
-                    }
-                },
-                {
-                    'data':'is_best',
-                    searchable: false,
-                    render : function (data, type, row, meta) {
-                        // data : '0' or '1'
-                        if(Number(data)){
-                            return '<i class="fa fa-check text-success"></i>';
-                        }
-                        return '<i class="fa fa-close text-danger"></i>';
-                    }
-                },
-                {
-                    searchable: false, //是否参与搜索
-                    'data':'sm_image',
-                    "orderable" : false,
-                    render : function (data, type, row, meta) {
-                        return '<img src="'+data+'" alt="">';
-                    }
-                },
-                {
-                    'data':'created_at'
                 },
                 {
                     searchable: false,
                     'data' : null, //对应服务器端
                     "orderable" : false, //是否开启排序
-                    'width' : '15%',
+                    'width' : '20%',
                     render: function(data, type, row, meta) {
-                        if(row.name == 'admin'){
-                            return "<a href='/admin/goods/"+row.id+"/edit' class='btn btn-info edit'><i class='fa fa-edit'></i></a>";
-                        }
-                        return "<a href='/admin/goods/"+row.id+"/edit' class='btn btn-info edit'><i class='fa fa-edit'></i></a>  " +
+                        return "<a href='/admin/types/"+row.id+"/attributes' class='btn btn-primary edit'><i class='fa fa-list'></i></a>  " +
+                            "<a href='/admin/types/"+row.id+"/edit' class='btn btn-info edit'><i class='fa fa-edit'></i></a>  " +
                             "<button value="+row.id+" class='btn btn-danger del'><i class='fa fa-trash'></i></button>";
                     }
                 }
@@ -152,6 +105,7 @@
             ],
 
         });
+
         /**
          * ajax删除
          */
@@ -161,22 +115,19 @@
             }
         });
         $('body').on('click', 'button.del', function() {
-            var url = '/admin/goods/'+$(this).val(); //this代表删除按钮的DOM对象
-            if( !confirm('你确定删除该商品吗?')){
+            var url = '/admin/types/'+$(this).val(); //this代表删除按钮的DOM对象
+            if( !confirm('删除该类型将删除该商品类型下的所有属性,你确定要删除该属性类型吗?')){
                 return false;
             }
             $.ajax({
                 type: "DELETE",
                 url: url,
                 success: function(data){
-                    if (data == 1){
+                    if (data){
                         //刷新dt
                         table.ajax.reload(null, false); //databales对象从新加载
                         alert('删除成功');
                     }
-                },
-                error : function (errors) {
-                     alert(errors.responseText);
                 }
             });
         });

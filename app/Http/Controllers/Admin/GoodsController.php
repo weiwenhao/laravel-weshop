@@ -23,7 +23,7 @@ class GoodsController extends Controller
         return view('admin.goods.list');
     }
 
-    public function dtGoods()
+    public function dtData()
     {
         return Datatables::of(Goods::with('category'))->make(true);
     }

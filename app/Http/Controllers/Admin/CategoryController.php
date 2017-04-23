@@ -22,7 +22,7 @@ class CategoryController extends Controller
         return view('admin.category.list');
     }
 
-    public function dtCategories()
+    public function dtData()
     {
         return Datatables::of(Category::query())->make(true);
     }

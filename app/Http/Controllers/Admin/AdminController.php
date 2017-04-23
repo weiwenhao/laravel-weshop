@@ -37,7 +37,7 @@ class AdminController extends Controller
      * datatables数据源
      * @return mixed
      */
-    public function dtAdmins()
+    public function dtData()
     {
         return $this->admin->getDtAdmins();
     }

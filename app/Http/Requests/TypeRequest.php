@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Request;
 
-class CategoryRequest extends FormRequest
+class TypeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,11 +25,11 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         $rules =  [
-            'name' => 'required|max:10|unique:categories,name',
+            'name' => 'required|max:10|unique:types,name',
         ];
         if (Request::isMethod('PATCH') || Request::isMethod('PUT')){
             $id = Request::get('id');
-            $rules['name'] = 'required|unique:categories,name,'.$id;
+            $rules['name'] = 'required|unique:types,name,'.$id;
         }
         return $rules;
     }
@@ -47,7 +47,7 @@ class CategoryRequest extends FormRequest
     public function attributes()
     {
         return [
-          'name' => '分类名称'
+          'name' => '属性类型名称'
         ];
     }
 }

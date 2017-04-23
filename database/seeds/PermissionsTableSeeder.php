@@ -77,31 +77,31 @@ class PermissionsTableSeeder extends Seeder
         ]);
 
         //二级
-        $attribute = Permission::create([
-            'name' => 'attributes.list',
-            'display_name' => '属性列表',
-            'url' => 'categories',
+        $type = Permission::create([
+            'name' => 'types.list',
+            'display_name' => '类型列表',
+            'url' => 'types',
             'parent_id' => $shop_admin->id,
-            'description' => '属性列表',
+            'description' => '类型列表',
         ]);
         //三级
         Permission::create([
-            'name' => 'attributes.create',
-            'display_name' => '添加属性',
-            'parent_id' => $attribute->id,
-            'description' => '添加属性',
+            'name' => 'types.create',
+            'display_name' => '添加类型',
+            'parent_id' => $type->id,
+            'description' => '添加类型',
         ]);
         Permission::create([
-            'name' => 'attributes.edit',
-            'display_name' => '修改属性',
-            'parent_id' => $attribute->id,
-            'description' => '修改属性',
+            'name' => 'types.edit',
+            'display_name' => '修改类型',
+            'parent_id' => $type->id,
+            'description' => '修改类型',
         ]);
         Permission::create([
-            'name' => 'attributes.destroy',
-            'display_name' => '删除属性',
-            'parent_id' => $attribute->id,
-            'description' => '删除属性',
+            'name' => 'types.destroy',
+            'display_name' => '删除类型',
+            'parent_id' => $type->id,
+            'description' => '删除类型',
         ]);
 
 

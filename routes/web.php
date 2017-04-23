@@ -40,22 +40,28 @@ Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.ad
         return view('admin.index');
     });
 
-    //商品管理区域
+    /******************************商品管理区************************************/
     //商品管理
-    Route::get('/goods/dt_goods','GoodsController@dtGoods')->name('goods.index'); //定义路由名称和resource的index一致,方便对权限进行判断
+    Route::get('/goods/dt_data','GoodsController@dtData')->name('goods.index'); //定义路由名称和resource的index一致,方便对权限进行判断
     Route::resource('goods', 'GoodsController');
     //分类管理
-    Route::get('/categories/dt_categories','CategoryController@dtCategories')->name('categories.index'); //定义路由名称和resource的index一致,方便对权限进行判断
+    Route::get('/categories/dt_data','CategoryController@dtData')->name('categories.index');
     Route::resource('categories', 'CategoryController');
+    //商品属性类型管理
+    Route::get('/types/dt_data','TypeController@dtData')->name('types.index');
+    Route::resource('types', 'TypeController');
+    //商品属性管理
+    Route::get('/types/{type_id}/attributes/dt_data','AttributeController@dtData')->name('attributes.index');
+    Route::resource('types/{type_id}/attributes', 'AttributeController'); //route.name  attributes.index 依旧是只取结尾处
 
-    //系统设置区域
+
+    /******************************系统设置区************************************/
     //权限管理
-//    Route::get('/permission/get_nest_perm_list','PermissionController@getNestPermList')->name('menu.index');
     Route::resource('permissions','PermissionController');
     //角色管理
-    Route::get('/roles/dt_roles','RoleController@dtRoles')->name('role.index');
+    Route::get('/roles/dt_data','RoleController@dtData')->name('role.index');
     Route::resource('roles','RoleController');
     //管理员管理
-    Route::get('/admins/dt_admins','AdminController@dtAdmins')->name('admin.index');
+    Route::get('/admins/dt_data','AdminController@dtData')->name('admin.index');
     Route::resource('admins','AdminController');
 });

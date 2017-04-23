@@ -84,7 +84,7 @@
                 "regex": true  //正则搜索还是精确搜索
             },
             "ajax": {
-                "url" : '/admin/admins/dt_admins',
+                "url" : '/admin/admins/dt_data',
             },
             "columns": [
                 {

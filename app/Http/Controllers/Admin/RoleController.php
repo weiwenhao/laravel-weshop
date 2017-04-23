@@ -43,7 +43,7 @@ class RoleController extends Controller
      * datatables数据源
      * @return mixed
      */
-    public function dtRoles()
+    public function dtData()
     {
         return Datatables::of(Role::query())->make(true);
     }

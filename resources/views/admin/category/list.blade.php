@@ -12,7 +12,7 @@
         <!-- Default box -->
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">分类</h3>
+                <h3 class="box-title">分类列表</h3>
 
                 <div class="box-tools pull-right">
                     <div class="box-tools pull-right">
@@ -82,7 +82,7 @@
                 "regex": true  //正则搜索还是精确搜索
             },
             "ajax": {
-                "url" : '/admin/categories/dt_categories',
+                "url" : '/admin/categories/dt_data',
             },
             "columns": [
                 {
