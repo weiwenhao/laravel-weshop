@@ -105,4 +105,9 @@ class TypeController extends Controller
         $res = $model->delete(); //成功返回1?失败返回0?
         return (string) $res;
     }
+
+    public function ajaxTypes(){
+        $types = Type::all(['id', 'name']);
+        return $types;
+    }
 }

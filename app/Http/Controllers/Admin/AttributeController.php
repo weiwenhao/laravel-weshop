@@ -6,6 +6,7 @@ use App\Http\Requests\AttributeRequest;
 use App\Models\Attribute;
 use App\Http\Controllers\Controller;
 use App\Models\Type;
+use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Facades\Datatables;
 
 class AttributeController extends Controller
@@ -112,5 +113,40 @@ class AttributeController extends Controller
             return response('删除失败',403);
         $res = $model->delete(); //成功返回1?失败返回0?
         return (string) $res;
+    }
+
+    public function ajaxAttributes($type_id){
+        $attributes = Attribute::where('type_id', $type_id)->get();
+        //属性transform处理
+        $attributes->transform(function ($item){
+            if($item->option_values){
+                $item->option_values = explode(',', $item->option_values);
+            }
+            return $item;
+        });
+        return $attributes;
+    }
+
+    //修改的主体也应该是类型才对,重点表中的数据应该取出来,但是类型表中的数据也应该取出来, 使用左连接, 从往左往右是type表,attribute表,goods_attribute表
+    public function ajaxEditAttr($type_id){ //
+        $goods_id = request('goods_id');
+        $attributes = DB::table('types') //已类型表取出了该类型下的所有的商品属性id
+            ->select('attributes.*',  'goods_attributes.attribute_value', 'goods_attributes.id as goods_attribute_id')
+            ->leftJoin('attributes', 'types.id','=','attributes.type_id')
+            ->leftJoin('goods_attributes', function ($join) use ($goods_id) {
+                $join->on('attributes.id', '=', 'goods_attributes.attribute_id')
+                    ->where('goods_attributes.goods_Id', $goods_id); //这里对该类型在商品属性表中数据进行了筛选
+            })
+            ->where('type_id',$type_id)
+            ->get();
+        //进行options_values处理
+        //属性transform处理
+        $attributes->transform(function ($item){
+            if($item->option_values){
+                $item->option_values = explode(',', $item->option_values);
+            }
+            return $item;
+        });
+        return $attributes;
     }
 }

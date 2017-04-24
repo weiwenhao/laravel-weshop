@@ -44,6 +44,10 @@ Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.ad
     //商品管理
     Route::get('/goods/dt_data','GoodsController@dtData')->name('goods.index'); //定义路由名称和resource的index一致,方便对权限进行判断
     Route::resource('goods', 'GoodsController');
+    Route::get('/types/ajax_types','TypeController@ajaxTypes')->name('goods.create');
+    Route::get('/types/{type_id}/attributes/ajax_attributes','AttributeController@ajaxAttributes')->name('goods.create');
+    Route::get('/types/{type_id}/attributes/ajax_edit_attr','AttributeController@ajaxEditAttr')->name('goods.edit');
+
     //分类管理
     Route::get('/categories/dt_data','CategoryController@dtData')->name('categories.index');
     Route::resource('categories', 'CategoryController');

@@ -52,6 +52,8 @@ class GoodsController extends Controller
         $goods = Goods::create($data);
         if(!$goods)//withInput代表的是用户原先的输入,会操作old中的值
             return redirect('/admin/goods/create')->withInput()->with('error', '系统错误，添加失败');
+        //商品属性保存到中间表
+        $goods->saveGoodsAttr($goods->id);
         return redirect('/admin/goods')->withSuccess('添加成功');
     }
 
@@ -90,15 +92,19 @@ class GoodsController extends Controller
     {
         $goods = Goods::findOrFail($id);
         $data = $request->all();
-       if ($request->hasFile('image')){
+        //判断用户是否选择了图片
+        if ($request->hasFile('image')){
            $data = array_merge($data, $goods->saveGoodsImage());
            //进行原来图片的删除处理
            $goods->removeGoodsImage();
-       }
-        //判断用户是否选择了图片
+        }
+        //入库操作
         $res = $goods->update($data);
-       if(!$res )
+        if (!$res )
            return redirect('/admin/goods/edit/'.$id)->withInput()->with('error', '系统错误，修改失败');
+        //商品属性修改
+        //商品属性修改
+        $goods->editGoodsAttr($id);
         return redirect('/admin/goods')->withSuccess('修改成功');
     }
 

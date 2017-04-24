@@ -29,7 +29,7 @@ class CreateGoodsTable extends Migration
             $table->string('mid_image')->comment('商品图片');
             $table->string('big_image')->comment('商品图片');
             $table->unsignedTinyInteger('category_id')->index()->comment('商品所属分类id');
-            $table->unsignedSmallInteger('goods_type_id')->nullable()->comment('商品所属类型');
+            $table->unsignedSmallInteger('type_id')->nullable()->comment('商品所属类型');
             $table->timestamps();
         });
     }

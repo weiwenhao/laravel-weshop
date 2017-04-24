@@ -28,13 +28,13 @@
             <div class="box-body">
                 <table id="datatables" class="table table-bordered table-striped">
                     <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>名称</th>
-                        <th>类型</th>
-                        <th>限定录入值</th>
-                        <th>操作</th>
-                    </tr>
+                        <tr>
+                            <th>ID</th>
+                            <th>名称</th>
+                            <th>类型</th>
+                            <th>限定录入值</th>
+                            <th>操作</th>
+                        </tr>
                     </thead>
                 </table>
             </div>

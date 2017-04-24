@@ -192,8 +192,64 @@
                                 </div>
                                 <!-- /.tab-pane -->
                                 <div class="tab-pane" id="tab_3">
-                                    <div class="row">
-                                        待构思
+                                    <div class="form-group">
+                                        <label for="" class="control-label col-md-4">商品类型</label>
+                                        <div class="col-md-4">
+                                            <select name="type_id"  class="form-control" data-placeholder="请选择"
+                                                    @change="changeType()" v-model="selected" placeolder="请选择"
+                                            >
+                                                <option value="">请选择</option>
+                                                <option v-for="type in types"
+                                                        :value="type.id">@{{ type.name }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <span>请检查并避免属性值的重复</span>
+                                        </div>
+                                    </div>
+                                    {{--属性区域--}}
+                                    <div class="form-group" v-for="(attribute,index) in attributes">
+                                        {{--绑定一个goods_attribute_id,这条id只有原先的商品属性存在--}}
+                                        <label for="" class="control-label col-md-4">@{{ attribute.name }}</label>
+                                        <input type="hidden" name="goods_attribute_ids[]" :value="attribute.goods_attribute_id">
+                                        <div class="col-md-4">
+                                            <template v-if="attribute.type == '唯一'">
+                                                <input type="text" :name="'attribute_values['+attribute.id+'][]'" :value="attribute.attribute_value" class="form-control" v-if="attribute.option_values == '' || attribute.option_values == null">
+                                                <select :name="'attribute_values['+attribute.id+'][]'" class="form-control select2" placeholder="请选择" v-else>
+                                                    <option value="">请选择</option>
+                                                    <option :value="option_value"
+                                                            v-for="option_value in attribute.option_values"
+                                                            :selected="option_value == attribute.attribute_value"
+                                                    >@{{ option_value }}</option>
+                                                </select>
+                                            </template>
+                                            <template v-else>
+                                                <div class="input-group"  v-if="attribute.option_values == '' || attribute.option_values == null">
+                                                    <input type="text" :name="'attribute_values['+attribute.id+'][]'" :value="attribute.attribute_value" class="form-control">
+                                                    <div class="input-group-addon">
+                                                        <a  @click.prevent="switchSelf(index, attribute)"> {{--有可能是减少自己也有可能是增加自己--}}
+                                                            <i class="fa fa-plus" v-if="attribute.is_server_data == undefined"></i>
+                                                            <i class="fa fa-minus" v-else-if="attribute.is_server_data == false"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="input-group"  v-else>
+                                                    <select :name="'attribute_values['+attribute.id+'][]'" class="form-control select2" data-placeholder="请选择">
+                                                        <option value="">请选择</option>
+                                                        <option :value="option_value"
+                                                                v-for="option_value in attribute.option_values"
+                                                                :selected="option_value == attribute.attribute_value"
+                                                        >@{{ option_value }}</option>
+                                                    </select>
+                                                    <div class="input-group-addon">
+                                                        <a @click.prevent="switchSelf(index, attribute)"> {{--有可能是减少自己也有可能是增加自己--}}
+                                                            <i class="fa fa-plus" v-if="attribute.is_server_data == undefined"></i>
+                                                            <i class="fa fa-minus" v-else-if="attribute.is_server_data == false"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
                                     </div>
                                 </div>
                                 <!-- /.tab-pane -->
@@ -219,6 +275,94 @@
 @include('vendor.ueditor.assets')
 @section('js')
 <script>
+    //vue测试
+    new Vue({
+        el : '#app',
+        data : {
+            selected : {{ $goods->type_id }},
+            types : [],
+            attributes : [],
+        },
+        created(){
+            this.getEditAttr();
+            this.getTypes();
+        },
+        methods :　{
+            switchSelf(index, attribute){
+                if(typeof(attribute.is_server_data) == 'undefined'){ //未定义的数据类型,则肯定是服务器数据,只能+
+                    let newAttribute = {
+                        'id' : attribute.id,
+                        'name' : attribute.name,
+                        'option_values' : attribute.option_values,
+                        'type' : attribute.type,
+                        'type_id' : attribute.type_id,
+                        'is_server_data' : false
+                    };
+                    //往数组中的该index的后面插入一条数据
+                    this.attributes.splice(index+1, 0, newAttribute);
+                } else if (attribute.is_server_data == false){
+                    this.attributes.splice(index, 1);
+                }
+            },
+            /**
+             * 商品类型的ajax数据
+             */
+            getTypes(){
+                axios.get('/admin/types/ajax_types', {
+                    params: {
+                        //这里的数据将会以  ?key=value的形式出现
+                    }
+                })
+                    .then((response)=> {
+                        this.types = response.data;
+                    })
+                    .catch(error=> {
+                        if(error.response.status == 404){
+                            alert('资源不存在'+error.response.data.message);
+                        }
+                    });
+            },
+            /**
+             * 商品分类的ajax数据
+             */
+            getEditAttr(){
+                axios.get('/admin/types/{{ $goods->type_id }}/attributes/ajax_edit_attr', {
+                    params: {
+                        'goods_id' : {{ $goods->id }},
+                    }
+                })
+                .then((response)=> {
+                    this.attributes =  response.data;
+                })
+                .catch(error=> {
+                    this.attributes = [];
+                });
+            },
+
+            getAttributes(){
+                if(this.selected == ""){
+                    this.attributes = [];
+                    return;
+                }
+                axios.get('/admin/types/'+this.selected+'/attributes/ajax_attributes', {
+                    params: {
+                        //这里的数据将会以  ?key=value的形式出现
+                    }
+                })
+                .then((response)=> {
+                    this.attributes =  response.data;
+                })
+                .catch(error=> {
+                    if(error.response.status == 404){
+                        alert('资源不存在'+error.response.data.message);
+                    }
+                });
+            },
+            changeType(){
+                this.getAttributes()
+            }
+        }
+    });
     //ue浏览器
     var ue = UE.getEditor('description', {  //UE应该是UE的全局变量,类似于VUE,$等
         toolbars: [

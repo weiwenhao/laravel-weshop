@@ -27,7 +27,7 @@
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>分类名称</th>
+                        <th>商品类型名称</th>
                         <th>操作(属性列表入口)</th>
                     </tr>
                     </thead>
