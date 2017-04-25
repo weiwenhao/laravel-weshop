@@ -213,7 +213,7 @@
                                             <template v-if="attribute.type == '唯一'">
                                                 <input type="text" :name="'attribute_values['+attribute.id+'][]'" class="form-control" v-if="attribute.option_values == '' || attribute.option_values == null">
                                                 <select :name="'attribute_values['+attribute.id+'][]'" class="form-control select2" placeholder="请选择" v-else>
-                                                    <option value="">请选择</option>
+                                                    <option :value="null">请选择</option>
                                                     <option :value="option_value" v-for="option_value in attribute.option_values">@{{ option_value }}</option>
                                                 </select>
                                             </template>
@@ -229,7 +229,7 @@
                                                 </div>
                                                 <div class="input-group"  v-else>
                                                     <select :name="'attribute_values['+attribute.id+'][]'" class="form-control select2" data-placeholder="请选择">
-                                                        <option value="">请选择</option>
+                                                        <option :value="null">请选择</option>
                                                         <option :value="option_value" v-for="option_value in attribute.option_values">@{{ option_value }}</option>
                                                     </select>
                                                     <div class="input-group-addon">

@@ -109,26 +109,22 @@ class AttributeController extends Controller
     public function destroy($type_id, $id)
     {
         $model = Attribute::find($id);
+        //todo 删除该属性,则删除对应的goods_attributes表中对应的记录,同时删除对应的库存
         if (!$model)
             return response('删除失败',403);
         $res = $model->delete(); //成功返回1?失败返回0?
         return (string) $res;
     }
 
-    public function ajaxAttributes($type_id){
+    public function ajaxAttributes($type_id, Attribute $model){
         $attributes = Attribute::where('type_id', $type_id)->get();
         //属性transform处理
-        $attributes->transform(function ($item){
-            if($item->option_values){
-                $item->option_values = explode(',', $item->option_values);
-            }
-            return $item;
-        });
+        $attributes = $model->ajaxAttrTransForm($attributes);
         return $attributes;
     }
 
     //修改的主体也应该是类型才对,重点表中的数据应该取出来,但是类型表中的数据也应该取出来, 使用左连接, 从往左往右是type表,attribute表,goods_attribute表
-    public function ajaxEditAttr($type_id){ //
+    public function ajaxEditAttr($type_id, Attribute $model){ //
         $goods_id = request('goods_id');
         $attributes = DB::table('types') //已类型表取出了该类型下的所有的商品属性id
             ->select('attributes.*',  'goods_attributes.attribute_value', 'goods_attributes.id as goods_attribute_id')
@@ -141,12 +137,7 @@ class AttributeController extends Controller
             ->get();
         //进行options_values处理
         //属性transform处理
-        $attributes->transform(function ($item){
-            if($item->option_values){
-                $item->option_values = explode(',', $item->option_values);
-            }
-            return $item;
-        });
+        $attributes = $model->ajaxAttrTransForm($attributes);
         return $attributes;
     }
 }

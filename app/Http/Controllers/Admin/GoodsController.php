@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Goods;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 use Yajra\Datatables\Facades\Datatables;
 
@@ -122,5 +123,11 @@ class GoodsController extends Controller
         $goods->removeGoodsImage();
         $res = $goods->delete();
         return (string) $res;
+    }
+
+    public function delGoodsAttr($goods_attribute_id){
+        $res = DB::table('goods_attributes')->where('id', $goods_attribute_id)->delete();
+        //todo 库存删除
+        return $res;
     }
 }

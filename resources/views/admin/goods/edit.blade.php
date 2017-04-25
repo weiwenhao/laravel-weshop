@@ -204,7 +204,7 @@
                                             </select>
                                         </div>
                                         <div class="col-md-4">
-                                            <span>请检查并避免属性值的重复</span>
+                                            <span>请检查并避免属性值的重复,置空或者不做选择则不被录入</span>
                                         </div>
                                     </div>
                                     {{--属性区域--}}
@@ -213,38 +213,38 @@
                                         <label for="" class="control-label col-md-4">@{{ attribute.name }}</label>
                                         <input type="hidden" name="goods_attribute_ids[]" :value="attribute.goods_attribute_id">
                                         <div class="col-md-4">
-                                            <template v-if="attribute.type == '唯一'">
-                                                <input type="text" :name="'attribute_values['+attribute.id+'][]'" :value="attribute.attribute_value" class="form-control" v-if="attribute.option_values == '' || attribute.option_values == null">
-                                                <select :name="'attribute_values['+attribute.id+'][]'" class="form-control select2" placeholder="请选择" v-else>
-                                                    <option value="">请选择</option>
+                                            <template v-if="attribute.type == '唯一'"> {{--//只有来自服务器的数据才需要绑定属性值, 因为attribute.attribute_value的值被绑定了--}}
+                                                <input type="text" :name="'attribute_values['+attribute.id+'][]'"  v-model="attribute.attribute_value" class="form-control" v-if="attribute.option_values == '' || attribute.option_values == null">
+                                                <select :name="'attribute_values['+attribute.id+'][]'"
+                                                        v-model="attribute.attribute_value"
+                                                        class="form-control select2" placeholder="请选择" v-else>
+                                                    <option :value="null">请选择</option>
                                                     <option :value="option_value"
                                                             v-for="option_value in attribute.option_values"
-                                                            :selected="option_value == attribute.attribute_value"
                                                     >@{{ option_value }}</option>
                                                 </select>
                                             </template>
                                             <template v-else>
                                                 <div class="input-group"  v-if="attribute.option_values == '' || attribute.option_values == null">
-                                                    <input type="text" :name="'attribute_values['+attribute.id+'][]'" :value="attribute.attribute_value" class="form-control">
+                                                    <input type="text" :name="'attribute_values['+attribute.id+'][]'"  v-model="attribute.attribute_value" class="form-control">
                                                     <div class="input-group-addon">
                                                         <a  @click.prevent="switchSelf(index, attribute)"> {{--有可能是减少自己也有可能是增加自己--}}
-                                                            <i class="fa fa-plus" v-if="attribute.is_server_data == undefined"></i>
-                                                            <i class="fa fa-minus" v-else-if="attribute.is_server_data == false"></i>
+                                                            <i class="fa" :class="[attribute.is_first_attr?'fa-plus':'fa-minus']"></i>
                                                         </a>
                                                     </div>
                                                 </div>
                                                 <div class="input-group"  v-else>
-                                                    <select :name="'attribute_values['+attribute.id+'][]'" class="form-control select2" data-placeholder="请选择">
-                                                        <option value="">请选择</option>
+                                                    <select :name="'attribute_values['+attribute.id+'][]'"
+                                                            v-model="attribute.attribute_value"
+                                                            class="form-control select2" data-placeholder="请选择">
+                                                        <option :value="null">请选择</option>
                                                         <option :value="option_value"
                                                                 v-for="option_value in attribute.option_values"
-                                                                :selected="option_value == attribute.attribute_value"
                                                         >@{{ option_value }}</option>
                                                     </select>
                                                     <div class="input-group-addon">
                                                         <a @click.prevent="switchSelf(index, attribute)"> {{--有可能是减少自己也有可能是增加自己--}}
-                                                            <i class="fa fa-plus" v-if="attribute.is_server_data == undefined"></i>
-                                                            <i class="fa fa-minus" v-else-if="attribute.is_server_data == false"></i>
+                                                            <i class="fa" :class="[attribute.is_first_attr?'fa-plus':'fa-minus']"></i>
                                                         </a>
                                                     </div>
                                                 </div>
@@ -279,7 +279,7 @@
     new Vue({
         el : '#app',
         data : {
-            selected : {{ $goods->type_id }},
+            selected : {!! $goods->type_id?$goods->type_id:"''" !!} ,
             types : [],
             attributes : [],
         },
@@ -289,19 +289,50 @@
         },
         methods :　{
             switchSelf(index, attribute){
-                if(typeof(attribute.is_server_data) == 'undefined'){ //未定义的数据类型,则肯定是服务器数据,只能+
+                //分情况 如果属性是第一个的话,则直接添加新的
+                if(attribute.is_first_attr){ //未定义的数据类型,则肯定是服务器数据,只能+
                     let newAttribute = {
                         'id' : attribute.id,
                         'name' : attribute.name,
                         'option_values' : attribute.option_values,
                         'type' : attribute.type,
                         'type_id' : attribute.type_id,
-                        'is_server_data' : false
+                        'is_first_attr' : false,
+                        'attribute_value' : '',
                     };
                     //往数组中的该index的后面插入一条数据
                     this.attributes.splice(index+1, 0, newAttribute);
-                } else if (attribute.is_server_data == false){
-                    this.attributes.splice(index, 1);
+                } else {
+                    //如果属性已经出现过则减少, 根据是否存在goods_attr_id再进行判断
+                    if(attribute.goods_attribute_id) {
+                        swal({
+                                title: "是否删除该属性?",
+                                text: "该属性已经存入到数据库中,删除该属性的同时,将会删除其对应的库存量!",
+                                type: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#DD6B55",
+                                confirmButtonText: "确定",
+                                cancelButtonText: "取消",
+                                closeOnConfirm: true
+                            },
+                            () => {
+                                this.attributes.splice(index, 1);
+                               //点击确定之后的回调
+                                axios.delete('/admin/goods_attributes/'+attribute.goods_attribute_id, {
+
+                                })
+                                /*.then((response)=> {
+                                    this.attributes =  response.data;
+                                })
+                                .catch(error=> {
+                                    swal("属性删除失败!", "warning")
+                                });*/
+
+                            });
+                    }else{
+                        //不存在goods_attribute_id直接删除即可
+                        this.attributes.splice(index, 1);
+                    }
                 }
             },
             /**
@@ -326,17 +357,19 @@
              * 商品分类的ajax数据
              */
             getEditAttr(){
-                axios.get('/admin/types/{{ $goods->type_id }}/attributes/ajax_edit_attr', {
-                    params: {
-                        'goods_id' : {{ $goods->id }},
-                    }
-                })
-                .then((response)=> {
-                    this.attributes =  response.data;
-                })
-                .catch(error=> {
-                    this.attributes = [];
-                });
+                if(this.selected){
+                    axios.get('/admin/types/{{ $goods->type_id }}/attributes/ajax_edit_attr', {
+                        params: {
+                            'goods_id' : {{ $goods->id }},
+                        }
+                    })
+                    .then((response)=> {
+                        this.attributes =  response.data;
+                    })
+                    .catch(error=> {
+                        this.attributes = [];
+                    });
+                }
             },
 
             getAttributes(){

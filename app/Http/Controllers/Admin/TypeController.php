@@ -98,7 +98,7 @@ class TypeController extends Controller
     public function destroy($id)
     {
         $model = Type::find($id);
-        //删除该类型对应的属性
+        //删除该类型对应的属性, todo 删除了该类型下的所有商品属性,则库存也需要删除
         Attribute::where('type_id', $id)->delete();
         if (!$model)
             return response('删除失败',403);

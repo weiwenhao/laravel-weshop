@@ -47,6 +47,7 @@ Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.ad
     Route::get('/types/ajax_types','TypeController@ajaxTypes')->name('goods.create');
     Route::get('/types/{type_id}/attributes/ajax_attributes','AttributeController@ajaxAttributes')->name('goods.create');
     Route::get('/types/{type_id}/attributes/ajax_edit_attr','AttributeController@ajaxEditAttr')->name('goods.edit');
+    Route::delete('/goods_attributes/{id}', 'GoodsController@delGoodsAttr')->name('goods.edit');
 
     //分类管理
     Route::get('/categories/dt_data','CategoryController@dtData')->name('categories.index');
@@ -58,6 +59,9 @@ Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.ad
     Route::get('/types/{type_id}/attributes/dt_data','AttributeController@dtData')->name('attributes.index');
     Route::resource('types/{type_id}/attributes', 'AttributeController'); //route.name  attributes.index 依旧是只取结尾处
 
+    /******************************订单管理区************************************/
+    Route::get('/orders/dt_data','OrderController@dtData')->name('types.index');
+    Route::resource('orders', 'OrderController');
 
     /******************************系统设置区************************************/
     //权限管理

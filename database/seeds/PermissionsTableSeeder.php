@@ -12,12 +12,12 @@ class PermissionsTableSeeder extends Seeder
      */
     public function run()
     {
-        /*商品管理*/
+        /*************************商品管理***************************************/
         //一级
         $shop_admin =  Permission::create([
             'name' => 'shop_admin',
             'display_name' => '商品管理',
-            'icon' => 'fa-shopping-cart',
+            'icon' => 'fa-shopping-bag',
             'sort' => 60,
         ]);
         //二级
@@ -107,9 +107,60 @@ class PermissionsTableSeeder extends Seeder
 
 
 
-        /**
-         * 控制台系列
-         */
+        /**************************订单管理***************************************/
+        //一级
+        $order_admin =  Permission::create([
+            'name' => 'order_admin',
+            'display_name' => '订单管理',
+            'icon' => 'fa-jpy',
+            'sort' => 70,
+        ]);
+
+
+        //二级
+        $order = Permission::create([
+            'name' => 'orders.list',
+            'display_name' => '订单列表',
+            'url' => 'orders',
+            'parent_id' => $order_admin->id,
+            'description' => '订单列表',
+        ]);
+        Permission::create([
+            'name' => 'orders.edit',
+            'display_name' => '修改订单',
+            'parent_id' => $order->id,
+            'description' => '修改订单',
+        ]);
+        Permission::create([
+            'name' => 'orders.destroy',
+            'display_name' => '删除订单',
+            'parent_id' => $order->id,
+            'description' => '删除订单',
+        ]);
+
+        //地址管理
+        $addr = Permission::create([
+            'name' => 'addrs.list',
+            'display_name' => '地址列表',
+            'url' => 'addrs',
+            'parent_id' => $order_admin->id,
+            'description' => '地址列表',
+        ]);
+        /*Permission::create([
+            'name' => 'addrs.edit',
+            'display_name' => '修改地址',
+            'parent_id' => $addr->id,
+            'description' => '修改地址',
+        ]);*/
+        Permission::create([
+            'name' => 'addrs.destroy',
+            'display_name' => '删除地址',
+            'parent_id' => $addr->id,
+            'description' => '删除地址',
+        ]);
+
+
+        /*****************************控制台************************************/
         //顶级
         $dash =  Permission::create([
             'name' => 'dash',
@@ -132,9 +183,7 @@ class PermissionsTableSeeder extends Seeder
 
 
 
-        /**
-         * 系统设置
-         */
+        /*****************************控制台************************************/
         $site = Permission::create([
             'name' => 'dash',
             'display_name' => '系统设置',

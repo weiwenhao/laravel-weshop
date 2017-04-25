@@ -55,9 +55,8 @@ class Goods extends Model
      * return void
      */
     public function saveGoodsAttr($goods_id){
-
-        $attributes = request('attribute_values'); //
-        foreach ($attributes as $attribute_id => $value) {
+        $attribute_values = request('attribute_values', []); //
+        foreach ($attribute_values as $attribute_id => $value) {
             $value = array_unique($value); //去重
             foreach ($value as $attribute_value){
                 if($attribute_value){ //去空
@@ -73,8 +72,9 @@ class Goods extends Model
     }
 
     public function editGoodsAttr($goods_id){
-        $attribute_values = request('attribute_values'); // attribute_id => attribute_value
+        $attribute_values = request('attribute_values', []); // attribute_id => attribute_value
         $goods_attribute_ids = request('goods_attribute_ids');
+        //$goods_attribute_values
         //拼凑入库数组
         $goods_attributes = [];
         $count = 0;
@@ -98,7 +98,7 @@ class Goods extends Model
                 $count ++;
             }
         }
-        //批量插入数据库 todo 直接进行删除该商品下的所有库存,再进行有id的插入操作
+        //批量插入数据库 todo 直接进行删除该商品下的所有商品属性,再进行有id的插入操作
         DB::table('goods_attributes')->where('goods_id', $goods_id)->delete();
         DB::table('goods_attributes')->insert($goods_attributes);
         //方法2,进行数据库查询插入
