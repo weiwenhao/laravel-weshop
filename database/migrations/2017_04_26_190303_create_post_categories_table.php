@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+class CreatePostCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->char('id', 28)->primary();
-            $table->string('nickname');
-            $table->string('avatar', 255);
+        Schema::create('post_categories', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name', 10)->unique()->comment('分类名称');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('post_categories');
     }
 }

@@ -131,12 +131,6 @@ class PermissionsTableSeeder extends Seeder
             'parent_id' => $order->id,
             'description' => '修改订单',
         ]);
-        Permission::create([
-            'name' => 'orders.destroy',
-            'display_name' => '删除订单',
-            'parent_id' => $order->id,
-            'description' => '删除订单',
-        ]);
 
         //地址管理
         $addr = Permission::create([
@@ -158,6 +152,30 @@ class PermissionsTableSeeder extends Seeder
             'parent_id' => $addr->id,
             'description' => '删除地址',
         ]);
+
+
+        /*****************************圈子(circle)管理************************************/
+        $circle_admin =  Permission::create([
+            'name' => 'circle_admin',
+            'display_name' => '圈子管理',
+            'icon' => 'fa-comments',
+            'sort' => 80,
+        ]);
+        $post = Permission::create([
+            'name' => 'posts.list',
+            'display_name' => '说说列表',
+            'url' => 'posts',
+            'parent_id' => $circle_admin->id,
+            'description' => '说说列表',
+        ]);
+        Permission::create([
+            'name' => 'posts.destroy',
+            'display_name' => '删除说说',
+            'parent_id' => $post->id,
+            'description' => '删除说说',
+        ]);
+
+
 
 
         /*****************************控制台************************************/

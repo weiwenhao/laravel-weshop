@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Attribute;
+use App\Models\Goods;
 use App\Models\Type;
 use Illuminate\Database\Seeder;
 
@@ -30,14 +31,14 @@ class TypesTableSeeder extends Seeder
         ]);
 
         //商品属性seed
-        Attribute::create([
+        $changshang = Attribute::create([
             'name' => '厂商',
             'type' => '唯一',
             'option_values' => null,
             'type_id' => $phone->id,
         ]);
 
-        Attribute::create([
+        $caozuo = Attribute::create([
             'name' => '操作系统',
             'type' => '可选',
             'option_values' => '安卓,ios,wp',
@@ -51,6 +52,7 @@ class TypesTableSeeder extends Seeder
             'type_id' => $phone->id,
         ]);
 
+
         Attribute::create([
             'name' => '口味',
             'type' => '可选',
@@ -63,6 +65,25 @@ class TypesTableSeeder extends Seeder
             'type' => '可选',
             'option_values' => '700ml,900ml,1200ml',
             'type_id' => $yinpin->id,
+        ]);
+        $ceshi1 = Goods::where('id',1)->first();
+        //goods_attribute表填充
+        $goods_attr1 = \Illuminate\Support\Facades\DB::table('goods_attributes')->insert([
+            'goods_id' => $ceshi1->id,
+            'attribute_id' => $changshang->id,
+            'attribute_value' => '小米'
+        ]);
+
+        \Illuminate\Support\Facades\DB::table('goods_attributes')->insert([
+            'goods_id' => $ceshi1->id,
+            'attribute_id' => $caozuo->id,
+            'attribute_value' => 'ios'
+        ]);
+
+        \Illuminate\Support\Facades\DB::table('goods_attributes')->insert([
+            'goods_id' => $ceshi1->id,
+            'attribute_id' => $caozuo->id,
+            'attribute_value' => '安卓'
         ]);
     }
 }

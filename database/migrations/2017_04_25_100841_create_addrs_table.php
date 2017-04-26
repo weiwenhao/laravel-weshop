@@ -15,6 +15,12 @@ class CreateAddrsTable extends Migration
     {
         Schema::create('addrs', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name', 5)->comment('真实姓名');
+            $table->char('phone', 11)->comment('手机号码');
+            $table->char('garden_name', 3)->comment('园地名称');
+            $table->char('floor_name', 3)->comment('宿舍楼名称');
+            $table->char('number', 3)->comment('门牌号');
+            $table->char('user_id', 28)->comment('微信用户的openid');
             $table->timestamps();
         });
     }

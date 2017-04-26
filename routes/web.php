@@ -11,7 +11,13 @@
 |
 */
 
-Route::get('/test', function (){
+Route::get('/test', function (\EasyWeChat\Foundation\Application $wechat){
+ // odh7zsgI75iT8FRh0fGlSojc9PWM
+//    dd($wechat->user->get('ojRsVv5u3iizG1Qf7XyKKtajcDSA'));
+//    dd(Auth::guard('admin')->user());
+//    $message = new \EasyWeChat\Message\Text(['content' => '测试消息']);
+//    $wechat->staff->message($message)->to('ojRsVv5u3iizG1Qf7XyKKtajcDSA')->send();
+//    dd(session('wechat.oauth_user'));
 
 });
 
@@ -32,11 +38,8 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
 
     Route::post('logout','Auth\LoginController@logout');
 });
-Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.admin','check.admin'] ], function () {
+Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.admin','check.admin', /*'wechat.oauth:snsapi_userinfo'*/] ], function () {
     Route::get('/',function (){
-//            dd(Auth::guard('admin')->user()->name);
-//        dd(auth('admin')->user());
-//        dd(auth('admin')->user()->hasRole('admin'));
         return view('admin.index');
     });
 
@@ -60,8 +63,22 @@ Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.ad
     Route::resource('types/{type_id}/attributes', 'AttributeController'); //route.name  attributes.index 依旧是只取结尾处
 
     /******************************订单管理区************************************/
-    Route::get('/orders/dt_data','OrderController@dtData')->name('types.index');
+    //订单列表
+    Route::get('/orders/dt_data','OrderController@dtData')->name('orders.index');
+    Route::put('/orders', 'OrderController@handleOrder')->name('orders.edit');
     Route::resource('orders', 'OrderController');
+    //地址列表
+    Route::get('/addrs/dt_data','AddrController@dtData')->name('addrs.index');
+    Route::get('/addrs', 'AddrController@index')->name('addrs.index');
+    Route::delete('/addrs/{id}', 'AddrController@destroy')->name('addrs.destroy');
+
+    /******************************圈子管理**************************************/
+    //说说列表
+    Route::get('posts/dt_data','PostController@dtData')->name('posts.index');
+    Route::resource('posts', 'PostController', ['only' => ['index', 'destroy']]);
+    //评论列表
+    Route::get('posts/{post_id}/post_comments/dt_data','PostCommentController@dtData')->name('comments.index');
+    Route::resource('posts/{post_id}/post_comments', 'PostCommentController', ['only' => ['index', 'destroy']]);
 
     /******************************系统设置区************************************/
     //权限管理
