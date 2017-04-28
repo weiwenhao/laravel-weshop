@@ -18,16 +18,38 @@ Route::get('/test', function (\EasyWeChat\Foundation\Application $wechat){
 //    $message = new \EasyWeChat\Message\Text(['content' => '测试消息']);
 //    $wechat->staff->message($message)->to('ojRsVv5u3iizG1Qf7XyKKtajcDSA')->send();
 //    dd(session('wechat.oauth_user'));
-
+//    return "<a href='?name=123'>123</a><a href='?name=456'>456</a>";
 });
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', function (){
+    return redirect('/index');
+});
+
+Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
+    //商品区
+    Route::get('index', 'GoodsController@index');
+    Route::get('goods', 'GoodsController@list');
+    Route::get('goods/{goods_id}', 'GoodsController@desc');
+    //购物车
+    Route::resource('shop_carts', 'ShopCartController');
+    //地址管理
+    Route::resource('addrs', 'AddrController');
+    //订单管理
+    Route::get('orders/confirm', 'OrderController@confirmOrder'); //确认订单
+    Route::get('orders/addrs', 'OrderController@addrs'); //订单地址列表
+    Route::resource('orders', 'OrderController');
+    //个人中心
+    Route::get('my_center', 'MyCenterController@index'); //个人中心主页
 });
 
 
-Route::get('/home', 'HomeController@index');
 
+
+
+
+/**
+ * 后台登陆注册区
+ */
 Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
     //登录
     Route::get('login','Auth\LoginController@showLoginForm');
@@ -38,6 +60,8 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
 
     Route::post('logout','Auth\LoginController@logout');
 });
+
+
 Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.admin','check.admin', /*'wechat.oauth:snsapi_userinfo'*/] ], function () {
     Route::get('/',function (){
         return view('admin.index');
@@ -79,6 +103,11 @@ Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.ad
     //评论列表
     Route::get('posts/{post_id}/post_comments/dt_data','PostCommentController@dtData')->name('comments.index');
     Route::resource('posts/{post_id}/post_comments', 'PostCommentController', ['only' => ['index', 'destroy']]);
+
+    /******************************活动管理**************************************/
+    //活动列表
+    Route::get('/actives/dt_data','ActiveController@dtData')->name('actives.index');
+    Route::resource('actives', 'ActiveController');
 
     /******************************系统设置区************************************/
     //权限管理

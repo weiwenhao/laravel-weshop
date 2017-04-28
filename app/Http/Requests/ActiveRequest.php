@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Request;
+use Request;
 
-class CategoryRequest extends FormRequest
+class ActiveRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,11 +25,18 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         $rules =  [
-            'name' => 'required|max:10|unique:categories,name',
+            'name' => 'required|max:10|unique:actives,name',
+            'url' => 'required|max:10|unique:actives,url',
+            'sort' => 'required|integer',
+            'is_show' => 'required|boolean',
+            'is_content' => 'required|boolean',
+            'image' => 'required|image'
         ];
         if (Request::isMethod('PATCH') || Request::isMethod('PUT')){
             $id = Request::get('id');
-            $rules['name'] = 'required|max:10|unique:categories,name,'.$id;
+            $rules['name'] = 'required|max:10|unique:actives,name,'.$id;
+            $rules['url'] = 'required|max:10|unique:actives,url,'.$id;
+            $rules['image'] = 'nullable|image';
         }
         return $rules;
     }
@@ -41,13 +48,21 @@ class CategoryRequest extends FormRequest
     public function messages()
     {
         return [
+
         ];
     }
 
+    /**
+     * 重写属性名称
+     * @return array
+     */
     public function attributes()
     {
         return [
-          'name' => '分类名称'
+            'name' => '活动名称',
+            'sort' => '权重',
+            'image' => '活动封面',
+            'url' => '英文名称',
         ];
     }
 }

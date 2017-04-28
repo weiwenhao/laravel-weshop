@@ -158,7 +158,7 @@ class PermissionsTableSeeder extends Seeder
         $circle_admin =  Permission::create([
             'name' => 'circle_admin',
             'display_name' => '圈子管理',
-            'icon' => 'fa-comments',
+            'icon' => 'fa-circle',
             'sort' => 80,
         ]);
         $post = Permission::create([
@@ -176,7 +176,42 @@ class PermissionsTableSeeder extends Seeder
         ]);
 
 
+        /****************************活动管理**********************************************/
+        $active_admin =  Permission::create([
+            'name' => 'active_admin',
+            'display_name' => '活动管理',
+            'icon' => 'fa-tree',
+            'sort' => 80,
+        ]);
 
+        //二级
+        $active = Permission::create([
+            'name' => 'actives.list',
+            'display_name' => '活动列表',
+            'url' => 'actives',
+            'parent_id' => $active_admin->id,
+            'description' => '活动列表',
+        ]);
+
+        //三级
+        Permission::create([
+            'name' => 'actives.create',
+            'display_name' => '添加活动',
+            'parent_id' => $active->id,
+            'description' => '添加活动',
+        ]);
+        Permission::create([
+            'name' => 'actives.edit',
+            'display_name' => '修改活动',
+            'parent_id' => $active->id,
+            'description' => '修改活动',
+        ]);
+        Permission::create([
+            'name' => 'actives.destroy',
+            'display_name' => '删除活动',
+            'parent_id' => $active->id,
+            'description' => '删除活动',
+        ]);
 
         /*****************************控制台************************************/
         //顶级

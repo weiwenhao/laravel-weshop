@@ -26,7 +26,8 @@ class GoodsController extends Controller
 
     public function dtData()
     {
-        return Datatables::of(Goods::with('category'))->make(true);
+        return Datatables::of(Goods::with('category')
+            ->select('id', 'name', 'price', 'sort', 'is_on_sale', 'is_best', 'buy_count', 'sm_image', 'created_at', 'category_id'))->make(true);
     }
     /**
      * Show the form for creating a new resource.

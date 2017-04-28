@@ -18,8 +18,8 @@ class Goods extends Model
     public function saveGoodsImage()
     {
         //todo 设置图片比例
-        $path = config('shop.goods_path').date('Ymd').'/';
-        $goods_name = str_random().'.jpg';
+        $path = config('shop.goods_img_path').date('Ymd').'/';
+        $goods_img_name = str_random().'.jpg';
         if(!is_dir(public_path($path))){
             mkdir(public_path($path), 0777, true); //第三个参数代表递归创建
         }
@@ -27,16 +27,16 @@ class Goods extends Model
         //这里裁剪,再充值尺寸
 
         //进行图片的存储测试
-        Image::make(request('image'))->fit($size = config('shop.goods_img_size'), $size*3/5)->save($path.$goods_name);
-        Image::make(request('image'))->fit($size = config('shop.sm_goods_img_size'), $size*3/5)->save($path.'sm_'.$goods_name);
-        Image::make(request('image'))->fit($size = config('shop.mid_goods_img_size'), $size*3/5)->save($path.'mid_'.$goods_name);
-        Image::make(request('image'))->fit($size = config('shop.big_goods_img_size'), $size*3/5)->save($path.'big_'.$goods_name);
+        Image::make(request('image'))->fit($size = config('shop.goods_img_size'), $size)->save($path.$goods_img_name);
+        Image::make(request('image'))->fit($size = config('shop.sm_goods_img_size'), $size)->save($path.'sm_'.$goods_img_name);
+        Image::make(request('image'))->fit($size = config('shop.mid_goods_img_size'), $size)->save($path.'mid_'.$goods_img_name);
+        Image::make(request('image'))->fit($size = config('shop.big_goods_img_size'), $size)->save($path.'big_'.$goods_img_name);
 
         return [
-          'image' =>  '/'.$path.$goods_name,
-          'sm_image' =>  '/'.$path.'sm_'.$goods_name,
-          'mid_image' =>  '/'.$path.'mid_'.$goods_name,
-          'big_image' =>  '/'.$path.'big_'.$goods_name,
+          'image' =>  '/'.$path.$goods_img_name,
+          'sm_image' =>  '/'.$path.'sm_'.$goods_img_name,
+          'mid_image' =>  '/'.$path.'mid_'.$goods_img_name,
+          'big_image' =>  '/'.$path.'big_'.$goods_img_name,
         ];
 
     }
@@ -71,6 +71,10 @@ class Goods extends Model
         }
     }
 
+    /**
+     * 后台修改商品属性
+     * @param $goods_id
+     */
     public function editGoodsAttr($goods_id){
         $attribute_values = request('attribute_values', []); // attribute_id => attribute_value
         $goods_attribute_ids = request('goods_attribute_ids');
@@ -105,6 +109,12 @@ class Goods extends Model
 
     }
 
+    /**
+     * 得值在数组中出现的次数,包括null
+     * @param $needle
+     * @param $haystak
+     * @return int
+     */
     private function arrayCount($needle, $haystak){
         $count = 0;
         foreach($haystak as $value){
@@ -113,5 +123,46 @@ class Goods extends Model
             }
         }
         return $count;
+    }
+
+    public function getGoodsByCid()
+    {
+        //初始值
+        $where = [];
+        $order = 'id';
+        $sort = 'desc';
+        //得到分类id
+        if(request('category_id')){
+            $where[] = ['category_id', request('category_id')];
+        }
+        if(request('order')){
+            $order = request('order');
+        }
+        if(request('sort')){
+            $sort = request('sort');
+        }
+        $goods = $this->where($where)->orderBy($order, $sort)->paginate(15);
+        return $goods;
+    }
+
+    public function getGoodsByKey()
+    {
+        //初始值
+        $order = 'id';
+        $sort = 'desc';
+        $key = request('key');
+        if(request('order')){
+            $order = request('order');
+        }
+        if(request('sort')){
+            $sort = request('sort');
+        }
+        $goods = $this->where(['name', 'like', "%$key%"])->orderBy($order, $sort)->paginate(15);
+        return $goods;
+    }
+
+    public function getBestGoods($limit){
+        $goods = $this->select('id', 'name', 'sm_image', 'price')->where('is_best', 1)->limit($limit)->get();
+        return $goods;
     }
 }

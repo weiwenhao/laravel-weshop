@@ -118,7 +118,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('sort') ? ' has-error' : '' }}">
-                                        <label for="sort" class="col-md-4 control-label">权重</label>
+                                        <label for="sort" class="col-md-4 control-label">权重(从小到大)</label>
 
                                         <div class="col-md-4">
                                             <input name="sort" type="number" class="form-control" value="{{ old('sort',100) }}" id="" placeholder="数字越大,商品展示越靠前">
@@ -169,7 +169,9 @@
                                     <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
                                         <label for="image" class="col-md-4 control-label">商品图片 *</label>
                                         <div class="col-md-4">
-                                            <input type="file" name="image" value="">
+                                            <div class="control-label">
+                                                <input type="file" name="image" value="">
+                                            </div>
                                             @if ($errors->has('image'))
                                                 <span class="help-block">
                                                     <strong>{{ $errors->first('image') }}</strong>

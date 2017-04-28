@@ -119,7 +119,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('sort') ? ' has-error' : '' }}">
-                                        <label for="sort" class="col-md-4 control-label">权重</label>
+                                        <label for="sort" class="col-md-4 control-label">权重(从小到大)</label>
 
                                         <div class="col-md-4">
                                             <input name="sort" type="number" class="form-control" value="{{ old('sort', $goods->sort) }}" id="" placeholder="数字越大,商品展示越靠前">
@@ -167,10 +167,35 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group{{ $errors->has('sort') ? ' has-error' : '' }}">
+                                        <label for="sort" class="col-md-4 control-label">商品图片预览</label>
+
+                                        <div class="col-md-4">
+                                            <img src="{{ $goods->mid_image }}" alt="">
+                                        </div>
+                                    </div>
                                     <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
+                                        <label for="image" class="col-md-4 control-label"></label>
+                                        <div class="col-md-4">
+                                            <div class="control-label"><input type="file" name="image" value="" class=""></div>
+                                            @if ($errors->has('image'))
+                                                <span class="help-block">
+                                                    <strong>{{ $errors->first('image') }}</strong>
+                                                </span>
+                                            @else
+                                                <span class="help-block">
+                                                    <strong>若不更换图片请勿选择文件</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    {{--<div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
                                         <label for="image" class="col-md-4 control-label">商品图片 *</label>
                                         <div class="col-md-4">
-                                            <input type="file" name="image" value="">
+                                            <div class="control-label">
+                                                <input type="file" name="image" value="">
+                                            </div>
                                             @if ($errors->has('image'))
                                                 <span class="help-block">
                                                     <strong>{{ $errors->first('image') }}</strong>
@@ -179,7 +204,7 @@
                                                 <b>若不更换图片,请勿选择任何文件!</b>
                                             @endif
                                         </div>
-                                    </div>
+                                    </div>--}}
                                 </div>
                                 <!-- /.tab-pane -->
                                 <div class="tab-pane" id="tab_2">

@@ -77,7 +77,7 @@
                                 </div>
                             </div>
                             <div class="form-group {{ $errors->has('sort')?'has-error':'' }}">
-                                <label class="col-md-3 control-label" for="inputError">权重</label>
+                                <label class="col-md-3 control-label" for="inputError">权重(从小到大)</label>
                                 <div class="col-md-6">
                                     <input type="text" name="sort" value="{{ old('sort', $perm->sort) }}" class="form-control" id="inputError" placeholder="数字越小,越靠前">
                                     @if($errors->has('sort'))
@@ -124,7 +124,7 @@
                                 </div>
                             </div>
                             <div class="form-group {{ $errors->has('sort')?'has-error':'' }}">
-                                <label class="col-md-3 control-label" for="inputError">权重</label>
+                                <label class="col-md-3 control-label" for="inputError">权重(从小到大)</label>
                                 <div class="col-md-6">
                                     <input type="text" name="sort" value="{{ old('sort', $perm->sort) }}" class="form-control" id="inputError" placeholder="数字越小越靠前">
                                     @if($errors->has('sort'))
