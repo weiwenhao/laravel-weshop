@@ -18,7 +18,7 @@ class OrdersSeeder extends Seeder
             'name' => '魏文豪',
             'phone' => '13168065609',
             'garden_name' => '积善园',
-            'floor_name' => '小弟楼',
+            'floor_name' => '孝悌楼',
             'number' => '503',
             'user_id' => 'ojRsVv5u3iizG1Qf7XyKKtajcDSA'
         ]);
@@ -33,11 +33,11 @@ class OrdersSeeder extends Seeder
             'garden_name' => $addr->garden_name,
             'floor_name' => $addr->floor_name,
             'number' => $addr->number,
-            'total_price' => 800,
+            'total_price' => 55,
         ]);
 
         $order2 = \App\Models\Order::create([
-            'order_id' =>  date('ymdh').sprintf('%04d', mt_rand(1,9999)),
+            'order_id' =>  date('ymdhi').sprintf('%04d', mt_rand(1,9999)),
             'remarks' => '我是订单备注啊',
             'user_id' => 'ojRsVv5u3iizG1Qf7XyKKtajcDSA',
             'name' => $addr->name,
@@ -45,8 +45,9 @@ class OrdersSeeder extends Seeder
             'garden_name' => $addr->garden_name,
             'floor_name' => $addr->floor_name,
             'number' => $addr->number,
-            'total_price' => 800,
+            'total_price' => 89,
         ]);
+
         //填充订单商品2条
         $ceshi1 = Goods::where('id',1)->first();
         $anzhuo = DB::table('goods_attributes')->where('attribute_value', '安卓')->first();

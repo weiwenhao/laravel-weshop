@@ -342,30 +342,7 @@
         }
     });
     //ue浏览器
-    var ue = UE.getEditor('description', {  //UE应该是UE的全局变量,类似于VUE,$等
-        toolbars: [
-            [
-                'bold',
-                'italic',
-                'blockquote',//引用
-                /*'insertcode', //代码语言*/
-                'insertunorderedlist', //无序
-                'insertorderedlist', //有序
-                'forecolor', //文字颜色
-                'backcolor', //文字北京颜色
-                'justifyleft', //居左
-                'justifycenter', //居中
-                'justifyright', //居右
-                'insertvideo', //视频
-                'insertimage',
-            ]
-        ],
-        elementPathEnabled: false,
-        enableContextMenu: false,
-        autoClearEmptyNode:true,
-        wordCount:false,
-        imagePopup:false,
-        autotypeset:{ indent: true,imageBlockLine: 'center' },
+    var ue = UE.getEditor('description', {  //UE应该是UE的全局变量,类似于VUE,$
         initialFrameWidth:"100%",
         initialFrameHeight:"500",
 //        zIndex: 3000

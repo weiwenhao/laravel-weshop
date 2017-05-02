@@ -181,7 +181,7 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         //entrust
         Zizaco\Entrust\EntrustServiceProvider::class,
-        //datatables
+        //datatables + buttons扩展
         Yajra\Datatables\DatatablesServiceProvider::class,
         //viewComposer,容器创建时会被运行
         App\Providers\ComposerServiceProvider::class,

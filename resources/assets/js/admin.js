@@ -12,6 +12,8 @@ window.$ = window.jQuery = require('jquery');
 
 
 require('bootstrap-sass');
+
+
 //弹出层组件
 require('sweetalert');
 require('select2')

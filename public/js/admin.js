@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 56);
+/******/ 	return __webpack_require__(__webpack_require__.s = 55);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -11433,7 +11433,7 @@ var _defaultParams2 = _interopRequireWildcard(_defaultParams);
  * Add modal + overlay to DOM
  */
 
-var _injectedHTML = __webpack_require__(50);
+var _injectedHTML = __webpack_require__(49);
 
 var _injectedHTML2 = _interopRequireWildcard(_injectedHTML);
 
@@ -41397,9 +41397,10 @@ window.axios.defaults.headers.common = {
 window.$ = window.jQuery = __webpack_require__(1);
 
 __webpack_require__(31);
+
 //弹出层组件
-__webpack_require__(52);
-__webpack_require__(47);
+__webpack_require__(51);
+__webpack_require__(46);
 //日期选择控件
 // require('laydate')
 
@@ -41414,7 +41415,7 @@ __webpack_require__(43);
 import 'element-ui/lib/theme-default/index.css'
 Vue.use(ElementUI) //注册为vue的全局组件了*/
 
-Vue.component('example', __webpack_require__(53));
+Vue.component('example', __webpack_require__(52));
 
 /*
 const app = new Vue({
@@ -43715,8 +43716,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;var _typeof = typeof Symbol === "function" && 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 46 */,
-/* 47 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;var require;/*!
@@ -49451,7 +49451,7 @@ S2.define('jquery.select2',[
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49592,7 +49592,7 @@ exports['default'] = {
 module.exports = exports['default'];
 
 /***/ }),
-/* 49 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49677,7 +49677,7 @@ exports['default'] = handleKeyDown;
 module.exports = exports['default'];
 
 /***/ }),
-/* 50 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49725,7 +49725,7 @@ exports["default"] = injectedHTML;
 module.exports = exports["default"];
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49956,7 +49956,7 @@ exports['default'] = setParameters;
 module.exports = exports['default'];
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49991,9 +49991,9 @@ var _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$r
 
 // Handle button events and keyboard events
 
-var _handleButton$handleConfirm$handleCancel = __webpack_require__(48);
+var _handleButton$handleConfirm$handleCancel = __webpack_require__(47);
 
-var _handleKeyDown = __webpack_require__(49);
+var _handleKeyDown = __webpack_require__(48);
 
 var _handleKeyDown2 = _interopRequireWildcard(_handleKeyDown);
 
@@ -50003,7 +50003,7 @@ var _defaultParams = __webpack_require__(35);
 
 var _defaultParams2 = _interopRequireWildcard(_defaultParams);
 
-var _setParameters = __webpack_require__(51);
+var _setParameters = __webpack_require__(50);
 
 var _setParameters2 = _interopRequireWildcard(_setParameters);
 
@@ -50265,20 +50265,20 @@ if (typeof window !== 'undefined') {
 module.exports = exports['default'];
 
 /***/ }),
-/* 53 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Component = __webpack_require__(54)(
+var Component = __webpack_require__(53)(
   /* script */
   __webpack_require__(41),
   /* template */
-  __webpack_require__(55),
+  __webpack_require__(54),
   /* scopeId */
   null,
   /* cssModules */
   null
 )
-Component.options.__file = "C:\\php\\laragon\\www\\weshop\\resources\\assets\\js\\components\\Example.vue"
+Component.options.__file = "d:\\php\\laragon\\www\\weshop\\resources\\assets\\js\\components\\Example.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Example.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -50299,7 +50299,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 54 */
+/* 53 */
 /***/ (function(module, exports) {
 
 module.exports = function normalizeComponent (
@@ -50352,7 +50352,7 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 55 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -50381,7 +50381,7 @@ if (false) {
 }
 
 /***/ }),
-/* 56 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(37);

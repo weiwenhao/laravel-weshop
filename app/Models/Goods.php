@@ -129,8 +129,8 @@ class Goods extends Model
     {
         //初始值
         $where = [];
-        $order = 'id';
-        $sort = 'desc';
+        $order = 'sort';
+        $sort = 'asc';
         //得到分类id
         if(request('category_id')){
             $where[] = ['category_id', request('category_id')];
@@ -141,7 +141,10 @@ class Goods extends Model
         if(request('sort')){
             $sort = request('sort');
         }
-        $goods = $this->where($where)->orderBy($order, $sort)->paginate(15);
+        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count')->where($where)->orderBy($order, $sort)->paginate(config('shop.goods_list_count'));
+
+        $category = Category::select('name')->findOrFail(request('category_id'));
+        $goods->category_name = $category->name;
         return $goods;
     }
 
@@ -157,12 +160,13 @@ class Goods extends Model
         if(request('sort')){
             $sort = request('sort');
         }
-        $goods = $this->where(['name', 'like', "%$key%"])->orderBy($order, $sort)->paginate(15);
+        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count')->where(['name', 'like', "%$key%"])->orderBy($order, $sort)->paginate(config('shop.goods_list_count'));
+        $goods->key = request('key');
         return $goods;
     }
 
     public function getBestGoods($limit){
-        $goods = $this->select('id', 'name', 'sm_image', 'price')->where('is_best', 1)->limit($limit)->get();
+        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count')->where('is_best', 1)->limit($limit)->get();
         return $goods;
     }
 }

@@ -18,7 +18,7 @@ class CreateShopCartsTable extends Migration
             $table->char('user_id', 28)->comment('用户的微信open_id');
             $table->unsignedInteger('goods_id')->comment('商品id');
             $table->string('goods_attribute_ids')->nullable()->comment('商品属性id,只需要可选属性');
-            $table->unsignedInteger('number')->comment('该商品的数量');
+            $table->unsignedInteger('number')->default(1)->comment('该商品的数量'); //从业务逻辑来看,加入购物车的初始数量就是一个
             $table->timestamps();
         });
     }

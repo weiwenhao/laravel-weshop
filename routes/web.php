@@ -1,18 +1,8 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 Route::get('/test', function (\EasyWeChat\Foundation\Application $wechat){
- // odh7zsgI75iT8FRh0fGlSojc9PWM
+    // odh7zsgI75iT8FRh0fGlSojc9PWM
 //    dd($wechat->user->get('ojRsVv5u3iizG1Qf7XyKKtajcDSA'));
 //    dd(Auth::guard('admin')->user());
 //    $message = new \EasyWeChat\Message\Text(['content' => '测试消息']);
@@ -20,6 +10,8 @@ Route::get('/test', function (\EasyWeChat\Foundation\Application $wechat){
 //    dd(session('wechat.oauth_user'));
 //    return "<a href='?name=123'>123</a><a href='?name=456'>456</a>";
 });
+
+
 
 Route::get('/', function (){
     return redirect('/index');
@@ -29,7 +21,7 @@ Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
     //商品区
     Route::get('index', 'GoodsController@index');
     Route::get('goods', 'GoodsController@list');
-    Route::get('goods/{goods_id}', 'GoodsController@desc');
+    Route::get('goods/{goods_id}', 'GoodsController@show');
     //购物车
     Route::resource('shop_carts', 'ShopCartController');
     //地址管理
@@ -41,11 +33,6 @@ Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
     //个人中心
     Route::get('my_center', 'MyCenterController@index'); //个人中心主页
 });
-
-
-
-
-
 
 /**
  * 后台登陆注册区
@@ -66,7 +53,6 @@ Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.ad
     Route::get('/',function (){
         return view('admin.index');
     });
-
     /******************************商品管理区************************************/
     //商品管理
     Route::get('/goods/dt_data','GoodsController@dtData')->name('goods.index'); //定义路由名称和resource的index一致,方便对权限进行判断
@@ -91,6 +77,8 @@ Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.ad
     Route::get('/orders/dt_data','OrderController@dtData')->name('orders.index');
     Route::put('/orders', 'OrderController@handleOrder')->name('orders.edit');
     Route::resource('orders', 'OrderController');
+
+
     //地址列表
     Route::get('/addrs/dt_data','AddrController@dtData')->name('addrs.index');
     Route::get('/addrs', 'AddrController@index')->name('addrs.index');
