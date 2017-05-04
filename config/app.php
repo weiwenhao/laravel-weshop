@@ -179,9 +179,10 @@ return [
 
         //ide-helper
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
         //entrust
         Zizaco\Entrust\EntrustServiceProvider::class,
-        //datatables
+        //datatables + buttons扩展
         Yajra\Datatables\DatatablesServiceProvider::class,
         //viewComposer,容器创建时会被运行
         App\Providers\ComposerServiceProvider::class,
@@ -191,6 +192,8 @@ return [
         Overtrue\LaravelWechat\ServiceProvider::class,
         //ue
         Overtrue\LaravelUEditor\UEditorServiceProvider::class,
+        //img
+        Intervention\Image\ImageServiceProvider::class,
     ],
 
     /*
@@ -242,6 +245,8 @@ return [
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
         'Active' => HieuLe\Active\Facades\Active::class,
         'EasyWeChat' => Overtrue\LaravelWechat\Facade::class,
+        'Image' => Intervention\Image\Facades\Image::class,
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],
 
 ];

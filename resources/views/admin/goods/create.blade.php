@@ -34,26 +34,28 @@
 
                                 <div class="tab-pane active" id="tab_1">
                                     <div class="form-group{{ $errors->has('category_id') ? ' has-error' : '' }}">
-                                        <label for="category_id" class="col-md-3 control-label">商品分类 *</label>
-                                        <div class="col-md-6">
+                                        <label for="category_id" class="col-md-4 control-label">商品分类 *</label>
+                                        <div class="col-md-4">
                                             <select name="category_id" class="form-control select2" data-placeholder="请选择" style="width: 100%;">
                                                 <option value="">请选择</option>
-                                                <option value="1">校园外卖</option>
-                                                <option value="2">水果超市</option>
-                                                <option value="3">二手市场</option>
+                                                @foreach($categories as $category)
+                                                    <option value="{{ $category->id }}" {{ $category->id==old('category_id')?'selected':'' }}>
+                                                        {{ $category->name }}
+                                                    </option>
+                                                @endforeach
                                             </select>
-                                            @if ($errors->has('role_ids'))
+                                            @if ($errors->has('category_id'))
                                                 <span class="help-block">
-                                            <strong>{{ $errors->first('role_ids') }}</strong>
-                                        </span>
+                                                    <strong>{{ $errors->first('category_id') }}</strong>
+                                                </span>
                                             @endif
                                         </div>
                                     </div>
                                     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                                        <label for="name" class="col-md-3 control-label">商品名称 *</label>
+                                        <label for="name" class="col-md-4 control-label">商品名称 *</label>
 
-                                        <div class="col-md-6">
-                                            <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="30字限制,可在此填写一些商品的必要信息" required autofocus>
+                                        <div class="col-md-4">
+                                            <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="30字限制,可在此填写一些商品的必要信息">
 
                                             @if ($errors->has('name'))
                                                 <span class="help-block">
@@ -64,11 +66,11 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('price') ? ' has-error' : '' }}">
-                                        <label for="price" class="col-md-3 control-label">商品价格 *</label>
+                                        <label for="price" class="col-md-4 control-label">商品价格 *</label>
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="input-group">
-                                                <input name="price" type="number" class="form-control" id="price" value="{{ old('price') }}" placeholder="精确到0.01">
+                                                <input name="price" type="text" class="form-control" id="price" value="{{ old('price') }}" placeholder="精确到0.01">
                                                 <div class="input-group-addon">元</div>
                                             </div>
                                             @if ($errors->has('price'))
@@ -80,11 +82,11 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('promote_price') ? ' has-error' : '' }}">
-                                        <label for="promote_price" class="col-md-3 control-label">促销价格</label>
+                                        <label for="promote_price" class="col-md-4 control-label">促销价格</label>
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <div class="input-group">
-                                                <input name="promote_price" type="number" class="form-control" id="" value="{{ old('promote_price') }}" placeholder="精确到0.01">
+                                                <input name="promote_price" type="text" class="form-control" id="" value="{{ old('promote_price') }}" placeholder="精确到0.01">
                                                 <div class="input-group-addon">元</div>
                                             </div>
                                             @if ($errors->has('promote_price'))
@@ -96,8 +98,8 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('promote_start_at') || $errors->has('promote_stop_at') ? ' has-error' : '' }}">
-                                        <label for="promote_start_at" class="col-md-3 control-label">促销时间</label>
-                                        <div class="col-md-3">
+                                        <label for="promote_start_at" class="col-md-4 control-label">促销时间</label>
+                                        <div class="col-md-2">
                                             <input name="promote_start_at" class="form-control" id="promote_start_at" value="{{ old('promote_start_at') }}" placeholder="促销开始时间">
                                             @if ($errors->has('promote_start_at'))
                                                 <span class="help-block">
@@ -105,7 +107,7 @@
                                                 </span>
                                             @endif
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <input name="promote_stop_at" class="form-control" id="promote_stop_at" value="{{ old('promote_stop_at') }}"  placeholder="促销结束时间">
                                             @if ($errors->has('promote_stop_at'))
                                                 <span class="help-block">
@@ -116,10 +118,10 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('sort') ? ' has-error' : '' }}">
-                                        <label for="sort" class="col-md-3 control-label">权重</label>
+                                        <label for="sort" class="col-md-4 control-label">权重(从小到大)</label>
 
-                                        <div class="col-md-6">
-                                            <input name="sort" type="number" class="form-control" value="{{ old('price',100) }}" id="" placeholder="数字越大,商品展示越靠前">
+                                        <div class="col-md-4">
+                                            <input name="sort" type="number" class="form-control" value="{{ old('sort',100) }}" id="" placeholder="数字越大,商品展示越靠前">
                                             @if ($errors->has('sort'))
                                                 <span class="help-block">
                                             <strong>{{ $errors->first('sort') }}</strong>
@@ -129,9 +131,9 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('is_on_sale') ? ' has-error' : '' }}">
-                                        <label for="is_on_sale" class="col-md-3 control-label">是否上架</label>
+                                        <label for="is_on_sale" class="col-md-4 control-label">是否上架</label>
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <label class="radio-inline">
                                                 <input type="radio" name="is_on_sale" value="1" {{ old('is_on_sale', 1) == 1?'checked':'' }}> 是
                                             </label>
@@ -147,9 +149,9 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('is_best') ? ' has-error' : '' }}">
-                                        <label for="is_best" class="col-md-3 control-label">是否精品</label>
+                                        <label for="is_best" class="col-md-4 control-label">是否精品</label>
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <label class="radio-inline">
                                                 <input type="radio" name="is_best"  value="1"  {{ old('is_best', 0) == 1?'checked':'' }}> 是
                                             </label>
@@ -165,13 +167,14 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
-                                        <label for="image" class="col-md-3 control-label">商品图片 *</label>
-
-                                        <div class="col-md-6">
-                                            <input type="file" name="image">
-                                            @if ($errors->has('is_best'))
+                                        <label for="image" class="col-md-4 control-label">商品图片 *</label>
+                                        <div class="col-md-4">
+                                            <div class="control-label">
+                                                <input type="file" name="image" value="">
+                                            </div>
+                                            @if ($errors->has('image'))
                                                 <span class="help-block">
-                                                    <strong>{{ $errors->first('is_best') }}</strong>
+                                                    <strong>{{ $errors->first('image') }}</strong>
                                                 </span>
                                             @endif
                                         </div>
@@ -179,18 +182,68 @@
                                 </div>
                                 <!-- /.tab-pane -->
                                 <div class="tab-pane" id="tab_2">
-                                    <!-- 编辑器容器 -->
-                                    <div id="description" name="description" type="text/plain"></div>
+                                    <div class="row">
+                                        <!-- 编辑器容器 -->
+                                        <div class="col-md-12">
+                                            <div id="description" name="description" type="text/plain"></div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- /.tab-pane -->
                                 <div class="tab-pane" id="tab_3">
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                                    when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                                    It has survived not only five centuries, but also the leap into electronic typesetting,
-                                    remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset
-                                    sheets containing Lorem Ipsum passages, and more recently with desktop publishing software
-                                    like Aldus PageMaker including versions of Lorem Ipsum.
+                                    <div class="form-group">
+                                        <label for="" class="control-label col-md-4">商品类型</label>
+                                        <div class="col-md-4">
+                                            <select name="type_id"  class="form-control" data-placeholder="请选择"
+                                                    @change="changeType()" v-model="selected" placeolder="请选择"
+                                            >
+                                                <option value="" selected>请选择</option>
+                                                <option v-for="type in types"
+                                                        :value="type.id">@{{ type.name }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <span>以下属性不需要的选项,置空即可</span>
+                                        </div>
+                                    </div>
+                                    {{--属性区域--}}
+                                    <div class="form-group" v-for="(attribute,index) in attributes">
+                                        {{--绑定一个attribute_id--}}
+                                        <label for="" class="control-label col-md-4">@{{ attribute.name }}</label>
+
+                                        <div class="col-md-4">
+                                            <template v-if="attribute.type == '唯一'">
+                                                <input type="text" :name="'attribute_values['+attribute.id+'][]'" class="form-control" v-if="attribute.option_values == '' || attribute.option_values == null">
+                                                <select :name="'attribute_values['+attribute.id+'][]'" class="form-control select2" placeholder="请选择" v-else>
+                                                    <option :value="null">请选择</option>
+                                                    <option :value="option_value" v-for="option_value in attribute.option_values">@{{ option_value }}</option>
+                                                </select>
+                                            </template>
+                                            <template v-else>
+                                                <div class="input-group"  v-if="attribute.option_values == '' || attribute.option_values == null">
+                                                    <input type="text" :name="'attribute_values['+attribute.id+'][]'" class="form-control">
+                                                    <div class="input-group-addon">
+                                                        <a  @click.prevent="switchSelf(index, attribute)"> {{--有可能是减少自己也有可能是增加自己--}}
+                                                            <i class="fa fa-plus" v-if="attribute.is_server_data == undefined"></i>
+                                                            <i class="fa fa-minus" v-else-if="attribute.is_server_data == false"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="input-group"  v-else>
+                                                    <select :name="'attribute_values['+attribute.id+'][]'" class="form-control select2" data-placeholder="请选择">
+                                                        <option :value="null">请选择</option>
+                                                        <option :value="option_value" v-for="option_value in attribute.option_values">@{{ option_value }}</option>
+                                                    </select>
+                                                    <div class="input-group-addon">
+                                                        <a @click.prevent="switchSelf(index, attribute)"> {{--有可能是减少自己也有可能是增加自己--}}
+                                                            <i class="fa fa-plus" v-if="attribute.is_server_data == undefined"></i>
+                                                            <i class="fa fa-minus" v-else-if="attribute.is_server_data == false"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- /.tab-pane -->
                         </div>
@@ -215,31 +268,88 @@
 @include('vendor.ueditor.assets')
 @section('js')
 <script>
+    //vue测试
+    new Vue({
+        el : '#app',
+        data : {
+            selected : "",
+            types : [],
+            attributes : [],
+        },
+        created(){
+            this.getTypes();
+        },
+        methods :　{
+            switchSelf(index, attribute){
+                 if(typeof(attribute.is_server_data) == 'undefined'){ //未定义的数据类型,则肯定是服务器数据,只能+
+                     let newAttribute = {
+                         'id' : attribute.id,
+                         'name' : attribute.name,
+                         'option_values' : attribute.option_values,
+                         'type' : attribute.type,
+                         'type_id' : attribute.type_id,
+                         'is_server_data' : false
+                     };
+                     //往数组中的该index的后面插入一条数据
+                     this.attributes.splice(index+1, 0, newAttribute);
+                 } else if (attribute.is_server_data == false){
+                     this.attributes.splice(index, 1);
+                 }
+            },
+            /**
+             * 商品类型的ajax数据
+             */
+            getTypes(){
+                axios.get('/admin/types/ajax_types', {
+                    params: {
+                        //这里的数据将会以  ?key=value的形式出现
+                    }
+                })
+                .then((response)=> {
+                     this.types = response.data;
+                })
+                .catch(error=> {
+                    if(error.response.status == 404){
+                        alert('资源不存在'+error.response.data.message);
+                    }
+                });
+            },
+            /**
+             * 商品分类的ajax数据
+             */
+            getAttributes(){
+                if(this.selected == ""){
+                    this.attributes = [];
+                    return;
+                }
+                axios.get('/admin/types/'+this.selected+'/attributes/ajax_attributes', {
+                    params: {
+                        //这里的数据将会以  ?key=value的形式出现
+                    }
+                })
+                .then((response)=> {
+                     this.attributes =  response.data;
+                })
+                .catch(error=> {
+                    if(error.response.status == 404){
+                        alert('资源不存在'+error.response.data.message);
+                    }
+                });
+            },
+            changeType(){
+                 this.getAttributes()
+            }
+        }
+    });
     //ue浏览器
-    var ue = UE.getEditor('description' /*{  //UE应该是UE的全局变量,类似于VUE,$等
-        toolbars: [
-            [
-                'bold',
-                'italic',
-                'blockquote',//引用
-                /!*'insertcode', //代码语言*!/
-                'insertunorderedlist', //无序
-                'insertorderedlist', //有序
-                'insertvideo', //视频
-                'insertimage',
-            ]
-        ],
-        elementPathEnabled: false,
-        enableContextMenu: false,
-        autoClearEmptyNode:true,
-        wordCount:false,
-        imagePopup:false,
-        autotypeset:{ indent: true,imageBlockLine: 'center' },
-        initialFrameHeight: 140,
+    var ue = UE.getEditor('description', {  //UE应该是UE的全局变量,类似于VUE,$
+        initialFrameWidth:"100%",
+        initialFrameHeight:"500",
 //        zIndex: 3000
-    }*/);
+    });
     ue.ready(function() {
         ue.execCommand('serverparam', '_token', '{{ csrf_token() }}'); // 设置 CSRF token.
+        ue.setContent('{!! old('description') !!}');
     });
     //select2
     $(".select2").select2({

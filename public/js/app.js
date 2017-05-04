@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 57);
+/******/ 	return __webpack_require__(__webpack_require__.s = 56);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -40894,32 +40894,23 @@ module.exports = function(module) {
 /* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
+window._ = __webpack_require__(32);
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
+window.Vue = __webpack_require__(33);
+window.axios = __webpack_require__(13);
 
-__webpack_require__(46);
+window.axios.defaults.headers.common = {
+    'X-CSRF-TOKEN': window.Laravel.csrfToken,
+    'X-Requested-With': 'XMLHttpRequest'
+};
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+window.$ = window.jQuery = __webpack_require__(1);
 
-// 引入element组件库
+__webpack_require__(31);
 
-/*import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-default/index.css'
-Vue.use(ElementUI) //注册为vue的全局组件了*/
-
-// Vue.component('example', require('./components/Example.vue'));
-
-var app = new Vue({
-  el: '#app'
-});
+/*const app = new Vue({
+    el: '#app',
+});*/
 
 /***/ }),
 /* 39 */
@@ -40939,57 +40930,7 @@ var app = new Vue({
 /* 43 */,
 /* 44 */,
 /* 45 */,
-/* 46 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-window._ = __webpack_require__(32);
-
-/**
- * We'll load jQuery and the Bootstrap jQuery plugin which provides support
- * for JavaScript based Bootstrap features such as modals and tabs. This
- * code may be modified to fit the specific needs of your application.
- */
-
-window.$ = window.jQuery = __webpack_require__(1);
-
-__webpack_require__(31);
-
-/**
- * Vue is a modern JavaScript library for building interactive web interfaces
- * using reactive data binding and reusable components. Vue's API is clean
- * and simple, leaving you to focus on building your next great project.
- */
-
-window.Vue = __webpack_require__(33);
-
-/**
- * We'll load the axios HTTP library which allows us to easily issue requests
- * to our Laravel back-end. This library automatically handles sending the
- * CSRF token as a header based on the value of the "XSRF" token cookie.
- */
-
-window.axios = __webpack_require__(13);
-
-window.axios.defaults.headers.common = {
-  'X-CSRF-TOKEN': window.Laravel.csrfToken,
-  'X-Requested-With': 'XMLHttpRequest'
-};
-
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
- */
-
-// import Echo from "laravel-echo"
-
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: 'your-pusher-key'
-// });
-
-/***/ }),
+/* 46 */,
 /* 47 */,
 /* 48 */,
 /* 49 */,
@@ -40999,8 +40940,7 @@ window.axios.defaults.headers.common = {
 /* 53 */,
 /* 54 */,
 /* 55 */,
-/* 56 */,
-/* 57 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(38);

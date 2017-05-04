@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Overtrue\LaravelWechat\Events\WeChatUserAuthorized;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -13,9 +14,14 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\SomeEvent' => [
+        /*'App\Events\SomeEvent' => [
             'App\Listeners\EventListener',
-        ],
+        ],*/
+
+        //监听微信授权事件
+        'Overtrue\LaravelWechat\Events\WeChatUserAuthorized' => [
+            'App\Listeners\CheckOnUser'
+        ]
     ];
 
     /**

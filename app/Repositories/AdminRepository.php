@@ -24,8 +24,8 @@ class AdminRepository extends Repository
         $admins = $this->model->with('roles');
         return Datatables::of($admins)->addColumn('roles', function (Admin $admin){
             //通过admin,处理出一段希望展示出来的roles字段,以行为单位
-            return $admin->roles->map(function ($roles){
-                return $roles->display_name;
+            return $admin->roles->map(function ($role){
+                return $role->display_name;
             })->implode('<br>');
         })->rawColumns(['roles'])->make(true);
         //rawColumns不做处理的字段,即不被转义处理的字段.

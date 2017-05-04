@@ -43,9 +43,9 @@ class RoleController extends Controller
      * datatables数据源
      * @return mixed
      */
-    public function dtRoles()
+    public function dtData()
     {
-        return Datatables::of($this->role->all())->make(true);
+        return Datatables::of(Role::query())->make(true);
     }
     /**
      * Show the form for creating a new resource.
