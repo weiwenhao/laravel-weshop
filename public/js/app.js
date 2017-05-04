@@ -40908,9 +40908,9 @@ window.$ = window.jQuery = __webpack_require__(1);
 
 __webpack_require__(31);
 
-var app = new Vue({
-    el: '#app'
-});
+/*const app = new Vue({
+    el: '#app',
+});*/
 
 /***/ }),
 /* 39 */

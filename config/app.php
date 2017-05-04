@@ -179,6 +179,7 @@ return [
 
         //ide-helper
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
         //entrust
         Zizaco\Entrust\EntrustServiceProvider::class,
         //datatables + buttons扩展
@@ -245,6 +246,7 @@ return [
         'Active' => HieuLe\Active\Facades\Active::class,
         'EasyWeChat' => Overtrue\LaravelWechat\Facade::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],
 
 ];

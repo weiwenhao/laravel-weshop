@@ -41384,7 +41384,7 @@ module.exports = __webpack_amd_options__;
 /* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
-window._ = __webpack_require__(32);
+/* WEBPACK VAR INJECTION */(function($) {window._ = __webpack_require__(32);
 
 window.Vue = __webpack_require__(33);
 window.axios = __webpack_require__(13);
@@ -41422,6 +41422,31 @@ const app = new Vue({
     el: '#app',
 });
 */
+
+//初始化判断
+if (Number(sessionStorage.getItem('hide_left_nav'))) {
+    //1
+    $('body').addClass('sidebar-collapse'); // 切换为隐藏(添加class) => hide_left_nav = 1
+} else {
+    $('body').removeClass('sidebar-collapse'); //将状态切换为 1 隐藏
+}
+$('.sidebar-toggle').click(function () {
+    //当前的状态
+    var left_nav_status = Number(sessionStorage.getItem('hide_left_nav'));
+    if (!left_nav_status) {
+        //当前hide_left_nav = 0 显示
+        //  加上sidebar-collapse这个class就是隐藏
+        $('body').addClass('sidebar-collapse'); // 切换为隐藏(添加class) => hide_left_nav = 1
+        //把1存储进去
+        sessionStorage.setItem('hide_left_nav', 1);
+    } else {
+        //hide_left_nav = 1 隐藏
+        $('body').removeClass('sidebar-collapse'); //将状态切换为 1 隐藏
+        //把0存储进去
+        sessionStorage.setItem('hide_left_nav', 0);
+    }
+});
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
 /* 38 */,
@@ -50278,7 +50303,7 @@ var Component = __webpack_require__(53)(
   /* cssModules */
   null
 )
-Component.options.__file = "d:\\php\\laragon\\www\\weshop\\resources\\assets\\js\\components\\Example.vue"
+Component.options.__file = "c:\\php\\laragon\\www\\weshop\\resources\\assets\\js\\components\\Example.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Example.vue: functional components are not supported with templates, they should use render functions.")}
 

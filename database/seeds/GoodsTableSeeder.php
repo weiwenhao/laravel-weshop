@@ -13,7 +13,7 @@ class GoodsTableSeeder extends Seeder
     public function run()
     {
         $ceshi1 = Goods::create([
-            'name' => '测试商品1',
+            'name' => '红烧鸡排',
             'price' => 99.99,
             'image' => '/uploads/images/goods/20170425/wKFXxfMQ6YroOwL1.jpg',
             'sm_image' => '/uploads/images/goods/20170425/sm_wKFXxfMQ6YroOwL1.jpg',
@@ -24,7 +24,7 @@ class GoodsTableSeeder extends Seeder
         ]);
 
         $ceshi2 = Goods::create([
-            'name' => '测试商品2',
+            'name' => '菠萝(块)',
             'price' => 10.00,
             'image' => '/uploads/images/goods/20170425/h72IjfZ1BahqZBn8.jpg',
             'sm_image' => '/uploads/images/goods/20170425/sm_h72IjfZ1BahqZBn8.jpg',

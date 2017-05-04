@@ -38,7 +38,7 @@ class CreateOrdersTable extends Migration
             $table->string('goods_attribute_ids', 30)->nullable()->comment('商品属性id,多个id之间逗号分隔,只需要可选属性');
             $table->unsignedTinyInteger('shop_number')->comment('购买数量');
             $table->decimal('shop_price')->comment('购买单价');
-            $table->unsignedTinyInteger('status')->default(0)->index()->comment('订单商品状态 0->未受理  1->已受理,2->已经完成,3->已关闭'); //
+            $table->unsignedTinyInteger('status')->default(0)->index()->comment('订单商品状态 0->未处理  1->已处理,2->已经完成,3->已关闭'); //
             $table->timestamps();
         });
     }

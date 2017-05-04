@@ -117,7 +117,7 @@ class PermissionsTableSeeder extends Seeder
         ]);
 
 
-        //二级
+        //二级 所有订单管理
         $order = Permission::create([
             'name' => 'orders.list',
             'display_name' => '订单列表',
@@ -125,12 +125,28 @@ class PermissionsTableSeeder extends Seeder
             'parent_id' => $order_admin->id,
             'description' => '订单列表',
         ]);
-        Permission::create([
+        Permission::create([ //相关订单的url请手动将需要的route_name 设置为 orders.edit,已方便权限的管理
             'name' => 'orders.edit',
             'display_name' => '修改订单',
             'parent_id' => $order->id,
             'description' => '修改订单',
         ]);
+
+        //二级 水果订单管理
+        $fruit_order = $order = Permission::create([
+            'name' => 'fruit_orders.list',
+            'display_name' => '水果订单',
+            'url' => 'fruit_orders',
+            'parent_id' => $order_admin->id,
+            'description' => '水果订单',
+        ]);
+        Permission::create([
+            'name' => 'fruit_orders.edit', //水果相关订单的url请手动将需要的route_name 设置为 orders.edit,已方便权限的管理
+            'display_name' => '修改水果订单',
+            'parent_id' => $order->id,
+            'description' => '修改水果订单',
+        ]);
+
 
         //地址管理
         $addr = Permission::create([
@@ -230,7 +246,14 @@ class PermissionsTableSeeder extends Seeder
             'description' => '后台首页,主控制台',
         ]);
 
-
+        //二级
+        Permission::create([
+            'name' => 'compute',
+            'display_name' => '订单统计',
+            'url' => 'compute',
+            'parent_id' => $dash->id,
+            'description' => '统计台',
+        ]);
 
 
 

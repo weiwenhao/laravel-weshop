@@ -51,8 +51,14 @@ Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
 
 Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.admin','check.admin', /*'wechat.oauth:snsapi_userinfo'*/] ], function () {
     Route::get('/',function (){
-        return view('admin.index');
+        return redirect('/admin/compute');
     });
+    /******************************控制台*********************************/
+    //主页
+    Route::get('/index', 'IndexController@index');
+    //统计区
+    Route::get('/compute', 'ComputeController@compute');
+
     /******************************商品管理区************************************/
     //商品管理
     Route::get('/goods/dt_data','GoodsController@dtData')->name('goods.index'); //定义路由名称和resource的index一致,方便对权限进行判断
@@ -73,10 +79,14 @@ Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.ad
     Route::resource('types/{type_id}/attributes', 'AttributeController'); //route.name  attributes.index 依旧是只取结尾处
 
     /******************************订单管理区************************************/
-    //订单列表
+    //所有订单列表
     Route::get('/orders/dt_data','OrderController@dtData')->name('orders.index');
     Route::put('/orders', 'OrderController@handleOrder')->name('orders.edit');
     Route::resource('orders', 'OrderController');
+
+    //水果订单列表(手机专享)
+    Route::get('/fruit_orders/dt_data','FruitOrderController@dtData')->name('fruit_orders.index');
+    Route::resource('/fruit_orders', 'FruitOrderController');
 
 
     //地址列表

@@ -25,7 +25,7 @@ class OrdersSeeder extends Seeder
 
         //填充一条记录
         $order1 = \App\Models\Order::create([
-            'order_id' =>  date('ymdh').sprintf('%04d', mt_rand(1,9999)),
+            'order_id' =>  date('ymdhi').sprintf('%04d', mt_rand(1,9999)),
             'remarks' => '我是订单备注',
             'user_id' => 'ojRsVv5u3iizG1Qf7XyKKtajcDSA',
             'name' => $addr->name,
@@ -52,14 +52,14 @@ class OrdersSeeder extends Seeder
         $ceshi1 = Goods::where('id',1)->first();
         $anzhuo = DB::table('goods_attributes')->where('attribute_value', '安卓')->first();
         $ios = DB::table('goods_attributes')->where('attribute_value', 'ios')->first();
-        \Illuminate\Support\Facades\DB::table('order_goods')->insert([
+        \App\Models\OrderGoods::create([
             'order_id' => $order1->id,
             'goods_id' => $ceshi1->id,
             'goods_attribute_ids' => $anzhuo->id,
             'shop_number' => '3',
             'shop_price' => $ceshi1->price,
         ]);
-        \Illuminate\Support\Facades\DB::table('order_goods')->insert([
+        \App\Models\OrderGoods::create([
             'order_id' => $order1->id,
             'goods_id' => $ceshi1->id,
             'goods_attribute_ids' => $ios->id,
@@ -69,14 +69,14 @@ class OrdersSeeder extends Seeder
 
 
         $ceshi2 = Goods::where('id',2)->first();
-        \Illuminate\Support\Facades\DB::table('order_goods')->insert([
+        \App\Models\OrderGoods::create([
             'order_id' => $order1->id,
             'goods_id' => $ceshi2->id,
             'shop_number' => '1',
             'shop_price' => $ceshi2->price,
         ]);
 
-        \Illuminate\Support\Facades\DB::table('order_goods')->insert([
+        \App\Models\OrderGoods::create([
             'order_id' => $order2->id,
             'goods_id' => $ceshi2->id,
             'shop_number' => '2',

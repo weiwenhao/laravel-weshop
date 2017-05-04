@@ -8,5 +8,6 @@ class OrderGoods extends Model
 {
     //
     protected $guarded = [];
+    protected $table = 'order_goods';
 
 }

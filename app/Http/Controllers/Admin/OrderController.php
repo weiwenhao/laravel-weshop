@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\OrderRequest;
+use App\Models\Category;
 use App\Models\Order;
 use App\Http\Controllers\Controller;
 use App\Models\OrderGoods;
@@ -18,7 +19,8 @@ class OrderController extends Controller
     public function index()
     {
         //
-        return view('admin.order.list');
+        $categories = Category::select('name', 'id')->get();
+        return view('admin.order.list', compact('categories'));
     }
 
     public function dtData()
@@ -34,9 +36,12 @@ class OrderController extends Controller
         if(\request('floor_name') !== null){
             $where[] = ['floor_name', \request('floor_name')];
         }
+        if(\request('category_id') !== null){
+            $where[] = ['category_id', \request('category_id')];
+        }
 
-        $query = Order::select('orders.*', 'goods.id', 'goods.name', 'goods.category_id',
-            'order_goods.goods_attribute_ids', 'order_goods.shop_price', 'order_goods.shop_number', 'order_goods.status', 'order_goods.id as order_goods_id')
+        $query = Order::select('orders.*', 'goods.id as goods_id', 'goods.name as goods_name', 'goods.category_id',
+            'order_goods.goods_attribute_ids', 'order_goods.shop_price', 'order_goods.shop_number', 'order_goods.status', 'order_goods.id as order_goods_id') //order_goods_id
             ->join('order_goods', 'order_goods.order_id', '=', 'orders.id')
             ->join('goods', 'order_goods.goods_id', '=', 'goods.id')
             ->where($where);
