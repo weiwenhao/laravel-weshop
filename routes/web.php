@@ -2,13 +2,15 @@
 
 
 Route::get('/test', function (\EasyWeChat\Foundation\Application $wechat){
-    // odh7zsgI75iT8FRh0fGlSojc9PWM
-//    dd($wechat->user->get('ojRsVv5u3iizG1Qf7XyKKtajcDSA'));
-//    dd(Auth::guard('admin')->user());
-//    $message = new \EasyWeChat\Message\Text(['content' => '测试消息']);
-//    $wechat->staff->message($message)->to('ojRsVv5u3iizG1Qf7XyKKtajcDSA')->send();
-//    dd(session('wechat.oauth_user'));
-//    return "<a href='?name=123'>123</a><a href='?name=456'>456</a>";
+    DB::connection()->enableQueryLog();
+    $changshang = \App\Models\Attribute::create([
+        'name' => '厂商',
+        'type' => '唯一',
+        'option_values' => null,
+        'type_id' => 1,
+    ]);
+    $log = DB::getQueryLog();
+    dd($log);   //打印sql语句
 });
 
 
@@ -77,6 +79,11 @@ Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.ad
     //商品属性管理
     Route::get('/types/{type_id}/attributes/dt_data','AttributeController@dtData')->name('attributes.index');
     Route::resource('types/{type_id}/attributes', 'AttributeController'); //route.name  attributes.index 依旧是只取结尾处
+
+    //商品库存管理
+    Route::get('/goods/{goods_id}/numbers', 'NumberController@index')->name('numbers.index');
+    Route::post('/goods/{goods_id}/numbers', 'NumberController@store')->name('numbers.edit');
+
 
     /******************************订单管理区************************************/
     //所有订单列表

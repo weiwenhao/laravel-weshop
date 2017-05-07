@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Active;
-use App\Models\Category;
 use App\Models\Goods;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class GoodsController extends Controller
@@ -28,13 +26,16 @@ class GoodsController extends Controller
         $best_goods = $goods->getBestGoods(10);
         return view('goods.index', compact('actives', 'best_goods'));
     }
-
     /**
      *商品详情页
+     * @param $goods_id
+     * @param Goods $goods
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show($goods_id)
+    public function show($goods_id, Goods $goods)
     {
         $goods = Goods::findOrFail($goods_id);
+        $goods->option_attrs = $goods->getOptionGoodsAttr($goods->id);
         return view('goods.goods', compact('goods'));
     }
 

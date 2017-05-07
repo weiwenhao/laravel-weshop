@@ -8,6 +8,7 @@
     <title>home</title>
     <!-- 以下是公共css -->
     <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/iconfont/iconfont.css"/>
     <link rel="stylesheet" href="/plugins/weui.css"/>
     <link rel="stylesheet" href="/css/common.css"/>
 
@@ -23,8 +24,8 @@
     @yield('content')
 </div>
 {{--公共js--}}
-<script src="/plugins/img_load_echo.min.js"></script> {{--图片懒加载--}}
 <script src="/js/app.js"></script>
+<script src="/plugins/img_load_echo.min.js"></script> {{--图片懒加载--}}
 <script src="/js/common.js"></script>
 <script>
     $.ajaxSetup({ //这段话的意思使用ajax,会将csrf加入请求头中

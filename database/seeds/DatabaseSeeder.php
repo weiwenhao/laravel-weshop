@@ -20,8 +20,8 @@ class DatabaseSeeder extends Seeder
         $this->call(GoodsTableSeeder::class);
         $this->call(TypesTableSeeder::class);
 
-        $this->call(OrdersSeeder::class);
-        $this->call(shopCartsTableSeeder::class);
+//        $this->call(OrdersSeeder::class);
+//        $this->call(shopCartsTableSeeder::class);
 
         //圈子填充
 //        $this->call(PostsTableSeeder::class);

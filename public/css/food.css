@@ -1,0 +1,12 @@
+@charset "utf-8";
+
+/*校园外卖*/
+
+/***************** 食物选项 ****************/
+.food-nav{background:#fff;position:fixed;top:2rem;width:100%;z-index:9;margin:0;text-align:center;}
+/***************** 分页按钮 ****************/
+.page{display:inline-block;position:relative;width:100%;}
+.page a{width:40%;}
+.page a:nth-of-type(1){float:left}
+.page a:nth-of-type(2){float:right;margin-top:0}
+

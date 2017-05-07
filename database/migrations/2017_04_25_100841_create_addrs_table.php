@@ -20,7 +20,7 @@ class CreateAddrsTable extends Migration
             $table->char('garden_name', 3)->comment('园地名称');
             $table->char('floor_name', 3)->comment('宿舍楼名称');
             $table->char('number', 3)->comment('门牌号');
-            $table->char('user_id', 28)->comment('微信用户的openid');
+            $table->unsignedInteger('user_id')->comment('用户id');
             $table->timestamps();
         });
     }

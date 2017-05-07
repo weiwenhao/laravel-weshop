@@ -8,13 +8,25 @@ class Attribute extends Model
 {
     protected $guarded = [];
     //
-    public function setOptionValuesAttribute($value)
+    public function setOptionValues($option_values)
     {
         //统一逗号分隔符
-        $this->attributes['option_values'] =  str_replace('，', ',', $value);;
+        $option_values = str_replace('，', ',', $option_values);
+        $option_values = explode(',', $option_values);
+        //去重
+        $option_values = array_unique($option_values);
+        $temp_arr = [];
+        foreach ($option_values as $v){ //去空
+            if(trim($v)){
+                $temp_arr[] = trim($v);
+            }
+        }
+        $temp_arr = implode(',', $temp_arr);
+        return $temp_arr;
     }
+
     public function ajaxAttrTransForm($attributes){
-        return $attributes->map(function ($item) {
+        $res = $attributes->map(function ($item) {
             //为数据添加 is_first_attr属性
             static $_box = '';
             if($item->name == $_box){ //代表已经进过盒子了
@@ -29,12 +41,12 @@ class Attribute extends Model
             if(!$item->attribute_value){
                 $item->attribute_value = null;
             }
-
             if($item->option_values){
                 $item->option_values = explode(',', $item->option_values);
             }
             return $item;
         });
+        return $res;
     }
 
 }

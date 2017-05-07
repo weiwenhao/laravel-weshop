@@ -21,21 +21,31 @@
         </form>
         <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
     </div>
+    <div class="weui-cells searchbar-result" id="searchResult" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1); display: none;">
+        <div class="weui-cell weui-cell_access">
+            <div class="weui-cell__bd weui-cell_primary">
+                <p>实时搜索文本</p>
+            </div>
+        </div>
+
+    </div>
     <!--**************** 轮播 ********************-->
     <div class="swiper-container">
-        <div class="swiper-wrapper" style="height:230px;background:#ccc;">
+        <div class="swiper-wrapper">
             @foreach($actives as $active)
                 <div class="swiper-slide">
                     <a href="{{ $active->is_content?'/actives/'.$active->url:'#' }}">
-                        <img src="{{ $active->image }}" width="100%" height="100%"/>
+                        <img class="img-responsive" src="{{ $active->image }}" />
                     </a>
                 </div>
             @endforeach
+                <div class="swiper-pagination"><!-- 分页器 --></div>
         </div>
         <div class="swiper-pagination"><!-- 分页器 --></div>
     </div>
+    <style id="frames"></style>
     <div class="font-move">
-        <span>公告:天呐来啦!</span>
+        <span>公告:测试 测试 测试 测试测试测试测试</span>
     </div>
     <!--**************** 九宫格 ********************-->
     <div class="weui-grids" style="background:#fff">
@@ -80,25 +90,25 @@
         </a>
     </div>
     <!-- 商品列表-->
-    <div class="weui-cell">
+    <div class="weui-cell me-font-f90">
         <div class="weui-cell__bd">
-            <span style="font-size: 14px; color: orange"><i class="fa fa-heart"></i> 精品推荐</span>
+            <span><i class="fa fa-heart"></i> 精品推荐</span>
         </div>
         <div class="weui-cell__ft"></div>
     </div>
+
     <div class="me-goods-List">
         @foreach($best_goods as $goods)
-            <div class="shopp-item">
-                <a class="me-on-a me-a" href="/goods/{{ $goods->id }}">
-                    <img class="img-responsive " src="{{ $goods->mid_image }}"/>
+            <div class="shopp-item" >
+                <a class="me-on-a me-a"  href="{{ url('/goods/'.$goods->id) }}">
+                    <!--添加name='off'出现下架-->
+                    <img class="img-responsive {{ $goods->is_on_sale?'':"off-sale" }}" data-img="{{ $goods->mid_image }}"/>
                     <p>{{ $goods->name }}</p>
                 </a>
                 <p>
-                    <span>
-                        <i class="fa fa-rmb"></i>{{ $goods->price }}
-                    </span>
+                    <span class="price-decimal-point">{{ $goods->price }}</span>
                     <small>销量:{{ $goods->buy_count }}</small>
-                    <a class=" fa fa-cart-plus fa-lg"></a>
+                    <a class=" fa fa-star" onclick="toast('加入收藏成功');"></a>
                 </p>
             </div>
         @endforeach

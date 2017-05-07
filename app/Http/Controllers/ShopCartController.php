@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Goods;
+use App\Models\Number;
 use App\Models\ShopCart;
 use Illuminate\Http\Request;
 
@@ -39,8 +41,19 @@ class ShopCartController extends Controller
      */
     public function store(Request $request, ShopCart $shop_cart)
     {
-        //进行判断创建还是叠加
-        $res = $shop_cart->storeShopCart();
+        $goods_id = $request->get('goods_id');
+        $shop_number = $request->get('shop_number');
+        $goods_attribute_ids = sortOrImplode($request->get('goods_attribute_ids', []));
+
+        if(!Goods::find($request->get('goods_id'))){
+            return response('系统错误', 404);
+        }
+        //检查库存
+        if(!Number::checkNumber($goods_id, $goods_attribute_ids, $shop_number)){
+            return response('库存量不足', config('shop.no_number'));
+        }
+        //存取
+        $res = $shop_cart->storeShopCart($goods_id, $goods_attribute_ids, $shop_number);
         return $res;
     }
 

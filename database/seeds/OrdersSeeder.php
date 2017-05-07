@@ -20,14 +20,14 @@ class OrdersSeeder extends Seeder
             'garden_name' => '积善园',
             'floor_name' => '孝悌楼',
             'number' => '503',
-            'user_id' => 'ojRsVv5u3iizG1Qf7XyKKtajcDSA'
+            'user_id' => '1'
         ]);
 
         //填充一条记录
         $order1 = \App\Models\Order::create([
             'order_id' =>  date('ymdhi').sprintf('%04d', mt_rand(1,9999)),
             'remarks' => '我是订单备注',
-            'user_id' => 'ojRsVv5u3iizG1Qf7XyKKtajcDSA',
+            'user_id' => '1',
             'name' => $addr->name,
             'phone' => $addr->phone,
             'garden_name' => $addr->garden_name,
@@ -39,7 +39,7 @@ class OrdersSeeder extends Seeder
         $order2 = \App\Models\Order::create([
             'order_id' =>  date('ymdhi').sprintf('%04d', mt_rand(1,9999)),
             'remarks' => '我是订单备注啊',
-            'user_id' => 'ojRsVv5u3iizG1Qf7XyKKtajcDSA',
+            'user_id' => '1',
             'name' => $addr->name,
             'phone' => $addr->phone,
             'garden_name' => $addr->garden_name,

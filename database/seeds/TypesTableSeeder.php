@@ -34,7 +34,7 @@ class TypesTableSeeder extends Seeder
         $changshang = Attribute::create([
             'name' => '厂商',
             'type' => '唯一',
-            'option_values' => null,
+//            'option_values' => null,
             'type_id' => $phone->id,
         ]);
 
@@ -56,7 +56,7 @@ class TypesTableSeeder extends Seeder
         Attribute::create([
             'name' => '口味',
             'type' => '可选',
-            'option_values' => null,
+//            'option_values' => null,
             'type_id' => $yinpin->id,
         ]);
 

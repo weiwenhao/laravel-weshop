@@ -15,10 +15,11 @@ class CreateShopCartsTable extends Migration
     {
         Schema::create('shop_carts', function (Blueprint $table) {
             $table->increments('id');
-            $table->char('user_id', 28)->comment('用户的微信open_id');
+            $table->unsignedInteger('user_id')->comment('用户id');
             $table->unsignedInteger('goods_id')->comment('商品id');
-            $table->string('goods_attribute_ids')->nullable()->comment('商品属性id,只需要可选属性');
-            $table->unsignedInteger('number')->default(1)->comment('该商品的数量'); //从业务逻辑来看,加入购物车的初始数量就是一个
+            $table->string('goods_attribute_ids')->default('')->comment('商品属性id,只需要可选属性');
+            $table->unsignedInteger('shop_number')->comment('购买的的数量');
+            $table->unique(['user_id', 'goods_id', 'goods_attribute_ids']);
             $table->timestamps();
         });
     }

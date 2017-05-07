@@ -45,14 +45,19 @@ class AttributeController extends Controller
      * Store a newly created resource in storage.
      *
      * @param AttributeRequest $request
+     * @param Attribute $attribute
      * @param $type_id
      * @return \Illuminate\Http\Response
      */
-    public function store(AttributeRequest $request, $type_id)
+    public function store(AttributeRequest $request, Attribute $attribute, $type_id)
     {
-//        dd('通过');
         //得到保存路径
-        $model = Attribute::create(array_merge($request->all(),['type_id' => $type_id]));
+        //对option_values的值进行处理
+        $model = Attribute::create(array_merge([
+            'name' => $request->get('name'),
+            'type' => $request->get('type'),
+            'option_values' => $attribute->setOptionValues($request->get('option_values'))
+        ], ['type_id' => $type_id]));
         if(!$model)//withInput代表的是用户原先的输入,会操作old中的值
             return redirect()->route('attributes.create',[$type_id])->withInput()->with('error', '系统错误，添加失败');
         return redirect()->route('attributes.index',[$type_id])->withSuccess('添加成功');
@@ -91,10 +96,14 @@ class AttributeController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(AttributeRequest $request, $type_id, $id)
+    public function update(AttributeRequest $request,$type_id, $id)
     {
         $model = Attribute::findOrFail($id);
-        $res = $model->update($request->all());
+        $res = $model->update(array_merge([
+            'name' => $request->get('name'),
+            'type' => $request->get('type'),
+            'option_values' => $model->setOptionValues($request->get('option_values'))
+        ], ['type_id' => $type_id]));
        if(!$res )
            return redirect()->route('attributes.update', [$type_id, $id])->withInput()->with('error', '系统错误，修改失败');
         return redirect()->route('attributes.index', [$type_id])->withSuccess('修改成功');
@@ -131,7 +140,7 @@ class AttributeController extends Controller
             ->leftJoin('attributes', 'types.id','=','attributes.type_id')
             ->leftJoin('goods_attributes', function ($join) use ($goods_id) {
                 $join->on('attributes.id', '=', 'goods_attributes.attribute_id')
-                    ->where('goods_attributes.goods_Id', $goods_id); //这里对该类型在商品属性表中数据进行了筛选
+                    ->where('goods_attributes.goods_id', $goods_id); //这里对该类型在商品属性表中数据进行了筛选
             })
             ->where('type_id',$type_id)
             ->get();
