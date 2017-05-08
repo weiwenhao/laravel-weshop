@@ -58,4 +58,53 @@ class Order extends Model
         })->implode($connector);
         return $attr_name_values;
     }
+
+    public function getAttrValues($goods_attr_ids,  $connector = '，')
+    {
+        if(!is_array($goods_attr_ids)){
+            $goods_attr_ids = explode(',', $goods_attr_ids);
+        }
+        $goods_attributes = DB::table('goods_attributes')
+            ->select('goods_attributes.id', 'attributes.name', 'goods_attributes.attribute_value')
+            ->join('attributes', 'goods_attributes.attribute_id', '=', 'attributes.id')
+            ->whereIn('goods_attributes.id', $goods_attr_ids)->get(); //集合
+
+        $attr_name_values = $goods_attributes->map(function ($item){
+            //拼接出一条
+            return $item->attribute_value;
+        })->implode($connector);
+        return $attr_name_values;
+    }
+
+    /**
+     *从session中取出确认订单页需要的商品信息
+     */
+    public function getSessionOrderGoods()
+    {
+        $order_goods = json_decode(session('order_goods'));
+        if($order_goods){
+            //封装商品属性信息
+            foreach ($order_goods as &$order_good){
+                $order_good->attr_name_values = $this->getAttrNameValues($order_good->goods_attribute_ids);
+                $order_good->shop_price = $this->getShopPrice($order_good->goods_id, $order_good->goods_attribute_ids);
+            }
+        }
+        return $order_goods;
+    }
+
+    private function getShopPrice($goods_id, $goods_attribute_ids)
+    {
+        //商品原价格查询
+        $goods = Goods::find($goods_id);
+        //商品库存价格查询
+        $number = Number::where([
+            ['goods_id', $goods_id],
+            ['goods_attribute_ids', $goods_attribute_ids]
+        ])->first();
+        if($number->price){
+            return $number->price;
+        }
+        return $goods->price;
+        //todo  促销期价格判断
+    }
 }

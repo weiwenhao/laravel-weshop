@@ -49,7 +49,7 @@ return [
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
-            'strict' => false, //默认未true严格模式
+            'strict' => false, //默认为true严格模式
             'engine' => null,
         ],
 

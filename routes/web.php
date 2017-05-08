@@ -29,11 +29,12 @@ Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
     //地址管理
     Route::resource('addrs', 'AddrController');
     //订单管理
-    Route::get('orders/confirm', 'OrderController@confirmOrder'); //确认订单
-    Route::get('orders/addrs', 'OrderController@addrs'); //订单地址列表
+    Route::post('orders/confirm', 'orderController@confirmStore');
+    Route::get('orders/confirm', 'OrderController@confirm'); //确认订单
+    Route::get('orders/addrs', 'OrderController@addrs');
     Route::resource('orders', 'OrderController');
     //个人中心
-    Route::get('my_center', 'MyCenterController@index'); //个人中心主页
+//    Route::get('my_center', 'MyCenterController@index'); //个人中心主页
 });
 
 /**
@@ -57,7 +58,7 @@ Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.ad
     });
     /******************************控制台*********************************/
     //主页
-    Route::get('/index', 'IndexController@index');
+//    Route::get('/index', 'IndexController@index');
     //统计区
     Route::get('/compute', 'ComputeController@compute');
 

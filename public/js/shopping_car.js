@@ -43,23 +43,23 @@ $(function(){
         ifDelete : function(){//判断删除
             if(this.selected() == 0 || $('.center-block .fa-shopping-cart').parents().css('display')=='block' ){
                 this.deleteAll.css('background','#eee');
-                $('.showIOSDialog1').off('click');
+                this.deleteAll.off('click');
 
             }else{
                 this.deleteAll.css('background','rgb(230, 67, 64)');
-                 console.log('绑定');
-                $('.showIOSDialog1').on('click', function(){
+                this.deleteAll.on('click', function(){
                     $('#iosDialog1').fadeIn(200);
                 });
+                this.deleteAll.click(deleteAll);
             }
         }
     };edit.offListF();
 
     //删除 按钮
-    edit.deleteAll.click(function(){
+    edit.deleteAll.click(deleteAll);
+    function deleteAll(){
         edit.update();//更新
         edit.selected();//选中列表
-        //edit.ifDelete();//判断删除
         $('#okDelete').click(function(){//确认删除
             edit.selected();//选中列表
             edit.update();//更新
@@ -75,7 +75,7 @@ $(function(){
             }
            
         });
-    });
+    }
     //编辑 商品
     edit.on.click(function(){//点击编辑时
         var RMBnum = shoppCar.numList;//商品列表数量
@@ -129,7 +129,10 @@ $(function(){
     });   
     // + - 编辑商品 
     $(".edit-add").click(function() {
-        $(this).prev().val( parseInt($(this).prev().val()) + 1 );
+        var num = parseInt($(this).prev().val()) + 1;
+        if( num>$(this).prev().data().max )return;//不能小于data-max
+        $(this).prev().val( num );
+        // $(this).prev().val( parseInt($(this).prev().val()) + 1 );
     });
     $(".edit-min").click(function() {
         var num = parseInt($(this).next().val())-1;
@@ -184,17 +187,11 @@ $(function(){
                aList[i] = parseInt( this.numList[i].innerText );//转整数数
             };return aList;
         },
-        update : function(){
+        update : function(){//更新
             this.rmbList = $('#shoppingList .row .RMBnum span');//商品列表价钱
             this.numList = $('#shoppingList .row .RMBnum tt');
         }
     }
-    //是否下架
-    //for(var i=0; i<edit.select.length; i++){
-        //if(edit.select.eq(i).parents().parents().prev().is('[class="off"]')){
-            //edit.select[i].checked = false;
-        //}
-    //}
     //全选按钮
     edit.selectAll.click(selectAll);
     function selectAll(){
@@ -227,11 +224,7 @@ $(function(){
             return true;
         }return false;
     });
-    //点击显示
-    // $('.showIOSDialog1').on('click', function(){
-    //     $('#iosDialog1').fadeIn(200);
-    // });
-    // //点按钮关闭
+     //点按钮关闭
     $('#dialogs').on('click', '.weui-dialog__btn', function(){
         $(this).parents('.js_dialog').fadeOut(200);//关闭
     });

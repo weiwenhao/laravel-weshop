@@ -7,7 +7,7 @@ $(function(){
             var s = price.eq(i).text().replace(/\.([\d\.]*)/,'<span style="font-size:.9rem;letter-spacing:-1px;">.'+'$1'+'</span>');
             price.eq(i).html('<i class="fa fa-rmb"></i>'+s);
         }
-        $('#historyPageGo').click(function(){
+        $('#previous_page').click(function(){
             window.history.go(-1);//返回上一页
         });
         //弹出菜单
@@ -46,29 +46,13 @@ $(function(){
             $(this).next().val(num);
         });
         //选择类型
-        // var target = $('.class-ok .attr-target');
-        // var input = $('.me-actionsheet-body .attr input');
-        // input.click(selectAttr);
-        // function selectAttr(){
-        //     var s = '';
-        //     for(i=0;i<input.length;i++){
-        //         if(input[i].checked){
-        //             s += input.eq(i).next().text()+', ';
-        //         }
-        //     }
-        //     s=s.replace(/, +$/,'');
-        //     target.text(s);
-        // }selectAttr();
 //******************************
-        
-        //var ee = $('.attr-value').is(':checked');
         var target = $('.class-ok .attr-target');
         var input = $('.attr-value');
         input.click(selectAttr);
         function selectAttr(){
             var s = '';
             $('.attr-value:checked').each(function(index,elem){
-                console.log(index);
                 s += $(this).next().text()+', ';
             });
             s=s.replace(/, +$/,'');
@@ -113,18 +97,17 @@ var html = '<div class="off"><!--已下架-->\
             });
         }
 //加载中提示************************************
-        var oWait = $('[name="wait"]','.weui-tabbar');
+        var oWait = $('.fa-comments-o','.weui-tabbar');
         oWait.click(function(){wait();});
         function wait(s){
             var s = s || '程序猿小哥正在努力开发中';
-            var wait = '<div id="loadingToast2" style="position:fixed">\
+            var wait = '<div id="loadingToast2" style="position:fixed;z-index:10;">\
                     <div class="weui-mask_transparent"></div>\
                     <div class="weui-toast">\
                         <i class="weui-loading weui-icon_toast"></i>\
                         <p class="weui-toast__content">'+s+'</p>\
                     </div>\
                 </div>';
-                //console.log($('#loadingToast2').length);
             if(!$('#loadingToast2').length){
                 $('body').append(wait);
             }else{
@@ -136,3 +119,33 @@ var html = '<div class="off"><!--已下架-->\
                 },1500);
             });
         };
+    //确定取消 ******************************************************
+        function weConfirm(msg,okId,noId){
+        msg = msg || '确定吗';
+        var weConfirmOk = okId || 'weConfirmOk';
+        var weConfirmNo = noId || 'weConfirmNo';
+        var html = '<div id="dialogs">\
+            <div class="js_dialog" id="iosDialog1" style="display: ">\
+                <div class="weui-mask"></div>\
+                <div class="weui-dialog">\
+                    <div class="weui-dialog__hd"><strong class="weui-dialog__title">'+msg+'</strong></div>\
+                    <div class="weui-dialog__ft">\
+                        <a id="'+weConfirmOk+'" class="weui-dialog__btn weui-cell_warn me-font-f90">确定</a>\
+                        <a id="'+weConfirmNo+'" class="weui-dialog__btn weui-dialog__btn_primary">取消</a>\
+                    </div>\
+                </div>\
+            </div>\
+        </div>';
+        if(!$('#dialogs').length){
+            $('.weui-tabbar').after(html);
+        }
+        $('#iosDialog1').fadeIn(200);
+        
+        $('#'+weConfirmOk+'').bind('click',function(){console.log('ok'); return true});
+        $('#'+weConfirmNo+'').bind('click',function(){console.log('no'); return false});
+        //点按钮关闭
+        $('#dialogs').on('click', '.weui-dialog__btn', function(){
+            $(this).parents('.js_dialog').fadeOut(200);//关闭
+        });
+    }
+    

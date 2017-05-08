@@ -19,9 +19,9 @@
         @foreach($shop_carts as $shop_cart)
             <div class="row">
                 <!--添加name='off'出现下架-->
-                <div class="col-xs-1"><!--选项-->
+                <div class="col-xs-1 {{ $shop_cart->is_on_sale?'':'off-sale' }}"><!--选项-->
                     <label for='{{ $loop->index }}' class="me-checkbox-icon">
-                        <input id="{{ $loop->index }}" type="checkbox" name="select" value="1"/>
+                        <input id="{{ $loop->index }}" class="shop_cart" type="checkbox" name="select" value="{{ $shop_cart->id }}"/>
                         <i class="weui-icon-success"></i>
                     </label>
                 </div>
@@ -33,45 +33,51 @@
                     <small>{{ $shop_cart->attr_name_values }}</small>
                 </div>
                 <div class="col-xs-2">
-                    <div class="RMBnum"><i class="fa fa-rmb"></i><span>{{ $shop_cart->price }}</span>
+                    <div class="RMBnum"></i><span class="price-decimal-point">{{ $shop_cart->price?:$shop_cart->goods_price }}</span>
                         <br>x<tt>{{ $shop_cart->shop_number }}</tt></div>
                 </div>
                 <div class="me-edit">
-                    <button class="edit-min">-</button><input type="text" value="1" readonly="readonly" /><button class="edit-add">+</button>
+                    <button class="edit-min">-</button><input type="text" value="1"  readonly="readonly" /><button class="edit-add">+</button>
                 </div>
             </div>
         @endforeach
     </div>
-    <div class="center-block" style="display:none">
-        <span class="fa fa-cart-plus fa-5x"></span>
-        <h3>您的购物车还是空的</h3>
-        <p>去挑一些中意的商品吧</p>
-        <a href="javascript:;" class="weui-btn weui-btn_primary" style="">去商店逛逛</a>
-    </div>
+    <div class="center-block" style="display:{{ $shop_carts->toArray()?'none':'block' }}">
+                <span class="fa fa-shopping-cart fa-5x"></span>
+                <h3>您的购物车是空的</h3>
+                <p>去挑一些喜欢的商品吧</p>
+                <a href="{{ url('/') }}" class="weui-btn weui-btn_primary" style="">再去逛逛</a>
+            </div>
+    <div class="height-2rem"></div>
+    <div class="height-4rem"></div>
     <!--****************  结算  ********************-->
     <div calss="container" id="bill">
-        <div class="row ">
-            <div class="col-xs-4">
-                <label for='all' class="me-checkbox-icon">
-                    <input id="all" type="checkbox" name="selectAll" />
-                    <i class="weui-icon-success"></i>
-                </label><b>全选</b>
-            </div>
-            <div class="col-xs-4">
-                <span>合计: <i class="fa fa-rmb"></i><tt>0.00</tt></span>
-            </div>
-            <div class="col-xs-4" name="num">
-                <a id="sub" class="weui-btn weui-btn_warn" href="shoppCar/settlement.html" >结算(<span>0</span>)
-                </a>
-            </div>
-            <div class="col-xs-4" >
-                <a class="weui-btn weui-btn_warn" style="">加入收藏夹</a>
-            </div>
-            <div class="col-xs-4" >
-                <a class="weui-btn weui-btn_warn showIOSDialog1" name="deledeAll">删除</a>
+            <div class="row ">
+                <div class="col-xs-4">
+                    <label for='all' class="me-checkbox-icon">
+                        <input id="all" type="checkbox" name="selectAll" />
+                        <i class="weui-icon-success"></i>
+                    </label><b>全选</b>
+                </div>
+                <div class="col-xs-4">
+                    <span>合计: <i class="fa fa-rmb"></i><tt>0.00</tt></span>
+                </div>
+                <div class="col-xs-4" name="num">
+                    <a id="sub" class="weui-btn weui-btn_warn" href="javascript:void(0)" >结算(<span>0</span>)
+                    </a>
+                </div>
+                <div class="col-xs-4" >
+                    <a class="weui-btn weui-btn_warn" style="">加入收藏夹</a>
+                </div>
+                <div class="col-xs-4" >
+                    <a class="weui-btn weui-btn_warn showIOSDialog1" name="deledeAll">删除</a>
+                </div>
             </div>
         </div>
-    </div>
+    <!--*************** 底部导航 ********************-->
+    @include('layouts.bottom_nav')
+
+
     <!--是否删除购物车商品-->
     <div id="dialogs">
         <div class="js_dialog" id="iosDialog1" style="display: none">
@@ -85,12 +91,36 @@
             </div>
         </div>
     </div>
-    <!--*************** 底部导航 ********************-->
-    @include('layouts.bottom_nav')
 @stop
 @section('js')
     <script type="text/javascript" src="/js/shopping_car.js"></script>
     <script>
 
+        $('#sub').click(function () {
+            //判断用户是否选择了商品
+            let shop_cart_ids =  [];
+            $('.shop_cart:checked').each(function (index, dom) {
+                  shop_cart_ids[index] = $(dom).val();
+            });
+            if(shop_cart_ids == ''){
+                alert('您还没有选择商品呢!');
+                return;
+            }
+            $.ajax({
+            	type: "POST",
+            	url: "{{ url('/orders/confirm') }}",
+            	data:{
+            	    'shop_cart_ids' : shop_cart_ids
+                },
+            	success: function(msg){
+                     location.href = '{{ url('orders/confirm') }}';
+            	},
+            	error: function (error) { //200以外的状态码走这里
+            		 if(error.status == 422){
+            		     alert(error.responseText);
+                     }
+            	}
+            });
+        })
     </script>
 @stop

@@ -41,7 +41,9 @@ class CheckOnUser
                 ]);
             }
             //将该用户设置为已经登陆
-            \Auth::login($user, true); //登陆并且记住用户
+            if(!\Auth::check()){
+                \Auth::login($user, true); //登陆并且记住用户
+            }
 //        }
     }
 }

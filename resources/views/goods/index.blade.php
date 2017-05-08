@@ -99,7 +99,7 @@
 
     <div class="me-goods-List">
         @foreach($best_goods as $goods)
-            <div class="shopp-item" >
+            <div class="shopp-item">
                 <a class="me-on-a me-a"  href="{{ url('/goods/'.$goods->id) }}">
                     <!--添加name='off'出现下架-->
                     <img class="img-responsive {{ $goods->is_on_sale?'':"off-sale" }}" data-img="{{ $goods->mid_image }}"/>

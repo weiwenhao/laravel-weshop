@@ -3,17 +3,19 @@
 /***************** 购物车列表 ****************/
 #shoppingList{margin-bottom:.1rem}
 #shoppingList p{margin-bottom:.3rem}
-#shoppingList .row{position:relative;background:#fff;padding:.2rem 0;margin-bottom:.1rem;border-bottom: 1px solid #ddd;}
+#shoppingList .row{position:relative;background:#fff;padding:.3rem 0;margin-bottom:.1rem;border-bottom: 1px solid #ddd;}
 
 #shoppingList .row .off{position:absolute;width:100%;height:100%;top:0;z-index:10;background: rgba(0, 0, 0, 0.6);}/*已下架*/
 #shoppingList .row .off .icon-xiajia{position:relative;font-size:4.5rem;margin-left:40%;line-height:90%;color:#fff;}
 
-#shoppingList .col-xs-1 {margin-top:.8rem;}
+#shoppingList .col-xs-1 {margin-top:.8rem;padding:0 .5rem;}
+#shoppingList .col-xs-3{padding:0 .5rem;}
 #shoppingList .row .col-xs-6 {padding:0;}
 #shoppingList .col-xs-6 p,#shoppingList .col-xs-6 small{text-overflow: -o-ellipsis-lastline;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;/*第二行超出隐藏*/}
 #shoppingList .col-xs-6 p{margin-bottom:0;}
-#shoppingList .col-xs-6 small{font-size:.9rem;color:#777;}
-#shoppingList .col-xs-2 {padding:0;}
+#shoppingList .col-xs-6 small{font-size:.8rem;color:#777;}
+#shoppingList .col-xs-7{padding:0 .5rem;}
+#shoppingList .col-xs-2 {padding:0 0 0 .2rem;}
 #shoppingList .RMBnum{color:#f90;font-weight:600;font-size:1.2rem;line-height:1.4rem}
 #shoppingList .RMBnum i{font-size:.8rem}
 #shoppingList .RMBnum tt{font-size:.9rem}
@@ -25,8 +27,8 @@
 input[type="checkbox"]{width: 20px;height: 20px;cursor: pointer;border-radius: 50px;}
 .shopping-hoem .row{margin-bottom:.3rem !important;padding:.3rem 0 !important;}
 /*空购物车*/
-.center-block{display:none;width:60%;margin-top:10%;text-align:center;color:#444;}
-.center-block span{color:#bbb;font-size:8rem;}
+.center-block{display:none;width:60%;margin-top:10%;text-align:center;color:#bbb;}
+.center-block span{font-size:8rem;}
 
 .me-address .me-edit-address{position: absolute;right:0;}
 

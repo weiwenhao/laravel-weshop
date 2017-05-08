@@ -34,7 +34,7 @@ class ShopCart extends Model
     }
 
     /**
-     *购物车列表
+     *得到购物车列表  无分页
      */
     public function getShopCarts()
     {
@@ -48,10 +48,9 @@ class ShopCart extends Model
                 $join->on([ //on是对临时表的操作
                     ['shop_carts.goods_id', '=', 'numbers.goods_id'],
                     ['shop_carts.goods_attribute_ids', '=', 'numbers.goods_attribute_ids']
-                ])->orWhereNull('numbers.goods_attribute_ids');
+                ]);
             })
             ->get();
-        dd($data->toArray());
         //添加商品属性
         $order = new Order();
         $data = $data->map(function ($item) use ($order){
@@ -59,6 +58,67 @@ class ShopCart extends Model
             return $item;
         });
         return $data;
+    }
+
+    /**
+     * 购物车中结算后, 对商品数据进行一个检验, 返回一个数组,
+     * @param $shop_cart_ids
+     * @return array  $arr['sucs'] 中是通过验证的商品,  $arr['errs'] 是库存量不足的错误信息
+     */
+    public function checkShopCarts($shop_cart_ids)
+    {
+        //验证库存量商品语句
+        $shop_carts = ShopCart::select('goods.name', 'goods.is_on_sale', 'goods.sm_image', 'shop_carts.shop_number', 'shop_carts.id',
+            'shop_carts.goods_id', 'shop_carts.goods_attribute_ids' ,'numbers.number')
+            ->join('goods', function ($join) use ($shop_cart_ids){
+                $join->on('goods.id', '=', 'shop_carts.goods_id')
+                    ->whereIn('shop_carts.id', $shop_cart_ids);
+            }) ->join('numbers', function ($join){
+                $join->on([ //on是对临时表的操作
+                    ['shop_carts.goods_id', '=', 'numbers.goods_id'],
+                    ['shop_carts.goods_attribute_ids', '=', 'numbers.goods_attribute_ids']
+                ]);
+            })/*->whereColumn('shop_carts.shop_number', '>', 'numbers.number')*/
+            ->get(); //购买数量大于库存量的商品
+
+        $errs = [];
+        $sucs = [];
+        foreach ($shop_carts as $shop_cart){
+            if($shop_cart->shop_number > $shop_cart->number){
+                $errs[] = $shop_cart;
+            }else{
+                if( $shop_cart->is_on_sale = 1){ //二次测试,只将上架的商品存储进去
+                    $sucs[] = $shop_cart;
+                }
+            }
+        }
+        //如果存在库存不足,将 库存不足的商品信息,进行一个封装
+        if($errs){
+            $order = new Order();
+            //给错误的元素封装属性
+            foreach ($errs as &$err){
+                $err->attr_values = $order->getAttrValues($err->goods_attribute_ids);
+            }
+            $errs = $this->getErrMsg($errs);
+        }
+        return [
+            'errs' => $errs,
+            'sucs' => $sucs,
+        ];
+    }
+
+    /**
+     * 封装库存量不足的信息
+     * @param $errs
+     * @return string
+     */
+    private function getErrMsg($errs)
+    {
+        $msg = "库存量不足\n";
+        foreach ($errs as $err){
+            $msg .= str_limit($err->name, 15)." {$err->attr_values} 仅剩 {$err->number}\n";
+        }
+        return $msg;
     }
 
     /*public function setGoodsAttributeIdsAttribute($value)
