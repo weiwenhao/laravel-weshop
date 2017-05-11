@@ -8,7 +8,7 @@
 @section('content')
     <!--顶部-->
     <div class="me-header-top">
-        <div><a id="previous_page"><span class="fa fa-chevron-left fa-lg"></span></a></div>
+        <div><a href="{{ session('addrs_previous_url', url()->previous())  }}"><span class="fa fa-chevron-left fa-lg"></span></a></div>
         <div>我的收货地址</div>
         <div></div>
     </div>
@@ -20,20 +20,24 @@
                 @if($addr->is_default)
                     <i class="icon icon-moren"><!--默认地址图标--></i>
                 @endif
-                <div class="col-xs-1 me-a showIOSDialog1">
-                    <i class="fa fa-times-circle-o fa-lg"></i>
-                </div>
-                <div class="col-xs-10 " >
-                    <p>收货人:<b>{{ $addr->name }}</b> <tt>{{ $addr->phone }}</tt></p>
-                    <p>惠州市技师学院,{{ $addr->garden_name }},{{ $addr->floor_name }},{{ $addr->number }}</p>
-                </div>
-                <div class="col-xs-1 me-a" name="addressGo">
-                    <i class="fa fa-angle-right"></i>
-                </div>
+                <a href="" class="del-addr" addr_id="{{ $addr->id }}">
+                    <div class="col-xs-1 me-a showIOSDialog1">
+                        <i class="fa fa-times-circle-o fa-lg"></i>
+                    </div>
+                </a>
+                <a href="{{ url('addrs/'.$addr->id.'/edit') }}">
+                    <div class="col-xs-10 " >
+                        <p>收货人:<b>{{ $addr->name }}</b> <tt>{{ $addr->phone }}</tt></p>
+                        <p>惠州市技师学院，{{ $addr->floor_name }}，{{ $addr->number }}</p>
+                    </div>
+                    <div class="col-xs-1 me-a" name="addressGo">
+                        <i class="fa fa-angle-right"></i>
+                    </div>
+                </a>
             </div>
         </div>
     @endforeach
-    <div class="center-block" style="display:{{ $addrs->toArray()?'none':'block' }}">
+    <div class="weshop-center-block" style="display:{{ $addrs->toArray()?'none':'block' }}">
         <span class="fa fa-map-marker fa-5x"></span>
         <h3>╮(￣▽￣")╭</h3>
     </div>
@@ -43,6 +47,28 @@
 @section('js')
     <script type="text/javascript" src="/js/shopping_car.js"></script>
     <script>
-
+        $('.del-addr').click(function (event) {
+            event.preventDefault();
+            let addr_id = $(this).attr('addr_id');
+            if(!addr_id){
+                alert('系统错误,请联系客服');
+                return;
+            }
+            if(confirm('你确定要删除该收获地址吗？')){
+                $.ajax({
+                	type: "DELETE",
+                	url: "/addrs/"+addr_id,
+                	success: function(msg){
+                	    toast('删除成功');
+                        location.reload()
+                	},
+                	error: function (error) { //200系列以外的状态码走这里
+                		if(error.status == 403){
+                		    alert('系统错误,请联系客服');
+                        }
+                	}
+                });
+            }
+        });
     </script>
 @stop

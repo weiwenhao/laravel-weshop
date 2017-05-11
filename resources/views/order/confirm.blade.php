@@ -8,7 +8,8 @@
 @stop
 @section('content')
     <div class="me-header-top">
-        <div><a href="{{ url()->previous() }}"><span class="fa fa-chevron-left fa-lg"></span></a></div>
+        {{--todo 这里点了返回之后,ajax清空一下session--}}
+        <div><a href="{{ session('confirm_previous_url') }}"><span class="fa fa-chevron-left fa-lg"></span></a></div>
         <div>确认订单</div>
         <div></div>
     </div>
@@ -16,14 +17,14 @@
     <div class="height-2rem"></div>
     <div class="container me-address me-a">
         @if($addr)
-            <a href="{{ url('orders/addrs') }}">
+            <a href="{{ url('orders/confirm/addrs') }}">
                 <div class="row address">
                     <div class="col-xs-1">
                         <i class="fa fa-map-marker"></i>
                     </div>
                     <div class="col-xs-10">
                         <p>收货人:<b>{{ $addr->name }}</b> <tt>{{ $addr->phone }}</tt></p>
-                        <p>惠州市技师学院,{{ $addr->garden_name }},{{ $addr->floor_name }},{{ $addr->number }}</p>
+                        <p>惠州市技师学院,{{ $addr->floor_name }},{{ $addr->number }}</p>
                     </div>
                     <div class="col-xs-1">
                         <i class="fa fa-angle-right"></i>
@@ -31,7 +32,7 @@
                 </div>
             </a>
         @else
-            <a  href="{{ url('orders/addrs') }}">
+            <a  href="{{ url('orders/confirm/addrs') }}">
                 <div class="row address">
                     <div class="col-xs-11 text-center">
                         <div class="me-font-f90 address-new"><i class="fa fa-map-marker me-font-f90"></i>  点击选择收货地址</div>
@@ -80,7 +81,7 @@
     <div class="weui-cell me-fff">
         <div class="weui-cell__hd">订单备注：</div>
         <div class="weui-cell__bd">
-            <input class="weui-input" type="text" placeholder="订单要求信息">
+            <input class="weui-input" type="text" name="remarks" placeholder="订单要求信息">
         </div>
     </div>
     <!--****************结算********************-->
@@ -89,17 +90,51 @@
             <div class="col-xs-4">
             </div>
             <div class="col-xs-4">
-                <span>合计:￥<tt>{{ $sum_price }}</tt></span>
+                <span>合计:￥<tt>{{ sprintf("%.2f", $sum_price) }}</tt></span>
             </div>
             <div class="col-xs-4" name="">
-                <a href="select_address.html" class="weui-btn weui-btn_warn" id="sub" >提交订单</a>
+                <a href="javascript:void(0)" class="weui-btn weui-btn_warn"  id="submit-order">提交订单</a>
             </div>
         </div>
     </div>
 @stop
 @section('js')
     <script>
-
-
+        $('#submit-order').click(function (event) {
+            event.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{{ url('/orders') }}",
+                data : {
+                  'remarks': $('input[name=remarks]').val()
+                },
+                success: function(msg){
+                    //使用微信浏览器自带的功能发起支付
+                    WeixinJSBridge.invoke(
+                        'getBrandWCPayRequest', msg.config,
+                        function(res){
+                            if(res.err_msg == "get_brand_wcpay_request:ok") {
+                             // 使用以上方式判断前端返回,微信团队郑重提示：
+                             // res.err_msg将在用户支付成功后返回
+                             // ok，但并不保证它绝对可靠。
+                             //跳转到订单详情页?
+                                location.href = '{{ url('orders') }}/'+msg.order_id+'?is_pay=1'
+                             }
+                             if("get_brand_wcpay_request:cancel" || "get_brand_wcpay_request:fail"){
+                                 location.href = '{{ url('orders') }}/'+msg.order_id+'?is_pay=0'
+                             }
+                        }
+                    );
+                },
+                error: function (error) { //200以外的状态码走这里
+                    if(error.status == 422){
+                        alert(error.responseText);
+                    }
+                    if(error.status == 500){
+                        alert('系统错误,请联系客服');
+                    }
+                }
+            });
+        });
     </script>
 @stop

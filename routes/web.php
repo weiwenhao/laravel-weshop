@@ -1,40 +1,38 @@
 <?php
 
 
-Route::get('/test', function (\EasyWeChat\Foundation\Application $wechat){
-    DB::connection()->enableQueryLog();
-    $changshang = \App\Models\Attribute::create([
-        'name' => '厂商',
-        'type' => '唯一',
-        'option_values' => null,
-        'type_id' => 1,
-    ]);
-    $log = DB::getQueryLog();
-    dd($log);   //打印sql语句
+Route::get('/test', function (){
+    /*$dt = \Carbon\Carbon::createFromTimestamp(strtotime('+ 28 minute'));
+    $res = timeDiff(time(),strtotime('2017-5-10 09:20:20'));*/
 });
-
 
 
 Route::get('/', function (){
     return redirect('/index');
 });
 
+Route::post('orders/notify', 'OrderController@notify'); //支付结果通知
 Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
     //商品区
     Route::get('index', 'GoodsController@index');
     Route::get('goods', 'GoodsController@list');
     Route::get('goods/{goods_id}', 'GoodsController@show');
     //购物车
+    Route::put('shop_carts/edit_shop_numbers', 'shopCartController@editShopNumbers');
     Route::resource('shop_carts', 'ShopCartController');
     //地址管理
     Route::resource('addrs', 'AddrController');
     //订单管理
-    Route::post('orders/confirm', 'orderController@confirmStore');
+        //确认订单
+    Route::get('orders/confirm/addrs', 'OrderController@addrs'); //确定订单中的地址列表
+    Route::post('orders/confirm/addrs/{addr_id}', 'OrderController@setAddrId'); //确定订单中的地址列表
+    Route::post('orders/confirm', 'OrderController@confirmStore');
     Route::get('orders/confirm', 'OrderController@confirm'); //确认订单
-    Route::get('orders/addrs', 'OrderController@addrs');
+    //已经有订单id.根据改id再次付款
+    Route::post('orders/repay', 'OrderController@repay');
     Route::resource('orders', 'OrderController');
     //个人中心
-//    Route::get('my_center', 'MyCenterController@index'); //个人中心主页
+    Route::get('me', 'MeController@index'); //个人中心主页
 });
 
 /**

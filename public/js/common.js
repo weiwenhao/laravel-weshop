@@ -7,8 +7,14 @@ $(function(){
             var s = price.eq(i).text().replace(/\.([\d\.]*)/,'<span style="font-size:.9rem;letter-spacing:-1px;">.'+'$1'+'</span>');
             price.eq(i).html('<i class="fa fa-rmb"></i>'+s);
         }
+        $('#historyPageGo').click(function(){
+            window.history.go(-1);//返回上一页
+        });
         $('#previous_page').click(function(){
             window.history.go(-1);//返回上一页
+        });
+        $('#previous_f5').click(function(){
+            window.location.href = document.referrer;//返回上一页并刷新
         });
         //弹出菜单
         var $actionsheet = $('#actionsheet');
@@ -36,8 +42,8 @@ $(function(){
         }
         $(".add").click(function() {
             var num = parseInt($(this).prev().val()) + 1;
-            prices(num);
-            $(this).prev().val(num);
+            if( num > $(this).prev().data().max )return;//不能小于data-max
+            $(this).prev().val( num );
         });
         $(".min").click(function() {
             var num = parseInt($(this).next().val())-1;
@@ -69,11 +75,18 @@ $(function(){
         }
         
 });
-//添加 class="off-sale" 出现已下架 ************************************
-var html = '<div class="off"><!--已下架-->\
-                <i class="icon icon-xiajia"><!--已下架--></i>\
-            </div>';
-        $('.off-sale').before(html);
+
+//添加 class="off-number" 出现已售罄 ************************************
+var yishouqing = '<div class="off"><!--已售罄-->\
+                    <i class="icon icon-yishouqing"><!--已售罄--></i>\
+                </div>';
+$('.off-number').before(yishouqing);
+//添加 class="off-sale" 出现下架
+var yixiajia = '<div class="off"><!--已下架-->\
+                    <i class="icon icon-yixiajia"><!--已下架--></i>\
+                </div>';
+$('.off-sale').before(yixiajia);
+
 //已完成提示************************************
         function toast( msg ){
             msg = msg || '已完成' ;

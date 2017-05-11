@@ -15,7 +15,7 @@ class CreateGoodsTable extends Migration
     {
         Schema::create('goods', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 30)->comment('商品名称');
+            $table->string('name', 50)->comment('商品名称');
             $table->decimal('price', 8, 2)->index()->comment('商品价格');
             $table->text('description')->nullable()->comment('商品描述'); //text不允许设置默认值
             $table->decimal('promote_price')->default(0.00)->comment('促销价格');
@@ -31,6 +31,7 @@ class CreateGoodsTable extends Migration
             $table->string('big_image')->comment('商品图片 300x300');
             $table->unsignedTinyInteger('category_id')->index()->comment('商品所属分类id');
             $table->unsignedSmallInteger('type_id')->default(0)->comment('商品所属类型');
+            $table->unsignedTinyInteger('is_deleted')->default(0)->index()->comment('是否被删除');
             $table->timestamps();
         });
     }

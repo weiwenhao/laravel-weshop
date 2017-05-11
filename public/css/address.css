@@ -25,7 +25,3 @@
 /*添加地址页面*/
 .weui-cell .weui-label{width:4rem;}
 #bill .row {bottom:0;}
-
-/*空购物车*/
-.center-block{display:none;width:60%;margin-top:10%;text-align:center;color:#bbb;}
-.center-block span{font-size:8rem;}

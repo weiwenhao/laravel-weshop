@@ -8,9 +8,9 @@
 @section('content')
     <!--**************** 顶部 ********************-->
     <div class="me-header-top me-header-food-info">
-        <div><a href="{{ url()->previous() }}" id="historyPageGo"><span class="fa fa-chevron-left "></span></a></div>
+        <div><a id="previous_page"><span class="fa fa-chevron-left "></span></a></div>
         <div></div>
-        <div><a href="{{ url('shop_carts') }}"><span class="fa fa-cart-plus "></span></a></div>
+        <div><a href="{{ url('shop_carts') }}"><span class="fa fa fa-shopping-cart"></span></a></div>
     </div>
     <!--**************** 详情 ********************-->
     <div class="goods-info-img">
@@ -137,8 +137,8 @@
         	},
         	error: function (error) { //200以外的状态码走这里
 //                error.responseText; //库存量不足
-                 if(error.status == {{ config('shop.no_number') }}){
-                     alert('库存量不足')
+                 if(error.status == 422){
+                     alert(error.responseText)
                  }
         	}
         });

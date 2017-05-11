@@ -179,7 +179,7 @@ return [
 
         //ide-helper
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class,
+//        Barryvdh\Debugbar\ServiceProvider::class,
         //entrust
         Zizaco\Entrust\EntrustServiceProvider::class,
         //datatables + buttons扩展

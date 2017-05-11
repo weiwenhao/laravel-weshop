@@ -9,7 +9,7 @@ class ShopCart extends Model
     protected $guarded = [];
 
     /**
-     * 加入购物车操作
+     * 商品详情页加入购物车操作
      * @param $goods_id
      * @param $goods_attribute_ids
      * @param $shop_number
@@ -61,72 +61,59 @@ class ShopCart extends Model
     }
 
     /**
-     * 购物车中结算后, 对商品数据进行一个检验, 返回一个数组,
-     * @param $shop_cart_ids
-     * @return array  $arr['sucs'] 中是通过验证的商品,  $arr['errs'] 是库存量不足的错误信息
+     * @param  array $shop_cart_ids 购物车列表id, 数组格式
+     * @return string $err_msgs
      */
     public function checkShopCarts($shop_cart_ids)
     {
+        $err_msgs = '';
+        $order = new Order();
         //验证库存量商品语句
-        $shop_carts = ShopCart::select('goods.name', 'goods.is_on_sale', 'goods.sm_image', 'shop_carts.shop_number', 'shop_carts.id',
-            'shop_carts.goods_id', 'shop_carts.goods_attribute_ids' ,'numbers.number')
-            ->join('goods', function ($join) use ($shop_cart_ids){
-                $join->on('goods.id', '=', 'shop_carts.goods_id')
-                    ->whereIn('shop_carts.id', $shop_cart_ids);
-            }) ->join('numbers', function ($join){
-                $join->on([ //on是对临时表的操作
-                    ['shop_carts.goods_id', '=', 'numbers.goods_id'],
-                    ['shop_carts.goods_attribute_ids', '=', 'numbers.goods_attribute_ids']
-                ]);
-            })/*->whereColumn('shop_carts.shop_number', '>', 'numbers.number')*/
-            ->get(); //购买数量大于库存量的商品
+        foreach ($shop_cart_ids as $shop_cart_id){
+            //检验该购物车id和用户id是否存在商品
+            $shop_cart = $this->where('id', $shop_cart_id)->where('user_id', \Auth::user()->id)->first(); //如果连shop_carts_id都找不到,或者找到了不是当前用户的,我选择直接报错
+            if(!$shop_cart){
+               return  $err_msgs = '系统错误';
+            }
+            $err_msg = $order->checkOneGoods($shop_cart->goods_id, $shop_cart->goods_attribute_ids, $shop_cart->shop_number);
+            if($err_msg){
+                $err_msgs .= $err_msg."\n";
+            }
+        }
+        return $err_msgs;
 
-        $errs = [];
-        $sucs = [];
-        foreach ($shop_carts as $shop_cart){
-            if($shop_cart->shop_number > $shop_cart->number){
-                $errs[] = $shop_cart;
-            }else{
-                if( $shop_cart->is_on_sale = 1){ //二次测试,只将上架的商品存储进去
-                    $sucs[] = $shop_cart;
-                }
-            }
-        }
-        //如果存在库存不足,将 库存不足的商品信息,进行一个封装
-        if($errs){
-            $order = new Order();
-            //给错误的元素封装属性
-            foreach ($errs as &$err){
-                $err->attr_values = $order->getAttrValues($err->goods_attribute_ids);
-            }
-            $errs = $this->getErrMsg($errs);
-        }
-        return [
-            'errs' => $errs,
-            'sucs' => $sucs,
-        ];
     }
 
     /**
-     * 封装库存量不足的信息
-     * @param $errs
-     * @return string
+     * 将购物车中的数据存储到session中以供临时订单表使用
+     * @param $shop_cart_ids
+     * @return void
      */
-    private function getErrMsg($errs)
+    public function shopCartsToSession($shop_cart_ids)
     {
-        $msg = "库存量不足\n";
-        foreach ($errs as $err){
-            $msg .= str_limit($err->name, 15)." {$err->attr_values} 仅剩 {$err->number}\n";
+        $shop_carts = ShopCart::select('goods.name', 'goods.sm_image', 'shop_carts.shop_number', 'shop_carts.id',
+            'shop_carts.goods_id', 'shop_carts.goods_attribute_ids')
+            ->join('goods', function ($join) use ($shop_cart_ids){
+                $join->on('goods.id', '=', 'shop_carts.goods_id')
+                    ->whereIn('shop_carts.id', $shop_cart_ids);
+            })->get(); //购买数量大于库存量的商品
+
+        //判断当前用户是否存在默认的地址
+        $addr = Addr::where([
+            'user_id' => \Auth::user()->id,
+            'is_default' => 1,
+        ])->first();
+        $order_addr_id = '';
+        if($addr){
+            $order_addr_id = $addr->id;
         }
-        return $msg;
+        //将数组编辑成json格式 [{},{},{}]
+        $order_goods = json_encode($shop_carts);
+        //sesssion存储
+        session(['order_addr_id' => $order_addr_id]);
+        session(['order_goods' => $order_goods]);
+
     }
 
-    /*public function setGoodsAttributeIdsAttribute($value)
-    {
-            if(!is_array($value))
-                explode(',', $value);
-            sort($value, 1); //1代表 SORT_NUMRIC 把每一项当作数字来处理
-            $this->attributes['goods_attribute_ids'] = implode(',', $value);;
-    }*/
 
 }

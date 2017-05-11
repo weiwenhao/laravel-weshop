@@ -42,8 +42,8 @@ class CheckOnUser
             }
             //将该用户设置为已经登陆
             if(!\Auth::check()){
-                \Auth::login($user, true); //登陆并且记住用户
+                \Auth::login($user); //登陆并且记住用户, 仅仅登陆一个用户的有效期是多久
             }
-//        }
-    }
+        }
+//    }
 }

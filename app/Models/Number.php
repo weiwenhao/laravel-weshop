@@ -8,28 +8,11 @@ class Number extends Model
 {
     protected $guarded = [];
 
+
     /**
-     * 检测库存量
-     * @param $goods_id integer
-     * @param $goods_attribute_ids string
-     * @param $shop_number integer
-     * @return bool
+     * 后台修改商品时调用该方法进行库存量的修改
+     * @param $goods
      */
-    public static function checkNumber($goods_id, $goods_attribute_ids, $shop_number)
-    {
-        /*if(!$goods_attribute_ids){ // 将 [] 转为null,方便数据库查找  todo 这种应该如何处理
-            $goods_attribute_ids = null;
-        }*/
-        $number = Number::where([
-            ['goods_id', $goods_id],
-            ['goods_attribute_ids', $goods_attribute_ids]
-        ])->first();
-        if(!$number)
-            return false; //默认如果不存在库存量则返回false
-        return $number->number >= $shop_number;
-    }
-
-
     public function editNumbers($goods)
     {
         /**

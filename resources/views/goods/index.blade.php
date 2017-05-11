@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('css')
     <link rel="stylesheet" href="/plugins/swiper/swiper.min.css"/> <!--轮播-->
-    <link rel="stylesheet" href="/css/home.css"/> {{--首页css--}}
+    {{--<link rel="stylesheet" href="/css/home.css"/> --}}{{--首页css--}}
 <style>
 </style>
 @stop

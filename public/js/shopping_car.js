@@ -53,7 +53,8 @@ $(function(){
                 this.deleteAll.click(deleteAll);
             }
         }
-    };edit.offListF();
+    };
+    edit.offListF();
 
     //删除 按钮
     edit.deleteAll.click(deleteAll);
@@ -68,6 +69,8 @@ $(function(){
                     edit.row.eq(i).remove();
                 }
             }
+            //ajax删除后台数据
+            ajaxDel();
             edit.ifDelete();//判断删除
             edit.row = $('#shoppingList .row');
             if(edit.row.length == 0){//购物车
@@ -79,7 +82,7 @@ $(function(){
     //编辑 商品
     edit.on.click(function(){//点击编辑时
         var RMBnum = shoppCar.numList;//商品列表数量
-        if(edit.on.text() == '编辑全部'){
+        if(edit.on.text() == '编辑'){
             edit.ifDelete();//判断删除
              //获取 商品 数量
             for(var i=0; i<RMBnum.length; i++){
@@ -93,7 +96,7 @@ $(function(){
             edit.jie[2].style.display = 'none';
             edit.jie[3].style.display = 'block';
             edit.jie[4].style.display = 'block';
-            edit.on.text('编辑完成');
+            edit.on.text('完成');
         }else{//编辑完成
             edit.update();//更新
             edit.offListF();//下架列表
@@ -115,7 +118,7 @@ $(function(){
             
             shoppCar.HeJi();//合计方法
             shoppCar.Jie();//结算方法
-            edit.on.text('编辑全部');
+            edit.on.text('编辑');
         }
     });
     //选中商品
@@ -130,7 +133,8 @@ $(function(){
     // + - 编辑商品 
     $(".edit-add").click(function() {
         var num = parseInt($(this).prev().val()) + 1;
-        if( num>$(this).prev().data().max )return;//不能小于data-max
+        if( num>$(this).prev().data().max )
+            return;//不能小于data-max
         $(this).prev().val( num );
         // $(this).prev().val( parseInt($(this).prev().val()) + 1 );
     });
@@ -141,7 +145,7 @@ $(function(){
     });
 
     var shoppCar = {//购物车对象
-        rmbList : $('#shoppingList .row .RMBnum span'),//商品列表价钱
+        rmbList : $('#shoppingList .row .RMBnum > span'),//商品列表价钱
         numList : $('#shoppingList .row .RMBnum tt'),//商品列表数量
         heji : $('#bill .row').eq(0).find('tt'),//合计
         jie : $('#bill [name="num"] a'),//结算
@@ -188,7 +192,7 @@ $(function(){
             };return aList;
         },
         update : function(){//更新
-            this.rmbList = $('#shoppingList .row .RMBnum span');//商品列表价钱
+            this.rmbList = $('#shoppingList .row .RMBnum > span');//商品列表价钱
             this.numList = $('#shoppingList .row .RMBnum tt');
         }
     }
