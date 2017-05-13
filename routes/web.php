@@ -18,7 +18,8 @@ Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
     Route::get('goods', 'GoodsController@list');
     Route::get('goods/{goods_id}', 'GoodsController@show');
     //购物车
-    Route::put('shop_carts/edit_shop_numbers', 'shopCartController@editShopNumbers');
+    Route::put('shop_carts', 'ShopCartController@editShopNumbers');
+    Route::delete('shop_carts', 'ShopCartController@delShopCarts');
     Route::resource('shop_carts', 'ShopCartController');
     //地址管理
     Route::resource('addrs', 'AddrController');
@@ -26,7 +27,8 @@ Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
         //确认订单
     Route::get('orders/confirm/addrs', 'OrderController@addrs'); //确定订单中的地址列表
     Route::post('orders/confirm/addrs/{addr_id}', 'OrderController@setAddrId'); //确定订单中的地址列表
-    Route::post('orders/confirm', 'OrderController@confirmStore');
+    Route::post('orders/shop_cart_confirm', 'OrderController@ShopCartToConfirm'); //将购物车商品经过结算操作转移到确认订单中
+    Route::post('orders/goods_confirm', 'OrderController@GoodsToConfirm'); //将商品直接转移到确认订单中
     Route::get('orders/confirm', 'OrderController@confirm'); //确认订单
     //已经有订单id.根据改id再次付款
     Route::post('orders/repay', 'OrderController@repay');

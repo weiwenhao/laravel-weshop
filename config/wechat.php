@@ -61,9 +61,9 @@ return [
      */
      'payment' => [
          'merchant_id'        => env('WECHAT_PAYMENT_MERCHANT_ID', 'your-mch-id'), //商户id
-         'key'                => env('WECHAT_PAYMENT_KEY', 'key-for-signature'),
-         'cert_path'          => env('WECHAT_PAYMENT_CERT_PATH', 'path/to/your/cert.pem'), // XXX: 绝对路径！！！！
-         'key_path'           => env('WECHAT_PAYMENT_KEY_PATH', 'path/to/your/key'),      // XXX: 绝对路径！！！！
+         'key'                => env('WECHAT_PAYMENT_KEY', 'key-for-signature'),  //api接口安全
+         'cert_path'          => env('WECHAT_PAYMENT_CERT_PATH', 'path/to/your/cert.pem'), //证书pem格式 XXX: 绝对路径！！！！
+         'key_path'           => env('WECHAT_PAYMENT_KEY_PATH', 'path/to/your/key'),      //证书密钥pem格式 XXX: 绝对路径！！！！
          'notify_url'         => env('APP_URL').'/orders/notify',       // 你也可以在下单时单独设置来想覆盖它
          // 'device_info'     => env('WECHAT_PAYMENT_DEVICE_INFO', ''),
          // 'sub_app_id'      => env('WECHAT_PAYMENT_SUB_APP_ID', ''),

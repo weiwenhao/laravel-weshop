@@ -91,7 +91,7 @@ class ShopCart extends Model
      */
     public function shopCartsToSession($shop_cart_ids)
     {
-        $shop_carts = ShopCart::select('goods.name', 'goods.sm_image', 'shop_carts.shop_number', 'shop_carts.id',
+        $shop_carts = ShopCart::select('goods.name', 'goods.sm_image', 'shop_carts.shop_number',
             'shop_carts.goods_id', 'shop_carts.goods_attribute_ids')
             ->join('goods', function ($join) use ($shop_cart_ids){
                 $join->on('goods.id', '=', 'shop_carts.goods_id')

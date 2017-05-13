@@ -1,5 +1,5 @@
 ﻿@charset "utf-8";
-html,body{z-index:-10;width:100%;height:100%;background-color:whitesmoke;font-size:14px ;overflow-x:hidden;}
+html,body{z-index:-10;background-color:whitesmoke;font-size:14px ;overflow-x:hidden;}
 hr{margin:0 -.5rem;}
 @media screen and (min-width:360px){
 	html,body{font-size:16px;}
@@ -19,7 +19,7 @@ a:hover{color:#444 ;}
 .me-a:visited {color:#444 ;/*已被访问过时的样式*/}
 .me-a:hover {color:#444 ;}
 .me-a:active {background:#eee ;/*激活*/}
-.height-4rem{height:3rem;}
+.height-4rem{height:3.6rem;}
 .height-2rem{height:2.2rem;}
 .me-ok{border-radius:0;}
 .me-fff{background:#fff}

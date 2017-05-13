@@ -157,13 +157,13 @@ class Order extends Model
         }
         //库存量再次检测
         if($shop_number > $number->number){
-            return str_limit($goods->name, 15, '').' '.$this->getAttrValues($goods_attribute_ids).'  仅剩'.$number->number;
+            return str_limit($goods->name, 15, '').' '.$this->getAttrValues($goods_attribute_ids).'  仅剩'.$number->number.'件';
         }
         return '';
     }
 
     /**
-     * 对商品属性的真实性进行一个验证
+     * 对商品属性的真实性进行一个验证, 服务于checkOneGoods()
      *  既根据一个 goods_attr_id 和一个goods_id能够查到一条记录,
      * 最后将查到的记录的attribute_id(颜色)进行重复性的匹配,如果出现重复则会出现  蓝色,紫色,ios,2g的情况,这种情况是不被允许的
      * @param $goods_attribute_ids
@@ -196,36 +196,8 @@ class Order extends Model
      * 'shop_carts.goods_id', 'shop_carts.goods_attribute_ids'
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function shopCartsToOrders($order_goods, $addr)
+    public function ConfirmToOrders($order_goods, $addr)
     {
-        /*
-         * array:3 [
-              0 => {#524
-                +"name": "红烧鸡排"
-                +"sm_image": "/uploads/images/goods/20170508/sm_1JyTtISiUESbWhwS.jpg"
-                +"shop_number": 1
-                +"id": 10
-                +"goods_id": 1
-                +"goods_attribute_ids": "22,23,24"
-              }
-              1 => {#511
-                +"name": "单属性商品"
-                +"sm_image": "/uploads/images/goods/20170507/sm_r0QgZ6BGk035czEw.jpg"
-                +"shop_number": 6
-                +"id": 11
-                +"goods_id": 5
-                +"goods_attribute_ids": "11"
-              }
-              2 => {#522
-                +"name": "无属性商品"
-                +"sm_image": "/uploads/images/goods/20170507/sm_jfAzNx5bSAX91DAS.jpg"
-                +"shop_number": 18
-                +"id": 5
-                +"goods_id": 6
-                +"goods_attribute_ids": ""
-              }
-            ]
-         * */
         $total_price = 0;
         foreach ($order_goods as $key => $item){
             $order_goods[$key]->shop_price = $this->getShopPrice($item->goods_id, $item->goods_attribute_ids);
@@ -235,7 +207,7 @@ class Order extends Model
         //生成订单表数据
         $order = $this->create([
             'order_id' => date('ymdhi').sprintf('%04d', mt_rand(1,9999)), //todo 关键点订单id生成地  思路一,对前后一分钟时间内所有的订单进行一个检测,如果有重复则再生成一个 思路2,使用 cache实现一个订单池
-            'remarks' => request('remarks', ''),
+            'remarks' => (string)request('remarks'),
             'user_id' => \Auth::user()->id,
             'name' => $addr->name,
             'phone' => $addr->phone,
@@ -273,8 +245,8 @@ class Order extends Model
         $payment = $wechat->payment;
         //创建订单
         $attributes = [
-            'trade_type'       => 'JSAPI', // JSAPI，NATIVE，APP...
-            'body'             => '一公里科技有限公司',
+            'trade_type'       => 'JSAPI', // JSAPI(公众号支付)，NATIVE，APP...
+            'body'             => '一公里科技有限公司-校园外卖',
             'detail'           => '天哪来啦-校园商城',
             'out_trade_no'     => $this->order_id,
             'total_fee'        => $this->total_price * 100, // 单位：分
@@ -287,6 +259,35 @@ class Order extends Model
             return $prepayId = $result->prepay_id;
         }
         return false;
+    }
+
+    /**
+     * 将商品和用户地址存储到确认订单的session中
+     * @param $goods_id
+     * @param $goods_attribute_ids
+     * @param $shop_number
+     */
+    public function goodsToSession($goods_id, $goods_attribute_ids, $shop_number)
+    {
+        //确定订单中session的格式  [{},{},{}],需要存储的字段 商品名称,商品小图,商品的购买数量,商品id,商品属性ids
+        $goods = Goods::select('name', 'sm_image', 'id as goods_id')->where('id', $goods_id)->first();
+        //完善数据
+        $goods->goods_attribute_ids = $goods_attribute_ids;
+        $goods->shop_number = $shop_number;
+        //判断当前用户是否存在默认的地址
+        $addr = Addr::where([
+            'user_id' => \Auth::user()->id,
+            'is_default' => 1,
+        ])->first();
+        $order_addr_id = '';
+        if($addr){
+            $order_addr_id = $addr->id;
+        }
+        //格式转换
+        $order_goods = json_encode([$goods]);
+        //sesssion存储
+        session(['order_addr_id' => $order_addr_id]);
+        session(['order_goods' => $order_goods]);
     }
 
 }

@@ -45,7 +45,7 @@
     </div>
     <style id="frames"></style>
     <div class="font-move">
-        <span>公告:测试 测试 测试 测试测试测试测试</span>
+        <span>公告:天呐 天呐 天呐来啦 （〜^㉨^)〜</span>
     </div>
     <!--**************** 九宫格 ********************-->
     <div class="weui-grids" style="background:#fff">
@@ -53,40 +53,40 @@
         <a href="/goods?category_id=1" class="weui-grid">
             <!-- 图标 -->
             <div class="weui-grid__icon">
-                <img src="/images/food.png" alt="">
+                <img src="/images/icon1.png" alt="">
             </div>
             <!-- 标签文字 -->
             <p class="weui-grid__label">校园外卖</p>
         </a>
-        <a href="#" class="weui-grid">
-            <div class="weui-grid__icon">
-                <img src="/images/shop.png" alt="">
-            </div>
-            <p class="weui-grid__label">校园商城</p>
-        </a>
-        <a href="#" class="weui-grid">
-            <div class="weui-grid__icon">
-                <img src="/images/car.png" alt="">
-            </div>
-            <p class="weui-grid__label">车宝通</p>
-        </a>
         <a href="/goods?category_id=2" class="weui-grid">
             <div class="weui-grid__icon">
-                <img src="/images/Fruits.png" alt="">
+                <img src="/images/icon2.png" alt="">
             </div>
             <p class="weui-grid__label">水果超市</p>
         </a>
         <a href="#" class="weui-grid">
             <div class="weui-grid__icon">
-                <img src="/images/chat.png" alt="">
+                <img src="/images/icon3.png" alt="">
+            </div>
+            <p class="weui-grid__label">校园商城</p>
+        </a>
+        <a href="#" class="weui-grid">
+            <div class="weui-grid__icon">
+                <img src="/images/icon4.png" alt="">
             </div>
             <p class="weui-grid__label">校园圈子</p>
         </a>
         <a href="#" class="weui-grid">
             <div class="weui-grid__icon">
-                <img src="/images/horn.png" alt="">
+                <img src="/images/icon5.png" alt="">
             </div>
-            <p class="weui-grid__label">校内通</p>
+            <p class="weui-grid__label">校内资讯</p>
+        </a>
+        <a href="{{ url('orders') }}" class="weui-grid">
+            <div class="weui-grid__icon">
+                <img src="/images/icon6.png" alt="">
+            </div>
+            <p class="weui-grid__label">订单管理</p>
         </a>
     </div>
     <!-- 商品列表-->
@@ -108,7 +108,7 @@
                 <p>
                     <span class="price-decimal-point">{{ $goods->price }}</span>
                     <small>销量:{{ $goods->buy_count }}</small>
-                    <a class=" fa fa-star" onclick="toast('加入收藏成功');"></a>
+                    <a class=" fa fa-heart-o"></a>
                 </p>
             </div>
         @endforeach

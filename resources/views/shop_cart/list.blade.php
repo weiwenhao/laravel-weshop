@@ -64,7 +64,7 @@
                 </div>
         @endforeach
     </div>
-    <div class="weshop-center-block" style="display:{{ $shop_carts->toArray()?'none':'block' }}">
+    <div class="weshop-center-block no-goods" style="display:{{ $shop_carts->toArray()?'none':'block' }}">
                 <span class="fa fa-shopping-cart fa-5x"></span>
                 <h3>您的购物车是空的</h3>
                 <p>去挑一些喜欢的商品吧</p>
@@ -98,21 +98,6 @@
         </div>
     <!--*************** 底部导航 ********************-->
     @include('layouts.bottom_nav')
-
-
-    <!--是否删除购物车商品-->
-    <div id="dialogs">
-        <div class="js_dialog" id="iosDialog1" style="display: none">
-            <div class="weui-mask"></div>
-            <div class="weui-dialog">
-                <div class="weui-dialog__hd"><strong class="weui-dialog__title">您确定要删除吗</strong></div>
-                <div class="weui-dialog__ft">
-                    <a href="javascript:;" id="okDelete" class="weui-dialog__btn weui-cell_warn me-font-f90">确定删除</a>
-                    <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary">点错了</a>
-                </div>
-            </div>
-        </div>
-    </div>
 @stop
 @section('js')
     <script type="text/javascript" src="/js/shopping_car.js"></script>
@@ -135,7 +120,7 @@
             }
             $.ajax({
             	type: "POST",
-            	url: "{{ url('/orders/confirm') }}",
+            	url: "{{ url('/orders/shop_cart_confirm') }}",
             	data:{
             	    'shop_cart_ids' : shop_cart_ids,
                     'shop_numbers' : shop_numbers
@@ -178,13 +163,14 @@
             editShopNum(data);
         });
 
+
         /**
          *ajax请求更改购物车商品数量
          */
         function editShopNum(data) {
             $.ajax({
                 type: "PUT",
-                url: "shop_carts/edit_shop_numbers",
+                url: "shop_carts",
                 data:{
                     'shop_numbers': data
                 },
@@ -207,8 +193,29 @@
             })
             return data;
         }
-        function ajaxDel() {
-            alert(123);
+        /**
+         * ajax删除商品
+         */
+        function ajaxDelGoods() {
+            //得到勾选的商品
+            let shop_cart_ids =  [];
+            $('.shop_cart:checked').each(function (index, dom) {
+                shop_cart_ids[index] = $(dom).val();
+            });
+            //发送到后台
+            $.ajax({
+            	type: "DELETE",
+            	url: "/shop_carts",
+            	data:{
+            	    'shop_cart_ids':shop_cart_ids
+                },
+            	success: function(msg){
+
+            	},
+            	error: function (error) { //200以外的状态码走这里
+
+            	}
+            });
         }
     </script>
 @stop

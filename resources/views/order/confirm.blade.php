@@ -84,13 +84,14 @@
             <input class="weui-input" type="text" name="remarks" placeholder="订单要求信息">
         </div>
     </div>
+    <div class="height-4rem"></div>
     <!--****************结算********************-->
     <div calss="container" id="bill">
         <div class="row">
             <div class="col-xs-4">
             </div>
             <div class="col-xs-4">
-                <span>合计:￥<tt>{{ sprintf("%.2f", $sum_price) }}</tt></span>
+                <span>合计:<tt>￥{{ sprintf("%.2f", $sum_price) }}</tt></span>
             </div>
             <div class="col-xs-4" name="">
                 <a href="javascript:void(0)" class="weui-btn weui-btn_warn"  id="submit-order">提交订单</a>
@@ -128,7 +129,7 @@
                 },
                 error: function (error) { //200以外的状态码走这里
                     if(error.status == 422){
-                        alert(error.responseText);
+                        alert('无法完成订单\n'+error.responseText);
                     }
                     if(error.status == 500){
                         alert('系统错误,请联系客服');

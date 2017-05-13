@@ -8,13 +8,13 @@
 @section('content')
     <!--**************** 顶部 ********************-->
     <div class="me-header-top me-header-food-info">
-        <div><a id="previous_page"><span class="fa fa-chevron-left "></span></a></div>
+        <div><a href="{{ request()->cookie('goods_previous_url')?:'' }}"><span class="fa fa-chevron-left "></span></a></div>
         <div></div>
         <div><a href="{{ url('shop_carts') }}"><span class="fa fa fa-shopping-cart"></span></a></div>
     </div>
     <!--**************** 详情 ********************-->
     <div class="goods-info-img">
-        <img class="img-responsive" src="{{ $goods->big_image }}" />
+        <img class="img-responsive" style="width: 100%" src="{{ $goods->big_image }}" />
     </div>
     <div class="goods-info-img-empty" id="showAndroidActionSheet"></div>
     <div class="goods-info">
@@ -53,14 +53,13 @@
                 <a class="weui-btn weui-btn_warn" ><i class="fa fa-star"></i> 加入收藏</a>
             </div>
             <div class="col-xs-4">
-                <a class="weui-btn weui-btn_warn showIOSActionSheet" ></i> 加入购物车</a>
+                <a class="weui-btn weui-btn_warn showIOSActionSheet {{ $goods->is_on_sale?'':"off-sale" }}" ></i> 加入购物车</a>
             </div>
-            <div class="col-xs-4 {{ $goods->is_on_sale?'':"off-sale" }}"><!--添加name='off'显示已下架-->
-                <a class="weui-btn weui-btn_warn showIOSActionSheet"  >立即购买</a>
+            <div class="col-xs-4"><!--添加name='off'显示已下架-->
+                <a class="weui-btn weui-btn_warn showIOSActionSheet {{ $goods->is_on_sale?'':"off-sale" }}"  >立即购买</a>
             </div>
         </div>
     </div>
-    <!--*************** 弹出菜单 ********************-->
     <!--*************** 弹出菜单 ********************-->
     <div class="weui-mask" id="iosMask" style="display:none"><!--灰色--></div>
     <div class="weui-actionsheet me-out-nav" id="actionsheet">
@@ -101,7 +100,7 @@
         </div>
         <div class="me-actionsheet-bottom">
             <a href="" class="weui-btn weui-btn_warn me-ok me-back-f90" id="addShopCart">加入购物车</a>
-            <a href="" class="weui-btn weui-btn_warn me-ok">立即购买</a>
+            <a href="" class="weui-btn weui-btn_warn me-ok" id="lijiShop">立即购买</a>
         </div>
     </div>
 @stop
@@ -144,5 +143,34 @@
         });
 
     });
+
+    //立即购买操作
+    $('#lijiShop').click(function () {
+        //得到购买数量
+        let shop_number = $('[name=shop_number]').val();
+        //得到商品属性
+        let goods_attribute_ids = [];
+        $('.attr-value:checked').each(function (index, elem) {
+            goods_attribute_ids[index] = $(this).val();
+        });
+        $.ajax({
+            type: "POST",
+            url: "/orders/goods_confirm",
+            data:{
+                'goods_id' : {{$goods->id}},
+                'shop_number' : shop_number,
+                'goods_attribute_ids' : goods_attribute_ids,
+            },
+            success: function(msg){
+                location.href='{{ url('/orders/confirm') }}';
+            },
+            error: function (error) { //200以外的状态码走这里
+//                error.responseText; //库存量不足
+                if(error.status == 422){
+                    alert(error.responseText)
+                }
+            }
+        });
+    })
 </script>
 @stop

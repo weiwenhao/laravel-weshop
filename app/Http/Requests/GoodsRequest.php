@@ -27,7 +27,7 @@ class GoodsRequest extends FormRequest
         $rules =  [
 //            'category_id' => 'required|exists:category,id',
             'category_id' => 'required',
-            'name' => 'required|between:3,30',
+            'name' => 'required|between:2,30',
             'price' => ['required', 'regex:/^\d{1,6}\.\d{1,2}$|^\d{1,6}$/'],
             'promote_price' => ['nullable', 'regex:/^\d{1,6}\.\d{1,2}$|^\d{1,6}$/'], //小数点后面两位
             'promote_start_at' => 'nullable|date_format:Y-m-d H:i:s',

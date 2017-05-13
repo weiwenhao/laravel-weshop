@@ -32,6 +32,15 @@ class OrderController extends Controller
         $order = Order::where('id', $id)->where('user_id', \Auth::user()->id)->firstOrFail();
         return view('order.show', compact('order'));
     }
+
+    /**
+     * 确认订单页的提交订单操作
+     * @param Request $request
+     * @param ShopCart $shopCart
+     * @param Order $order
+     * @param Application $wechat
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function store(Request $request, ShopCart $shopCart, Order $order, Application $wechat)
     {
       /* return response()->json([
@@ -48,13 +57,23 @@ class OrderController extends Controller
 
         //confirm中的商品检测-> 如果confirm中存在shop_cart_id,其实就是根据shop_cart_id再进行一次购物车检测
         $order_goods = json_decode(session('order_goods'));
-        $shop_cart_ids = [];
+        //todo 对session中商品的检查使用购物车提交时的检查并不方便.因为其不具有通用性,因为从商品的立即购买得到的确定订单session中并不存在shop_cart_id,因此这里采取从新进行检查的方案
+        //这里的检查方案很像商品界面的从新付款处的检查
+        /*$shop_cart_ids = [];
         foreach ($order_goods as $item) {
             $shop_cart_ids[] = $item->id;
         }
         $err_msgs = $shopCart->checkShopCarts($shop_cart_ids);
+
         if($err_msgs){
             return response($err_msgs, 422);
+        }*/
+        //商品再次验证,使用checkOneGoods
+        foreach ($order_goods as $item) {
+            $err_msg = $order->checkOneGoods($item->goods_id, $item->goods_attribute_ids, $item->shop_number);
+            if($err_msg){
+                return response($err_msg, 422);
+            }
         }
         //地址也进行一个检测
         $addr = Addr::where('id', session('order_addr_id'))->where('user_id', \Auth::user()->id)->first();
@@ -62,11 +81,10 @@ class OrderController extends Controller
             return response('请选择收货地址', 422);
         }
         //生成订单模型
-        $order = $order->shopCartsToOrders($order_goods, $addr);
+        $order = $order->ConfirmToOrders($order_goods, $addr);
         if(!$order->id){
             return response('系统错误,请联系客服', 500);
         }
-
         $perpay_id = $order->getPrepayId();
         if(!$perpay_id){
             return response('系统错误,请联系客服', 500);
@@ -122,7 +140,6 @@ class OrderController extends Controller
             'order_id' => $order->id,
             'config' => $config,
         ]);
-
     }
     /**
      * 得到该用户的地址列表,提供给用户在设置订单的时候方便的选择收获地址
@@ -167,7 +184,7 @@ class OrderController extends Controller
      * @param ShopCart $shopCart
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
      */
-    public function confirmStore(Request $request, ShopCart $shopCart)
+    public function ShopCartToConfirm(Request $request, ShopCart $shopCart)
     {
         $shop_cart_ids = $request->get('shop_cart_ids'); // [1, 2, 5, 3] 无序的数组形式
         $shop_numbers = $request->get('shop_numbers');
@@ -183,11 +200,33 @@ class OrderController extends Controller
         if($err_msgs){
             return response($err_msgs, 422);
         }
-        //存储购物车中
+        //将购物车中需要结算的数据存储到session中
         $shopCart->shopCartsToSession($shop_cart_ids);
 
         //跳转到确认订单页
         return response('验证通过', 200);
+    }
+
+    /**
+     * 将商品详情页中的商品直接添加到确定订单页.
+     * 前半部分类似于 方法 -> ShopCartController@store() 将商品加入到购物车中
+     * 后半部分类似于  -> this@ShopCartToConfirm购物车结算操作
+     * @param Request $request
+     * @param Order $order
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function GoodsToConfirm(Request $request, Order $order)
+    {
+        $goods_id = $request->get('goods_id');
+        $shop_number = $request->get('shop_number');
+        $goods_attribute_ids = sortOrImplode($request->get('goods_attribute_ids', [])); // 将数组转换成一个排序过的字符串
+        //商品检查
+        if($err_msg = $order->checkOneGoods($goods_id, $goods_attribute_ids, $shop_number)){
+            return response($err_msg, 422);
+        }
+        //将用户立即购买的商品存储到session中
+        $order->goodsToSession($goods_id, $goods_attribute_ids, $shop_number);
+        return response('立即购买验证通过', 200);
     }
 
     /**
@@ -212,6 +251,7 @@ class OrderController extends Controller
            if ($successful) {
                //将支付时间更新为当前时间
                $order->paid_at = time(); // 更新支付时间为当前时间
+               //todo 库存递减 加锁 加事务 购买量+1
            } /*else { // 用户支付失败
                $order->status = 'paid_fail';
            }*/

@@ -27,10 +27,12 @@ class ShopCartController extends Controller
 
 
     /**
+     * 将商品经过检查过后,加入到购物车中
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
      * @param ShopCart $shop_cart
+     * @param Order $order
      * @return \Illuminate\Http\Response
      * @internal param ShopCart $shopCart
      */
@@ -59,6 +61,15 @@ class ShopCartController extends Controller
             ShopCart::where('id', $shop_number['id'])->where('user_id', \Auth::user()->id)->update([
                 'shop_number' => $shop_number['shop_number']
             ]);
+        }
+    }
+
+    public function delShopCarts(Request $request)
+    {
+        $shop_cart_ids = $request->get('shop_cart_ids');
+        foreach ($shop_cart_ids as $shop_cart_id){
+            $res = ShopCart::where('id', $shop_cart_id)->where('user_id', \Auth::user()->id)->delete();
+            dd($res);
         }
     }
     /**

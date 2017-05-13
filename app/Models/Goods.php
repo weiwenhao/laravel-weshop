@@ -161,15 +161,22 @@ class Goods extends Model
         $sort = 'asc';
         //得到分类id
         if(request('category_id')){
-            $where[] = ['category_id', request('category_id')];
+            $where[] = ['category_id', request('category_id')]; // 根据请求url中的  ?category_id=x 进行分类
         }
         if(request('order')){
             $order = request('order');
+            if($order == 'buy_count'){
+                $sort = 'desc'; //销量只有降序排列
+            }
         }
         if(request('sort')){
             $sort = request('sort');
         }
-        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count', 'is_on_sale')->where($where)->orderBy($order, $sort)->paginate(config('shop.goods_list_count'));
+        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count', 'is_on_sale')
+            ->where($where)
+            ->where('is_deleted', 0)
+            ->orderBy($order, $sort)
+            ->paginate(config('shop.goods_list_count'));
 
         $category = Category::select('name')->findOrFail(request('category_id'));
         $goods->category_name = $category->name;
@@ -188,13 +195,22 @@ class Goods extends Model
         if(request('sort')){
             $sort = request('sort');
         }
-        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count', 'is_on_sale')->where(['name', 'like', "%$key%"])->orderBy($order, $sort)->paginate(config('shop.goods_list_count'));
+        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count', 'is_on_sale')
+            ->where(['name', 'like', "%$key%"])
+            ->where('is_deleted', 0)
+            ->orderBy($order, $sort)
+            ->paginate(config('shop.goods_list_count'));
         $goods->key = request('key');
         return $goods;
     }
 
     public function getBestGoods($limit){
-        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count', 'is_on_sale')->where('is_best', 1)->orderBy('sort', 'asc')->limit($limit)->get();
+        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count', 'is_on_sale')
+            ->where('is_best', 1)
+            ->where('is_deleted', 0)
+            ->orderBy('sort', 'asc')
+            ->orderBy('created_at', 'desc')
+            ->limit($limit)->get();
         return $goods;
     }
 }
