@@ -16,6 +16,7 @@ Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
     //商品区
     Route::get('index', 'GoodsController@index');
     Route::get('goods', 'GoodsController@list');
+    Route::get('goods/number_price', 'GoodsController@GetPriceAndNumber');
     Route::get('goods/{goods_id}', 'GoodsController@show');
     //购物车
     Route::put('shop_carts', 'ShopCartController@editShopNumbers');
