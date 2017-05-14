@@ -19,7 +19,7 @@
         @foreach($shop_carts as $shop_cart)
             <div class="row">
                     <!--添加name='off'出现下架-->
-                    <div class="col-xs-1 {{ $shop_cart->is_on_sale?'':'off-sale' }}"><!--选项-->
+                    <div class="col-xs-1 {{ $shop_cart->is_on_sale?($shop_cart->number == 0?'off-number':''):'off-sale' }} "><!--选项-->
                         <label for='{{ $loop->index }}' class="me-checkbox-icon">
                             <input id="{{ $loop->index }}" class="shop_cart" type="checkbox" name="select"
                                    {{--如果购买数量小于或者等于库存量(常见情况),则不需要修改数据库,所以传递一个空到后台,否则把仅剩的库存量传递到后台,修改购物车中的库存量--}}

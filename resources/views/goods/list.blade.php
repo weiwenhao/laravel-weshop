@@ -71,7 +71,7 @@
                     <p>
                         <span class="price-decimal-point">{{ $item->price }}</span>
                         <small>销量:{{ $item->buy_count }}</small>
-                        <a class=" fa fa-heart-o"></a>
+                        <a class=" fa fa-heart-o collect" goods_id="{{ $item->id }}"></a>
                     </p>
                 </div>
             @endforeach

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Active;
+use App\Models\Collect;
 use App\Models\Goods;
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 class GoodsController extends Controller
@@ -39,7 +41,11 @@ class GoodsController extends Controller
     {
         //确认订单的上一页进行记录 todo 待重构为中间件
         session(['confirm_previous_url' => \request()->getUri()]);
+
         $goods = Goods::findOrFail($goods_id);
+        //添加一个收藏状态
+        $collect = Collect::where('goods_id', $goods->id)->where('user_id', \Auth::user()->id)->first();
+        $collect?$goods->is_collect=true:$goods->is_collect=false;
         $goods->option_attrs = $goods->getOptionGoodsAttr($goods->id);
         return view('goods.goods', compact('goods'));
     }
@@ -60,5 +66,21 @@ class GoodsController extends Controller
             $goods = $model->getGoodsByKey();
         }
         return view('goods.list', compact('goods'));
+    }
+
+    public function GetPriceAndNumber(Request $request)
+    {
+        $goods_id = $request->get('goods_id');
+        $number_price = Goods::select( 'goods.price as goods_price',
+            'numbers.goods_attribute_ids', 'numbers.number', 'numbers.price')
+            ->Join('numbers', 'goods.id', '=', 'numbers.goods_id')
+            ->where('goods.id', $goods_id)
+            ->get();
+        //数据处理方便取出
+        $number_price = $number_price->keyBy(function ($item){
+            //返回的值将作为键值使用
+            return 'a'.str_replace(',', '_', $item->goods_attribute_ids);
+        });
+        return $number_price;
     }
 }

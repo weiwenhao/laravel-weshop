@@ -16,6 +16,5 @@ return [
     'goods_list_count' => 8, //商品列表页 每页显示的商品数量
     'default_goods_number' => 9999, //默认商品库存量
 
-    //http状态码约定
-    'no_number' => 422, //表单验证状态码
+    'collects_count' => 8, //收藏列表显示的记录数
 ];

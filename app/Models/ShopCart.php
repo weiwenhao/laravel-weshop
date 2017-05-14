@@ -73,7 +73,7 @@ class ShopCart extends Model
             //检验该购物车id和用户id是否存在商品
             $shop_cart = $this->where('id', $shop_cart_id)->where('user_id', \Auth::user()->id)->first(); //如果连shop_carts_id都找不到,或者找到了不是当前用户的,我选择直接报错
             if(!$shop_cart){
-               return  $err_msgs = '系统错误';
+                return  $err_msgs = '系统错误';
             }
             $err_msg = $order->checkOneGoods($shop_cart->goods_id, $shop_cart->goods_attribute_ids, $shop_cart->shop_number);
             if($err_msg){

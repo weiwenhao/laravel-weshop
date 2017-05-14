@@ -49,14 +49,14 @@
     <!--**************** 加入购物车 立即购买 ********************-->
     <div calss="container" id="mai">
         <div class="row">
-            <div class="col-xs-4">
-                <a class="weui-btn weui-btn_warn" ><i class="fa fa-star"></i> 加入收藏</a>
+            <div class="col-xs-4 switch-collect">
+                <a class="weui-btn weui-btn_warn" ><i class="fa {{ $goods->is_collect?'fa-heart':'fa-heart-o' }}"></i> 收藏</a>
             </div>
             <div class="col-xs-4">
-                <a class="weui-btn weui-btn_warn showIOSActionSheet {{ $goods->is_on_sale?'':"off-sale" }}" ></i> 加入购物车</a>
+                <a class="weui-btn weui-btn_warn showIOSActionSheet" ></i> 加入购物车</a>
             </div>
-            <div class="col-xs-4"><!--添加name='off'显示已下架-->
-                <a class="weui-btn weui-btn_warn showIOSActionSheet {{ $goods->is_on_sale?'':"off-sale" }}"  >立即购买</a>
+            <div class="col-xs-4  {{ $goods->is_on_sale?'':"off-sale" }}"><!--添加name='off'显示已下架-->
+                <a class="weui-btn weui-btn_warn showIOSActionSheet"  >立即购买</a>
             </div>
         </div>
     </div>
@@ -67,7 +67,8 @@
             <img class="img-rounded img-thumbnail" src="{{ $goods->sm_image }}" />
             <div class="me-right">
                 <span id="iosActionsheetCancel" class="fa fa-times-circle-o fa-lg"></span>
-                <p class="price"><i class="fa fa-rmb"></i> <span>{{ $goods->price }}</span></p>
+                <p class="price"><i class="fa fa-rmb"></i> <span id="goods_price">{{ $goods->price }}</span></p>
+                <div>库存 <span id="goods_number">0</span> 件</div>
                 @if($goods->option_attrs)
                     <p class="class-ok">已选: <span class="attr-target"></span></p>
                 @endif
@@ -172,5 +173,82 @@
             }
         });
     })
+    //选择属性时确定库存和价格
+    $('.attr-value').click(getNumberAndPrice);
+    //点击立即购买和加入购物车时分别计算一次属性和库存
+    $('.showIOSActionSheet').click(getNumberAndPrice);
+
+
+    /**
+     * 收藏与取消收藏
+     * */
+    $('.switch-collect').click(function () {
+         let icon = $(this).find('i');
+        //鉴于没有判断用户登陆的操作,所以直接进行状态改变,然后发送ajax信息
+        if(icon.hasClass('fa-heart-o')){
+            icon.removeClass('fa-heart-o')
+            icon.addClass('fa-heart')
+        }else {
+            icon.removeClass('fa-heart')
+            icon.addClass('fa-heart-o')
+        }
+        //发送ajax请求
+        $.ajax({
+        	type: "POST",
+        	url: "/collects/switch_collect",
+        	data:{
+        	    'goods_id' : {{ $goods->id }}
+            }
+        });
+    });
+
+    /*
+    * 通过ajax从后台得到商品的库存和价格信息
+    * */
+    var number_price = {};
+    (function () {
+        $.ajax({
+        	type: "get",
+        	url: "/goods/number_price",
+        	data:{
+        	    'goods_id' : {{ $goods->id }}
+            },
+        	success: function(msg){
+        		number_price = msg;
+         //后台数据获得后,调用一次该方法,得到商品商品的价格和库存,调用必须在ajax获得后台数据之后 todo 点击加入购物车或者立即购买时进行计算比较好
+        	},
+        	error: function (error) { //200以外的状态码走这里
+        		 console.log(error.responseJSON);
+        	}
+        });
+    })();
+    /*
+    * 根据用户的选择计算出该属性下商品的属性和库存量,并赋值给对应的html
+    * */
+    function getNumberAndPrice() {
+        //得到商品属性ids
+        let goods_attribute_ids = [];
+        $('.attr-value:checked').each(function (index, elem) {
+            goods_attribute_ids[index] = $(this).val();
+        });
+        //从小到大排序,且使用逗号关联起来
+        goods_attribute_ids.sort(function (a,b) {
+            return a-b
+        }); //对数组的引用。请注意，数组在原数组上进行排序，不生成副本。
+        //拼接出对象名称
+        goods_attribute_ids = 'a'+goods_attribute_ids.join('_');
+        // xxx[变量]√    xxx.变量 ×
+        let number = number_price[goods_attribute_ids].number;
+        let price = number_price[goods_attribute_ids].price;
+        if(!price){
+            price = {{ $goods->price }}
+        }
+        //赋值操作
+        $('#goods_number').text(number);
+        $('#goods_price').text(price);
+
+    }
+
+
 </script>
 @stop

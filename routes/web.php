@@ -16,7 +16,14 @@ Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
     //商品区
     Route::get('index', 'GoodsController@index');
     Route::get('goods', 'GoodsController@list');
+    Route::get('goods/number_price', 'GoodsController@GetPriceAndNumber');
     Route::get('goods/{goods_id}', 'GoodsController@show');
+    //收藏区
+    Route::post('collects/switch_collect', 'CollectController@switchCollect'); //服务于商品详情页
+    Route::post('collects/collect', 'CollectController@collect');//服务于商品列表页
+    Route::get('collects', 'CollectController@index');//服务于商品列表页
+    Route::delete('collects/{id}', 'CollectController@noCollect');//服务于商品列表页
+
     //购物车
     Route::put('shop_carts', 'ShopCartController@editShopNumbers');
     Route::delete('shop_carts', 'ShopCartController@delShopCarts');
