@@ -1,72 +1,114 @@
 @extends('layouts.app')
 @section('css')
-    <link rel="stylesheet" href="/css/food.css"/>
 <style>
-    .food-nav .active a{
-        color: #d04c4c;
+    .goods-list > .shaixuan {
+        z-index: 100;
+        width: 100%; /*适应fixed*/
+        border-bottom: 1px #e8e8e8 solid ;
+    }
+    .goods-list > .shaixuan > div {
+        text-align: center;
+        background-color: #fff;
+    }
+    .goods-list > .shaixuan > .active > a {
+        color: #ff005c;
+    }
+    .goods-list > .top-nav {
+        background-color: #f90;
+        line-height: 2.2rem;
+        color: #fff;
+    }
+    .goods-list > .top-nav a {
+        color: #fff;
+    }
+    .goods-list {
+        margin-bottom: 2.3rem;
     }
 </style>
 @stop
 @section('content')
-    <!--顶部-->
-    <div class="me-header-top">
-        <div><a href="/"><span class="fa fa-chevron-left fa-lg"></span></a></div>
-        @if($goods->category_name)
+    <div class="goods-list">
+        {{--nav--}}
+        <div class="weui-flex top-nav">
             <div>
-                {{ $goods->category_name }}
+                <a href="/"><span class="fa fa-chevron-left fa-lg"></span></a>
             </div>
-        @endif
-    </div>
-    <!--导航-->
-    <div class="row food-nav">
-        <div class="col-xs-4 {{ request('order', 'sort') == 'sort'?'active':'' }}" style="font-size: 14px">
-            <a href="?category_id={{ request('category_id')?:'' }}&key={{ request('key')?:'' }}&order=sort&sort=asc">
-                默认排序 <span class="caret"></span>
-            </a>
+            <div class="weui-flex__item text-center">
+                @if($goods->category_name)
+                    <div>
+                        <b>{{ $goods->category_name }}</b>
+                    </div>
+                @endif
+            </div>
+            <div>
+                <div>&nbsp;&nbsp;&nbsp;</div>
+            </div>
         </div>
-        <div class="col-xs-4 {{ request('order') == 'buy_count'?'active':'' }}" style="font-size: 14px">
-            <a href="?category_id={{ request('category_id')?:'' }}&key={{ request('key')?:null }}&order=buy_count&sort=desc">
-                销量优先 <span class="caret"></span>
-            </a>
+        <!--导航-->
+        <div class="weui-flex shaixuan">
+            <div class="weui-flex__item {{ request('order') ?'':'active' }}">
+                <a href="?category_id={{ request('category_id') }}">综合排序</a>
+            </div>
+            <div class="weui-flex__item {{ request('order')=='buy_count'?'active':'' }}">
+                <a href="?category_id={{ request('category_id') }}&order=buy_count"> {{--销量默认使用的是desc--}}
+                    销量优先
+                </a>
+            </div>
+            <div class="weui-flex__item {{ request('order') == 'price'?'active':'' }}">
+                <a href="?category_id={{ request('category_id') }}&order=price&sort={{request('sort') == 'asc'?'desc':'asc'}}">
+                    价格排序 <span class="fa {{ request('sort')=='desc'?'fa-angle-down':'fa-angle-up' }}"></span>
+                </a>
+            </div>
         </div>
-        <div class="col-xs-4">
-            <a href=""/>
-                价格降序 <span class="caret"></span>
-            </a>
-        </div>
-    </div>
-    <!--****************   商品列表 ********************-->
-    <div class="me-goods-List" style="margin-top:70px">
-        <div class="me-goods-List" style="margin-top:70px">
-            @foreach($goods as $g)
+        <!--****************   商品列表 ********************-->
+        <div class="me-goods-List">
+            @foreach($goods as $item)
                 <div class="shopp-item">
-                    <a class="me-on-a" href="/goods/{{ $g->id }}">
-                        <img class="img-responsive " src="{{ $g->mid_image }}"/>
-                        <p>{{ $g->name }}</p>
+                    <a class="me-on-a me-a" href="{{ url('goods').'/'.$item->id  }}">
+                        <img class="img-responsive {{ $item->is_on_sale?'':'off-sale' }}" src="" data-img="{{ $item->mid_image }}"/>
+                        <p>{{ $item->name}}</p>
                     </a>
                     <p>
-                        <span>￥99</span>
-                        <small>销量:{{ $g->buy_count }}</small>
-                        <a onclick="addShopCart({{ $g->id }})"><img src="/images/cart.svg" style="width: 1.8em" alt=""></a >
+                        <span class="price-decimal-point">{{ $item->price }}</span>
+                        <small>销量:{{ $item->buy_count }}</small>
+                        <a class=" fa fa-heart-o"></a>
                     </p>
                 </div>
             @endforeach
         </div>
-    </div>
-    <!--分页按钮-->
-    <div>
-        {{ $goods->appends([
-            'category_id'=>request('category_id'),
-            'key'=>request('key'),
-            'order'=>request('order'),
-            'sort' => request('sort'),
-        ])->links('goods.goods_list_page') }}
+        <!--分页按钮-->
+        <div>
+            {{ $goods->appends([
+                'category_id'=>request('category_id'),
+                'key'=>request('key'),
+                'order'=>request('order'),
+                'sort' => request('sort'),
+            ])->links('goods.goods_list_page') }}
+        </div>
     </div>
     <!--**********   底部导航  **************-->
     @include('layouts.bottom_nav')
 @stop
 @section('js')
 <script>
-	
+    var ofsy = 0;//window顶部偏移,默认为0,不便宜
+    var shaixuan_height = $('.shaixuan').height();
+	$(window).scroll(function () {
+        let shaixuan_top = $('.shaixuan').offset().top //当前div到窗口顶部的距离,固定值
+
+        if(this.scrollY > ofsy  && ofsy > shaixuan_top+(shaixuan_top/3)){
+            // position: fixed;
+            // position: static;
+            $('.shaixuan').css('position', 'fixed');
+            $('.shaixuan').css('top', '0');
+        }
+        if(this.scrollY < ofsy && this.scrollY < shaixuan_height){
+            $('.shaixuan').css('position', 'static');
+            $('.shaixuan').css('top', '0');
+        }
+        ofsy = this.scrollY //记录值
+    })
+
+
 </script>
 @stop

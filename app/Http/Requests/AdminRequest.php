@@ -24,9 +24,7 @@ class AdminRequest extends FormRequest
      */
     public function rules()
     {
-        //一级权限, 有图标,无url
-        //二级权限, 无图标,有url
-        //三级权限, 无图标,无url
+
         $rules =  [
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:admins',

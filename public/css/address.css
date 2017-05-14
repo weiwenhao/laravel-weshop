@@ -1,0 +1,27 @@
+@charset "utf-8";
+
+/***************** 我的收货地址 ****************/
+.me-address{position: relative;background:#fff;margin-bottom:.2rem;}
+.me-address .address .fa-times-circle-o{color:red;}
+.me-address .address tt{float:right;}
+.me-address .address p:nth-of-type(2){width:80%;float: left;font-size:.9rem;}
+.me-address .address .weui-btn{padding-left:.7rem;padding-right:.7rem; ;font-size:;float:right;}
+.me-address .col-xs-1 {display:block;z-index:10;padding-top:1rem;padding-bottom:1.2rem;height:100%;}
+.me-address .col-xs-1 .fa-times-circle-o{z-index:10;}
+.me-address .address .col-xs-10{padding:0 .2rem ;}
+.me-address .address .col-xs-10 p:nth-of-type(1){margin:.3rem 0 .2rem 0}
+.me-address .address-new{line-height:3.5rem; font-size: 1.2em;color: #999;}
+#sex .weui-check__label{width:45%;float:left;}
+#iosDialog1{display: }
+#iosDialog1 .weui-cell_warn{color:red;}
+#qiTa{display:none;/*其他地址*/}
+
+.address-hid{margin-top:39%;text-align:center;color:#777;display:none;}
+/*默认地址图标*/
+.icon-moren {position: absolute;top:-.6rem;left:0rem;z-index:3;font-size: 2.1rem;color:red;transform:rotate(-90deg);-ms-transform:rotate(-90deg); -moz-transform:rotate(-90deg); -webkit-transform:rotate(-90deg); -o-transform:rotate(-90deg);}
+/*新增收货地址*/
+.new-address{position:fixed;bottom:0;width:100%;border-radius:0;}
+.new-address.weui-btn{font-size:1rem;}
+/*添加地址页面*/
+.weui-cell .weui-label{width:4rem;}
+#bill .row {bottom:0;}

@@ -220,7 +220,7 @@
                                     <div class="form-group">
                                         <label for="" class="control-label col-md-4">商品类型</label>
                                         <div class="col-md-4">
-                                            <select name="type_id"  class="form-control" data-placeholder="请选择"
+                                            <select id="" name="type_id"  class="form-control" data-placeholder="请选择"
                                                     @change="changeType()" v-model="selected" placeolder="请选择"
                                             >
                                                 <option value="">请选择</option>
@@ -397,7 +397,7 @@
                 }
             },
 
-            getAttributes(){
+            getAttributes(){ //页面加载后将创建
                 if(this.selected == ""){
                     this.attributes = [];
                     return;

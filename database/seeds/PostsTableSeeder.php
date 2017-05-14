@@ -34,7 +34,7 @@ class PostsTableSeeder extends Seeder
                 \App\Models\PostComment::create([
                     'content' => $faker->paragraph(),
                     'post_id' => $item->id,
-                    'user_id' => session('wechat.oauth_user')->id
+                    'user_id' => 1
                 ]);
             }
 

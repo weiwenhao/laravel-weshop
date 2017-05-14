@@ -17,10 +17,11 @@ class CreateAddrsTable extends Migration
             $table->increments('id');
             $table->string('name', 5)->comment('真实姓名');
             $table->char('phone', 11)->comment('手机号码');
-            $table->char('garden_name', 3)->comment('园地名称');
+//            $table->char('garden_name', 3)->comment('园地名称');
             $table->char('floor_name', 3)->comment('宿舍楼名称');
             $table->char('number', 3)->comment('门牌号');
-            $table->char('user_id', 28)->comment('微信用户的openid');
+            $table->unsignedInteger('user_id')->comment('用户id');
+            $table->unsignedTinyInteger('is_default')->default(0)->comment('是否为默认地址');
             $table->timestamps();
         });
     }

@@ -52,23 +52,30 @@ class Goods extends Model
     /**
      * 保存商品属性
      * @param $goods_id
-     * return void
+     * @return array
      */
     public function saveGoodsAttr($goods_id){
+        $goods_attr_ids = [];
         $attribute_values = request('attribute_values', []); //
+
+        if(!$attribute_values) //先处理错误
+            return $goods_attr_ids;
+
         foreach ($attribute_values as $attribute_id => $value) {
             $value = array_unique($value); //去重
             foreach ($value as $attribute_value){
                 if($attribute_value){ //去空
                     //入库
-                    DB::table('goods_attributes')->insert([ //应该执行了 sql过滤
+                    $goods_attr_id = DB::table('goods_attributes')->insertGetId([ //应该执行了 sql过滤
                         'goods_id' => $goods_id,
                         'attribute_id' => $attribute_id,
                         'attribute_value' => $attribute_value,
                     ]);
+                    $goods_attr_ids[] = $goods_attr_id;
                 }
             }
         }
+        return $goods_attr_ids;
     }
 
     /**
@@ -102,11 +109,32 @@ class Goods extends Model
                 $count ++;
             }
         }
-        //批量插入数据库 todo 直接进行删除该商品下的所有商品属性,再进行有id的插入操作
+        //批量插入数据库 todo 直接进行删除该商品下的所有商品属性,再进行有id的插入操作  这里会不会留下坑2333
         DB::table('goods_attributes')->where('goods_id', $goods_id)->delete();
         DB::table('goods_attributes')->insert($goods_attributes);
-        //方法2,进行数据库查询插入
 
+    }
+
+
+    /**
+     * 得到某件商品下的可选属性, 用于前台购买商品
+     * @param $goods_id
+     * @return static
+     */
+    public function getOptionGoodsAttr($goods_id)
+    {
+        $option_attr = DB::table('goods_attributes')
+            ->select('goods.name', 'goods.id', 'attributes.name', 'goods_attributes.id as goods_attribute_id', 'goods_attributes.attribute_value')
+            ->join('goods', function ($join) use($goods_id){
+                $join->on('goods_attributes.goods_id', '=', 'goods.id')
+                    ->where('goods.id', $goods_id);
+            })
+            ->join('attributes', 'goods_attributes.attribute_id', '=', 'attributes.id')
+            ->where([
+                ['attributes.type', '可选']
+            ])
+            ->get();
+        return $option_attr->groupBy('name')->toArray();
     }
 
     /**
@@ -133,15 +161,22 @@ class Goods extends Model
         $sort = 'asc';
         //得到分类id
         if(request('category_id')){
-            $where[] = ['category_id', request('category_id')];
+            $where[] = ['category_id', request('category_id')]; // 根据请求url中的  ?category_id=x 进行分类
         }
         if(request('order')){
             $order = request('order');
+            if($order == 'buy_count'){
+                $sort = 'desc'; //销量只有降序排列
+            }
         }
         if(request('sort')){
             $sort = request('sort');
         }
-        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count')->where($where)->orderBy($order, $sort)->paginate(config('shop.goods_list_count'));
+        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count', 'is_on_sale')
+            ->where($where)
+            ->where('is_deleted', 0)
+            ->orderBy($order, $sort)
+            ->paginate(config('shop.goods_list_count'));
 
         $category = Category::select('name')->findOrFail(request('category_id'));
         $goods->category_name = $category->name;
@@ -160,13 +195,22 @@ class Goods extends Model
         if(request('sort')){
             $sort = request('sort');
         }
-        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count')->where(['name', 'like', "%$key%"])->orderBy($order, $sort)->paginate(config('shop.goods_list_count'));
+        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count', 'is_on_sale')
+            ->where(['name', 'like', "%$key%"])
+            ->where('is_deleted', 0)
+            ->orderBy($order, $sort)
+            ->paginate(config('shop.goods_list_count'));
         $goods->key = request('key');
         return $goods;
     }
 
     public function getBestGoods($limit){
-        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count')->where('is_best', 1)->limit($limit)->get();
+        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count', 'is_on_sale')
+            ->where('is_best', 1)
+            ->where('is_deleted', 0)
+            ->orderBy('sort', 'asc')
+            ->orderBy('created_at', 'desc')
+            ->limit($limit)->get();
         return $goods;
     }
 }

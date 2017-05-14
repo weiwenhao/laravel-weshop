@@ -224,8 +224,7 @@
                                                     <input type="text" :name="'attribute_values['+attribute.id+'][]'" class="form-control">
                                                     <div class="input-group-addon">
                                                         <a  @click.prevent="switchSelf(index, attribute)"> {{--有可能是减少自己也有可能是增加自己--}}
-                                                            <i class="fa fa-plus" v-if="attribute.is_server_data == undefined"></i>
-                                                            <i class="fa fa-minus" v-else-if="attribute.is_server_data == false"></i>
+                                                            <i class="fa" :class="[attribute.is_first_attr?'fa-plus':'fa-minus']"></i>
                                                         </a>
                                                     </div>
                                                 </div>
@@ -236,8 +235,7 @@
                                                     </select>
                                                     <div class="input-group-addon">
                                                         <a @click.prevent="switchSelf(index, attribute)"> {{--有可能是减少自己也有可能是增加自己--}}
-                                                            <i class="fa fa-plus" v-if="attribute.is_server_data == undefined"></i>
-                                                            <i class="fa fa-minus" v-else-if="attribute.is_server_data == false"></i>
+                                                            <i class="fa" :class="[attribute.is_first_attr?'fa-plus':'fa-minus']"></i>
                                                         </a>
                                                     </div>
                                                 </div>
@@ -281,18 +279,18 @@
         },
         methods :　{
             switchSelf(index, attribute){
-                 if(typeof(attribute.is_server_data) == 'undefined'){ //未定义的数据类型,则肯定是服务器数据,只能+
+                 if(attribute.is_first_attr){ //如果是服务器数组.则新创建,否则删除
                      let newAttribute = {
                          'id' : attribute.id,
                          'name' : attribute.name,
                          'option_values' : attribute.option_values,
                          'type' : attribute.type,
                          'type_id' : attribute.type_id,
-                         'is_server_data' : false
+                         'is_first_attr' : false,
                      };
                      //往数组中的该index的后面插入一条数据
                      this.attributes.splice(index+1, 0, newAttribute);
-                 } else if (attribute.is_server_data == false){
+                 } else{
                      this.attributes.splice(index, 1);
                  }
             },

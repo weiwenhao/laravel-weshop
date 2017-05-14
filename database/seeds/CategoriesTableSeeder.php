@@ -19,13 +19,5 @@ class CategoriesTableSeeder extends Seeder
         Category::create([
             'name' => '水果超市',
         ]);
-
-        Category::create([
-            'name' => '电子配件',
-        ]);
-
-        Category::create([
-            'name' => '二手杂货',
-        ]);
     }
 }

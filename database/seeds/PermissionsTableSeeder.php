@@ -48,6 +48,33 @@ class PermissionsTableSeeder extends Seeder
             'description' => '删除商品',
         ]);
 
+        //库存管理, 特殊-> 4级和5级
+        $number = Permission::create([
+            'name' => 'goods_numbers.list',
+            'display_name' => '库存列表列表',
+            'url' => 'goods_numbers',
+            'parent_id' => $goods->id,
+            'description' => '库存列表列表',
+        ]);
+        //五级
+        Permission::create([
+            'name' => 'goods_numbers.create',
+            'display_name' => '添加库存列表',
+            'parent_id' => $number->id,
+            'description' => '添加库存列表',
+        ]);
+        Permission::create([
+            'name' => 'goods_numbers.edit',
+            'display_name' => '修改库存列表',
+            'parent_id' => $number->id,
+            'description' => '修改库存列表',
+        ]);
+        Permission::create([
+            'name' => 'goods_numbers.destroy',
+            'display_name' => '删除库存列表',
+            'parent_id' => $number->id,
+            'description' => '删除库存列表',
+        ]);
         //二级
         $category = Permission::create([
             'name' => 'categories.list',
@@ -103,6 +130,36 @@ class PermissionsTableSeeder extends Seeder
             'parent_id' => $type->id,
             'description' => '删除类型',
         ]);
+
+        //商品属性管理, 特殊=> 属于4级和5级
+        $attr = Permission::create([
+            'name' => 'attributes.list',
+            'display_name' => '属性列表',
+            'parent_id' => $type->id,
+            'description' => '添加类型',
+        ]);
+        //五级
+        Permission::create([
+            'name' => 'attributes.create',
+            'display_name' => '添加属性',
+            'parent_id' => $attr->id,
+            'description' => '添加属性',
+        ]);
+        Permission::create([
+            'name' => 'attributes.edit',
+            'display_name' => '修改属性',
+            'parent_id' => $attr->id,
+            'description' => '修改属性',
+        ]);
+        Permission::create([
+            'name' => 'attributes.destroy',
+            'display_name' => '删除属性',
+            'parent_id' => $attr->id,
+            'description' => '删除属性',
+        ]);
+
+
+
 
 
 

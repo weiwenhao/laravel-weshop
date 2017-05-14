@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\GoodsRequest;
 use App\Models\Category;
 use App\Models\Goods;
+use App\Models\Number;
+use App\Models\ShopCart;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -49,13 +51,31 @@ class GoodsController extends Controller
      */
     public function store(GoodsRequest $request, Goods $goods)
     {
+        $data = [
+            'name' => $request->get('name'),
+            'price' => $request->get('price'),
+            'sort' => $request->get('sort'),
+            'description' => $request->get('description'),
+            'promote_price' => (float)$request->get('promote_price'),
+            'promote_start_at' => $request->get('promote_start_at'),
+            'promote_stop_at' => $request->get('promote_stop_at'),
+            'is_best' => $request->get('is_best'),
+            'is_on_sale' => $request->get('is_on_sale'),
+            'is_best' => $request->get('is_best'),
+            'type_id' => (int)$request->get('type_id'),
+            'category_id' => (int)$request->get('category_id'),
+        ];
         //得到保存路径
-        $data = array_merge($request->all(), $goods->saveGoodsImage());
+        $data = array_merge($data, $goods->saveGoodsImage());
         $goods = Goods::create($data);
         if(!$goods)//withInput代表的是用户原先的输入,会操作old中的值
             return redirect('/admin/goods/create')->withInput()->with('error', '系统错误，添加失败');
         //商品属性保存到中间表
-        $goods->saveGoodsAttr($goods->id);
+        $goods_attr_ids = $goods->saveGoodsAttr($goods->id);
+        //创建相应的库存数据
+        $number = new Number();
+        $number->createNumbers($goods);
+
         return redirect('/admin/goods')->withSuccess('添加成功');
     }
 
@@ -93,7 +113,20 @@ class GoodsController extends Controller
     public function update(GoodsRequest $request, $id)
     {
         $goods = Goods::findOrFail($id);
-        $data = $request->all();
+        $data = [
+            'name' => $request->get('name'),
+            'price' => $request->get('price'),
+            'sort' => $request->get('sort'),
+            'description' => (string)$request->get('description'),
+            'promote_price' => (float)$request->get('promote_price'),
+            'promote_start_at' => $request->get('promote_start_at'),
+            'promote_stop_at' => $request->get('promote_stop_at'),
+            'is_best' => $request->get('is_best'),
+            'is_on_sale' => $request->get('is_on_sale'),
+            'is_best' => $request->get('is_best'),
+            'type_id' => (int)$request->get('type_id'),
+            'category_id' => (int)$request->get('category_id'),
+        ];;
         //判断用户是否选择了图片
         if ($request->hasFile('image')){
            $data = array_merge($data, $goods->saveGoodsImage());
@@ -105,8 +138,11 @@ class GoodsController extends Controller
         if (!$res )
            return redirect('/admin/goods/edit/'.$id)->withInput()->with('error', '系统错误，修改失败');
         //商品属性修改
-        //商品属性修改
         $goods->editGoodsAttr($id);
+        //库存量修改
+        $number = new Number();
+        $number->editNumbers($goods);
+
         return redirect('/admin/goods')->withSuccess('修改成功');
     }
 
@@ -128,7 +164,12 @@ class GoodsController extends Controller
 
     public function delGoodsAttr($goods_attribute_id){
         $res = DB::table('goods_attributes')->where('id', $goods_attribute_id)->delete();
-        //todo 库存删除
+        //情况1   29,129,30 在开头 情况2 129,29,30 情况三 129,30,29 情况4 29
+        $regex = "^$goods_attribute_id,|,$goods_attribute_id,|,$goods_attribute_id$|^$goods_attribute_id$";
+        //库存表删除
+        Number::where('goods_attribute_ids', 'regexp', $regex)->delete();
+        //todo 删除属性的同时进行购物车表删除
+        ShopCart::where('goods_attribute_ids', 'regexp', $regex)->delete();
         return $res;
     }
 }

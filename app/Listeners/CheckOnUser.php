@@ -29,19 +29,21 @@ class CheckOnUser
     public function handle(WeChatUserAuthorized $event)
     {
         /*$event->user; // 同 session('wechat.oauth_user') 一样
-        $event->isNewSession*/; // 是不是新的会话（第一次创建 session 时为 true）
-        //todo 进行user表维护
-        if($event->isNewSession){
+        $event->isNewSession*/ // 是不是新的会话（第一次创建 session 时为 true）
+//        if($event->isNewSession){ //todo 上线或者微信测试时需要接触if注释
             //第一次进入的时候进行查找判断
-            $user = User::find($event->user->id);
+            $user = User::where('open_id', $event->user->id)->first();
             if(!$user){
-                User::create([
-                    'id' => $event->user->id,
-                    'nickname' => $event->user->nickname,
-                    'avatar' => $event->user->avatar,
+                $user = User::create([
+                    'open_id' => $event->user->id,
+                    'username' => $event->user->nickname,
+                    'logo' => $event->user->avatar,
                 ]);
             }
-            //todo 将登陆状态设置为已经登陆, 可以用过 Auth::user() 得到该用户
+            //将该用户设置为已经登陆
+            if(!\Auth::check()){
+                \Auth::login($user); //登陆并且记住用户, 仅仅登陆一个用户的有效期是多久
+            }
         }
-    }
+//    }
 }
