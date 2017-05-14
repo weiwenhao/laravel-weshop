@@ -108,7 +108,7 @@
                 <p>
                     <span class="price-decimal-point">{{ $goods->price }}</span>
                     <small>销量:{{ $goods->buy_count }}</small>
-                    <a class=" fa fa-heart-o"></a>
+                    <a class=" fa fa-heart-o collect" goods_id="{{ $goods->id }}"></a>
                 </p>
             </div>
         @endforeach
@@ -121,6 +121,7 @@
     <script src="/plugins/swiper/swiper.min.js">/*这是轮播框架*/</script>
     <script src="/js/home.js"></script>
 <script>
+
 
 </script>
 @stop

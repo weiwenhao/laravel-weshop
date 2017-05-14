@@ -33,6 +33,28 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    /**
+     * 商品列表页的收藏商品操作,仅收藏
+     */
+    $('.collect').click(function () {
+        toast('收藏成功');
+        let goods_id = $(this).attr('goods_id');
+        //ajax请求后台关注,并提示关注成功
+        $.ajax({
+            type: "POST",
+            url: "collects/collect",
+            data:{
+                'goods_id' : goods_id
+            },
+            success: function(msg){
+
+            },
+            error: function (error) { //200以外的状态码走这里
+                console.log(error.responseJSON);
+            }
+        });
+    });
 </script>
 @yield('js')
 </body>

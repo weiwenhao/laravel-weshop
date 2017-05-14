@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Active;
+use App\Models\Collect;
 use App\Models\Goods;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -40,7 +41,11 @@ class GoodsController extends Controller
     {
         //确认订单的上一页进行记录 todo 待重构为中间件
         session(['confirm_previous_url' => \request()->getUri()]);
+
         $goods = Goods::findOrFail($goods_id);
+        //添加一个收藏状态
+        $collect = Collect::where('goods_id', $goods->id)->where('user_id', \Auth::user()->id)->first();
+        $collect?$goods->is_collect=true:$goods->is_collect=false;
         $goods->option_attrs = $goods->getOptionGoodsAttr($goods->id);
         return view('goods.goods', compact('goods'));
     }

@@ -49,8 +49,8 @@
     <!--**************** 加入购物车 立即购买 ********************-->
     <div calss="container" id="mai">
         <div class="row">
-            <div class="col-xs-4">
-                <a class="weui-btn weui-btn_warn" ><i class="fa fa-star"></i> 加入收藏</a>
+            <div class="col-xs-4 switch-collect">
+                <a class="weui-btn weui-btn_warn" ><i class="fa {{ $goods->is_collect?'fa-heart':'fa-heart-o' }}"></i> 收藏</a>
             </div>
             <div class="col-xs-4">
                 <a class="weui-btn weui-btn_warn showIOSActionSheet" ></i> 加入购物车</a>
@@ -177,6 +177,30 @@
     $('.attr-value').click(getNumberAndPrice);
     //点击立即购买和加入购物车时分别计算一次属性和库存
     $('.showIOSActionSheet').click(getNumberAndPrice);
+
+
+    /**
+     * 收藏与取消收藏
+     * */
+    $('.switch-collect').click(function () {
+         let icon = $(this).find('i');
+        //鉴于没有判断用户登陆的操作,所以直接进行状态改变,然后发送ajax信息
+        if(icon.hasClass('fa-heart-o')){
+            icon.removeClass('fa-heart-o')
+            icon.addClass('fa-heart')
+        }else {
+            icon.removeClass('fa-heart')
+            icon.addClass('fa-heart-o')
+        }
+        //发送ajax请求
+        $.ajax({
+        	type: "POST",
+        	url: "/collects/switch_collect",
+        	data:{
+        	    'goods_id' : {{ $goods->id }}
+            }
+        });
+    });
 
     /*
     * 通过ajax从后台得到商品的库存和价格信息
