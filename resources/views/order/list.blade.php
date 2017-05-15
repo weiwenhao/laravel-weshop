@@ -111,6 +111,9 @@
             });
         }
     });
+    /**
+     * 重新下单
+     */
     $('.pay-order').click(function () {
         if(!$(this).attr('value')){
             alert('系统错误，请联系客服');

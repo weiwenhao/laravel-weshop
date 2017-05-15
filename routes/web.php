@@ -4,6 +4,14 @@
 Route::get('/test', function (){
     /*$dt = \Carbon\Carbon::createFromTimestamp(strtotime('+ 28 minute'));
     $res = timeDiff(time(),strtotime('2017-5-10 09:20:20'));*/
+   /* DB::connection()->enableQueryLog(); // 开启查询日志
+
+    $query = \App\Models\Order::whereNotNull('paid_at'); //此时并不存在sql语句
+    $query->where('name', '魏文豪')->get();
+
+    $queries = DB::getQueryLog(); // 获取查询日志
+
+    dd($queries);*/
 });
 
 

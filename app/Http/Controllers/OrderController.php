@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Addr;
+use App\Models\Goods;
+use App\Models\Number;
 use App\Models\Order;
 use App\Models\OrderGoods;
 use App\Models\ShopCart;
@@ -57,34 +59,34 @@ class OrderController extends Controller
 
         //confirm中的商品检测-> 如果confirm中存在shop_cart_id,其实就是根据shop_cart_id再进行一次购物车检测
         $order_goods = json_decode(session('order_goods'));
-        //todo 对session中商品的检查使用购物车提交时的检查并不方便.因为其不具有通用性,因为从商品的立即购买得到的确定订单session中并不存在shop_cart_id,因此这里采取从新进行检查的方案
-        //这里的检查方案很像商品界面的从新付款处的检查
-        /*$shop_cart_ids = [];
-        foreach ($order_goods as $item) {
-            $shop_cart_ids[] = $item->id;
+        if(count($order_goods) == 0){
+            return response('订单异常，请重新下单', 404);
         }
-        $err_msgs = $shopCart->checkShopCarts($shop_cart_ids);
-
-        if($err_msgs){
-            return response($err_msgs, 422);
-        }*/
+        //开启事务
+        \DB::beginTransaction();
         //商品再次验证,使用checkOneGoods
         foreach ($order_goods as $item) {
-            $err_msg = $order->checkOneGoods($item->goods_id, $item->goods_attribute_ids, $item->shop_number);
+            $err_msg = $order->checkOneGoods($item->goods_id, $item->goods_attribute_ids, $item->shop_number, true);
             if($err_msg){
+                \DB::rollBack();
                 return response($err_msg, 422);
             }
         }
         //地址也进行一个检测
         $addr = Addr::where('id', session('order_addr_id'))->where('user_id', \Auth::user()->id)->first();
         if(!$addr){
+            \DB::rollBack();
             return response('请选择收货地址', 422);
         }
         //生成订单模型
         $order = $order->ConfirmToOrders($order_goods, $addr);
         if(!$order->id){
+            \DB::rollBack();
             return response('系统错误,请联系客服', 500);
         }
+        // 结束事务
+        \DB::commit();
+
         $perpay_id = $order->getPrepayId();
         if(!$perpay_id){
             return response('系统错误,请联系客服', 500);
@@ -98,6 +100,11 @@ class OrderController extends Controller
 
     }
 
+    /**
+     * 订单关闭操作 ps:订单关闭时把订单中所有的商品的 status字段设置为3
+     * @param $id
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function destroy($id)
     {
         //能不能在该用户名下查找到该订单
@@ -108,12 +115,22 @@ class OrderController extends Controller
         foreach ($order->orderGoods as $key => $item){
             //将该订单下的商品的status都设置为 3
             $order->orderGoods[$key]->status = 3;
+
+            //进行库存量和购买数量的还原
+            Number::where('goods_id', $item->goods_id)->where('goods_attribute_ids', $item->goods_attribute_ids)->increment('number', $item->shop_number);
+            Goods::where('id', $item->goods_id)->decrement('buy_count', $item->shop_number); //todo 这里不进行销量的返还.有待请示
+
             //save保存一下
             $order->orderGoods[$key]->save();
         }
         return response('订单已经关闭', 200);
     }
 
+    /**
+     * 从新下单操作, 保库存但是不保证下架。
+     * @param Application $wechat
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function repay(Application $wechat)
     {
         $order_id = \request()->get('order_id');
@@ -121,9 +138,9 @@ class OrderController extends Controller
         if(!$order){
             return response('订单不存在', 404);
         }
-        //商品再次验证,使用checkOneGoods
-        foreach ($order->OrderGoods as $item) {
-            $err_msg = $order->checkOneGoods($item->goods_id, $item->goods_attribute_ids, $item->shop_number);
+        //商品再次验证， 下架商品必须做验证。原则上必须跳过库存验证,既用户即使已经抢到了该商品但是没有及时付款的话,后台下载该商品后依旧无法进行操作
+        foreach ($order->OrderGoods as $item) {//该方法的第四个和第五个参数分别代表验证库存时是否开启锁机制,以及是否需要验证库存.
+            $err_msg = $order->checkOneGoods($item->goods_id, $item->goods_attribute_ids, $item->shop_number, false, false);
             if($err_msg){
                 return response('订单中存在下架商品，请重新下单', 422);
             }
@@ -251,7 +268,6 @@ class OrderController extends Controller
            if ($successful) {
                //将支付时间更新为当前时间
                $order->paid_at = time(); // 更新支付时间为当前时间
-               //todo 库存递减 加锁 加事务 购买量+1
            } /*else { // 用户支付失败
                $order->status = 'paid_fail';
            }*/

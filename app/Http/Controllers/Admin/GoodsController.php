@@ -28,8 +28,12 @@ class GoodsController extends Controller
 
     public function dtData()
     {
-        return Datatables::of(Goods::with('category')
-            ->select('goods.id', 'goods.name', 'goods.price', 'goods.sort', 'goods.is_on_sale', 'goods.is_best', 'goods.buy_count', 'goods.sm_image', 'goods.created_at', 'category_id'))->make(true);
+        return Datatables::of(
+            Goods::with('category')
+            ->select('goods.id', 'goods.name', 'goods.price', 'goods.sort',
+                'goods.is_on_sale', 'goods.is_best', 'goods.buy_count', 'goods.sm_image', 'goods.created_at', 'category_id')
+            ->where('is_deleted', 0)
+        )->make(true);
     }
     /**
      * Show the form for creating a new resource.
@@ -156,19 +160,20 @@ class GoodsController extends Controller
     {
         $goods = Goods::find($id);
         if (!$goods)
-            return response('删除失败',403);
-        $goods->removeGoodsImage();
-        $res = $goods->delete();
-        return (string) $res;
+            return response('删除失败，商品不存在',403);
+//        $goods->removeGoodsImage();
+        $goods->is_deleted = 1;
+        $goods->save();
+        return response('删除成功', 200);
     }
 
     public function delGoodsAttr($goods_attribute_id){
         $res = DB::table('goods_attributes')->where('id', $goods_attribute_id)->delete();
         //情况1   29,129,30 在开头 情况2 129,29,30 情况三 129,30,29 情况4 29
         $regex = "^$goods_attribute_id,|,$goods_attribute_id,|,$goods_attribute_id$|^$goods_attribute_id$";
-        //库存表删除
+        //删除属性的后进行库存表含有该数据的属性的删除删除
         Number::where('goods_attribute_ids', 'regexp', $regex)->delete();
-        //todo 删除属性的同时进行购物车表删除
+        // 删除属性的后进行购物车表含有该数据的属性的删除删除
         ShopCart::where('goods_attribute_ids', 'regexp', $regex)->delete();
         return $res;
     }

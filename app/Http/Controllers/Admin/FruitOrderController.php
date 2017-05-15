@@ -44,8 +44,8 @@ class FruitOrderController extends Controller
             ->join('goods', 'order_goods.goods_id', '=', 'goods.id')
             ->where($where)->where([
                 ['category_id', 2], //2代表水果订单id
-                ['is_pay', 1] //1代表已经支付
-            ]);
+            ])
+            ->whereNotNull('paid_at'); //已经支付过的订单
 
         return Datatables::of($query)
             ->addColumn('all_info', function (Order $order){

@@ -26,6 +26,7 @@ class GoodsController extends Controller
 //        $user = User::find(session('wechat.oauth_user')->id);
         //session记录一下当前url方便存储 todo 待重构为cookie,或者中间件
         \Cookie::queue('goods_previous_url', \request()->getUri());
+        \Cookie::queue('orders_previous_url', \request()->getUri());
 
         $actives = $active->getActives(); //画布导航数据
         $best_goods = $goods->getBestGoods(8);
@@ -42,11 +43,14 @@ class GoodsController extends Controller
         //确认订单的上一页进行记录 todo 待重构为中间件
         session(['confirm_previous_url' => \request()->getUri()]);
 
-        $goods = Goods::findOrFail($goods_id);
-        //添加一个收藏状态
-        $collect = Collect::where('goods_id', $goods->id)->where('user_id', \Auth::user()->id)->first();
-        $collect?$goods->is_collect=true:$goods->is_collect=false;
-        $goods->option_attrs = $goods->getOptionGoodsAttr($goods->id);
+        $goods = Goods::where('id', $goods_id)->where('is_deleted', 0)->first();
+        if($goods){
+            //添加一个收藏状态
+            $collect = Collect::where('goods_id', $goods->id)->where('user_id', \Auth::user()->id)->first();
+            $collect?$goods->is_collect=true:$goods->is_collect=false;
+            //添加可选属性
+            $goods->option_attrs = $goods->getOptionGoodsAttr($goods->id);
+        }
         return view('goods.goods', compact('goods'));
     }
 

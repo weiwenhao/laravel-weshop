@@ -87,7 +87,6 @@ class ComputeController extends Controller
     private function shopNumberSum($start_at, $stop_at)
     {
         $where = [];
-        $where[] = ['orders.is_pay', 1];
         if($start_at)
             $where[] = ['orders.created_at', '>', $start_at];
         if($stop_at)
@@ -99,7 +98,8 @@ class ComputeController extends Controller
             )
             ->join('order_goods', function ($join) use($where){
                 $join->on('orders.id', '=', 'order_goods.order_id')
-                ->where($where);
+                ->where($where) //时间限制
+                    ->whereNotNull('paid_at'); //必须要为已经支付的商品
             })
             ->rightJoin('goods', 'order_goods.goods_id', '=', 'goods.id')
             ->join('categories', 'categories.id', '=', 'goods.category_id')

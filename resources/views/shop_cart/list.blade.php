@@ -65,11 +65,11 @@
         @endforeach
     </div>
     <div class="weshop-center-block no-goods" style="display:{{ $shop_carts->toArray()?'none':'block' }}">
-                <span class="fa fa-shopping-cart fa-5x"></span>
-                <h3>您的购物车是空的</h3>
-                <p>去挑一些喜欢的商品吧</p>
-                <a href="{{ url('/') }}" class="weui-btn weui-btn_primary" style="">再去逛逛</a>
-            </div>
+        <span class="fa fa-shopping-cart fa-5x"></span>
+        <h3>您的购物车是空的</h3>
+        <p>去挑一些喜欢的商品吧</p>
+        <a href="{{ url('/') }}" class="weui-btn weui-btn_primary" style="">再去逛逛</a>
+    </div>
     <div class="height-2rem"></div>
     <div class="height-4rem"></div>
     <!--****************  结算  ********************-->
