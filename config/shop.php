@@ -17,4 +17,8 @@ return [
     'default_goods_number' => 9999, //默认商品库存量
 
     'collects_count' => 8, //收藏列表显示的记录数
+
+    //圈子图片保存路径
+    'circle_img_path' =>  'uploads/images/circle/', //默认在public目录下
+    'sm_circle_img_size' => 170, //购物车图
 ];

@@ -19,7 +19,7 @@ class Goods extends Model
     {
         //todo 设置图片比例
         $path = config('shop.goods_img_path').date('Ymd').'/';
-        $goods_img_name = str_random().'.jpg';
+        $goods_img_name = md5(time().str_random(4)).'.jpg';
         if(!is_dir(public_path($path))){
             mkdir(public_path($path), 0777, true); //第三个参数代表递归创建
         }

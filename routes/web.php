@@ -1,18 +1,10 @@
 <?php
 
-
 Route::get('/test', function (){
-    /*$dt = \Carbon\Carbon::createFromTimestamp(strtotime('+ 28 minute'));
-    $res = timeDiff(time(),strtotime('2017-5-10 09:20:20'));*/
-   /* DB::connection()->enableQueryLog(); // 开启查询日志
-
-    $query = \App\Models\Order::whereNotNull('paid_at'); //此时并不存在sql语句
-    $query->where('name', '魏文豪')->get();
-
-    $queries = DB::getQueryLog(); // 获取查询日志
-
-    dd($queries);*/
+   $post = \App\Models\Post::find(35);
+   dd($post->postImages);
 });
+
 
 
 Route::get('/', function (){
@@ -50,12 +42,18 @@ Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
     Route::resource('orders', 'OrderController');
     //个人中心
     Route::get('me', 'MeController@index'); //个人中心主页
+
+    //圈子管理
+    Route::post('circles/upload', 'CircleController@upload');
+    Route::resource('circles', 'CircleController');
+    Route::get('post_categories', 'CircleController@getCategories');
+    Route::get('api/posts', 'CircleController@ajaxPosts');
 });
 
 /**
  * 后台登陆注册区
  */
-Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
+Route::group(['prefix' => 'admin', 'namespace'=>'Admin'], function () {
     //登录
     Route::get('login','Auth\LoginController@showLoginForm');
     Route::post('login','Auth\LoginController@login');
