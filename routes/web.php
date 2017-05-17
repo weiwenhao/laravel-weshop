@@ -43,11 +43,17 @@ Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
     //个人中心
     Route::get('me', 'MeController@index'); //个人中心主页
 
-    //圈子管理
+    /******************圈子管理******************/
+    //帖子管理
     Route::post('circles/upload', 'CircleController@upload');
     Route::resource('circles', 'CircleController');
-    Route::get('post_categories', 'CircleController@getCategories');
+    //帖子分类
+    Route::get('api/post_categories', 'CircleController@ajaxCategories');
     Route::get('api/posts', 'CircleController@ajaxPosts');
+    Route::delete('api/posts/{id}', 'CircleController@ajaxDestroy');
+    //帖子评论
+    Route::post('api/post_comments', 'PostCommentController@Create');
+    Route::delete('api/post_comments/{id}', 'PostCommentController@destroy');
 });
 
 /**

@@ -96,15 +96,6 @@ class CircleController extends Controller
         //
     }
 
-    /**
-     * ajax接口
-     * @return \Illuminate\Support\Collection
-     */
-    public function getCategories()
-    {
-        $categories = \DB::table('post_categories')->get();
-        return $categories;
-    }
 
     /**
      * 存储文章图片
@@ -137,12 +128,44 @@ class CircleController extends Controller
     }
 
     /**
-     * 得到文章列表
+     * 得到帖子分类数据
+     * @return \Illuminate\Support\Collection
+     */
+    public function ajaxCategories()
+    {
+        $categories = \DB::table('post_categories')->get();
+        return $categories;
+    }
+
+    /**
+     * 得到帖子列表
      * @param Request $request
+     * @param Post $post
+     * @return
      */
     public function ajaxPosts(Request $request, Post $post)
     {
         $posts = $post->getPosts($request);
         return $posts;
+    }
+
+    /**
+     * ajax删除帖子
+     * @param $id
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function ajaxDestroy($id)
+    {
+        $post = Post::find($id);
+        if(!$post){
+            return response('帖子不存在', 404);
+        }
+        if(\Auth::user()->id != $post->user_id){
+            return response('权限不足', 403);
+        }
+        $res = $post->delete();
+        //删除图片
+        $post->delImage($post->id);
+        return response('你成功删除了'.$res.'条帖子', 200);
     }
 }

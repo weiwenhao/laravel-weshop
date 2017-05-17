@@ -18,7 +18,8 @@ class CreatePostCommentsTable extends Migration
             $table->string('content', 255)->comment('评论内容');
             $table->unsignedInteger('post_id')->comment('评论的文章id');
             $table->unsignedInteger('user_id')->comment('用户id');
-            $table->unsignedInteger('obj_user_id')->default(0)->comment('评论的目标用户id,如果为NULL则是对文章的评论');
+            $table->unsignedInteger('obj_user_id')->default(0)->comment('评论的目标用户id');
+            $table->unsignedInteger('obj_user_name')->default('')->comment('评论的目标用户名称');
             $table->timestamps();
         });
     }

@@ -6,47 +6,53 @@
             <div class="logo"></div>
             <div class="circle-h-mid">
                 <span class="me-flex-3"></span>
-                <span class="me-flex-6" style="font-size:0.9rem">校园商城</span>
-                <span class="me-flex-3">进来逛逛 <i class="fa fa-angle-right"></i></span>
+                <span class="me-flex-6">校园商城</span>
+                <span class="me-flex-3"><a href="/">进来逛逛 <i class="fa fa-angle-right"></i></a></span>
             </div>
         </div>
         <!--导航-->
         <div class="home-circle-nav">
-           <!-- <div class="circle-nav">
-                <span class="me-flex-3 action">首页</span>
-                <span class="me-flex-3">精华</span>
-                <span class="me-flex-3">客服</span>
-                <span class="me-flex-3">达人榜</span>
-                <hr>
-            </div>-->
+            <div class="circle-nav">
+                <span class="me-flex-4 active"><a href="">首页</a></span>
+                <span class="me-flex-4"><a href="">精华</a></span>
+                <span class="me-flex-4"><a href="">我的</a></span>
+            </div>
+            <hr>
             <div class="circle-nav-b">
-                <a  :class="{ 'action':category.id==params.category_id }" v-for="category in  categories">{{ category.name }}</a>
+                <a  :class="{ 'active':post_category.id==params.post_category_id }"
+                    v-for="post_category in  post_categories"
+                    @click="setPostCateId(post_category.id)"
+                >
+                    {{ post_category.name }}
+                </a>
             </div>
         </div>
-
-        <div class="circle-home-content" v-for="circle in circles">
+        <!--帖子内容start-->
+        <div class="circle-home-content" v-for="(post, index) in posts">
             <!--头像,名称,日期,板块-->
             <div class="circle-top">
                 <div class="me-flex-2">
-                    <img class="me-img lazy" :src="circle.logo">
+                    <img class="me-img lazy" :src="post.logo">
                 </div>
                 <div class="me-flex-9">
-                    <div class="circle-name"><b>{{ circle.username }}</b><span class="lv"></span></div>
-                    <span class="circle-time">{{ circle.created_at_str }}</span>
-                    <span class="circle-block"> 板块：<tt>{{ circle.post_category_name }}</tt></span>
+                    <div class="circle-name"><b>{{ post.username }}</b><span class="lv"></span></div>
+                    <span class="circle-time">{{ post.created_at_str }}</span>
+                    <span class="circle-block"> 板块：<tt>{{ post.post_category_name }}</tt></span>
+                </div>
+                <div class="me-flex-1">
+                    <a @click.prevent="delPost(index, post)" v-if="post.is_author">删除</a>
                 </div>
             </div>
-            <!--内容显示三行,点击显示全部-->
+            <!--内容-->
             <div class="circle-content">
-                <div v-html="circle.content">
-                </div>
+                <div v-html="post.content"></div>
             </div>
             <!--图片-->
-            <div class="circle-content-img" v-if="circle.post_images.length">
-                <div class="me-flex-4" v-for="post_image in circle.post_images">
+            <div class="circle-content-img" v-if="post.post_images.length">
+                <div class="me-flex-4" v-for="post_image in post.post_images">
                     <img class="me-img lazy"
                          :src="post_image.sm_image"
-                         @click="showImages(post_image.image, circle.post_images)"
+                         @click="showImages(post_image.image, post.post_images)"
                     >
                 </div>
             </div>
@@ -54,44 +60,72 @@
             <div class="circle-critic">
                 <div class="critic-top"><!--评论数量和赞-->
                     <span class="critic-t-r">
-                        <a class="onReply">
-                            <i class="fa fa-commenting-o"></i><span style="font-size:0.8rem"> 0</span>
+                        <a class="onReply" @click.prevent="showComment(index ,post.id)">
+                            <i class="fa fa-commenting-o"></i><span> {{ post.post_comments_count }}</span>
                         </a>
-                        <i class="fa fa-thumbs-o-up"></i><span style="font-size:0.8rem"> {{ circle.likes_count }}</span>
+                        <i class="fa fa-thumbs-o-up"></i><span> {{ post.likes_count }}</span>
                     </span>
                 </div>
                 <!--评论-->
-                <!--<div class="critic-replys">
-                    <div class="item">
-                        <a>诚哥:</a><span>谁谁谁sadafFdf谁谁谁sadafFdfd谁谁谁d谁谁谁</span>
+                <div class="critic-replys" v-if="post.post_comments.length">
+                    <!--todo class=item 添加一个点击特效,类似qq-->
+                    <div class="item" v-for="(post_comment, index2) in  post.post_comments" @click="showComment(index, post.id, post_comment.user_id, post_comment.username)">
+                        <a>{{ post_comment.username }}</a>
+                        <template v-if="post_comment.obj_username">回复 <a href="">{{ post_comment.obj_username }}</a></template>
+                        :<span>{{ post_comment.content }}</span>
+                        <a href="" class="del" v-if="post_comment.is_author || post.is_author"
+                           @click.prevent="delPostComment(index2, post_comment, post.post_comments)"
+                        >删除</a>
                     </div>
-                </div>-->
-                <!--弹出文本框-->
-                <!--<div class="critic-main">
-                    <div class="reply">
-                        <textarea placeholder="回复谁谁谁"   rows="4" ></textarea>
-                        <span>
-					        <a class="on-reoly-no">取消</a>
-                            <a class="sub">发送</a>
-                        </span>
-                    </div>
-                </div>-->
+                </div>
             </div>
         </div>
+        <!--帖子内容end-->
 
+        <!--帖子为空时start-->
+        <div class="weshop-center-block"
+             style="display:block;"
+             v-if="posts.length == 0"
+        >
+            <i class="fa fa-tencent-weibo fa-5x"></i>
+            <div>暂时没有相关帖子</div>
+        </div>
+        <!--帖子为空时end-->
+
+
+        <!--底部start-->
         <div style="height:2rem"></div>
-        <!--↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓- 底部发帖按钮 -↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓-->
-        <div class="circle-home-bottom">
+        <!--回复文本框start-->
+        <div class="critic-reply-frame"  v-if="comment.is_show">
+            <textarea
+                    class="me-flex-10"  rows="1"
+                    name="comment"
+                    v-model="comment.content"
+                    :placeholder="comment.placeholder"
+                    @blur="cancelComment()"
+            ></textarea>
+            <div class="me-flex-2">
+                <button
+                        class="weui-btn weui-btn_mini"
+                        :class="[comment.content?'weui-btn_primary':'weui-btn_default weui-btn_plain-disabled']"
+                        :disabled="!comment.content"
+                        @click="createComment()"
+                >发送
+                </button>
+            </div>
+        </div>
+        <!--发帖start-->
+        <div class="circle-home-bottom" v-else>
             <div class="me-flex-4">&nbsp;</div>
             <div class="me-flex-4">
                 <a class="circle_send" id="fatie" href="/circles/create"><!---->
                     <i class="fa fa-pencil-square-o" ></i>
-                    发帖子
+                    发送
                 </a>
             </div>
             <div class="me-flex-4">&nbsp;</div>
         </div>
-
+        <!--底部end-->
     </div>
 </template>
 <script>
@@ -105,10 +139,19 @@
                     limit : 8,
                     order : 'created_at',
                     sort : 'desc',
-                    category_id : null
+                    post_category_id : null
                 },
-                categories : [],
-                circles : [],
+                comment : { //评论对象只有一套,保证了唯一性
+                    is_show : false,
+                    post_id : null,
+                    obj_user_id : 0,
+                    obj_username : '',
+                    placeholder : null,
+                    content : '',
+                    index : null,
+                },
+                post_categories : [],
+                posts : [],
             }
         },
         created(){
@@ -119,50 +162,154 @@
 
         },
         methods : {
+            //得到帖子数据,包括评论,图片
             getCircles(){
                 axios.get('/api/posts', {
                     params: this.params //params参数会被附加到get请求中
                 })
                 .then(response=> {
-                    this.circles = response.data;
+                    this.posts = response.data;
                 })
                 .catch(error=> {
                 	console.log(error);
                 });
             },
+            //得到帖子分类数据
             getPostCate(){
-                axios.get('/post_categories', {
+                axios.get('/api/post_categories', {
                     /*params: {
                      article_id: this.article_id,
                      }*/
                 })
-                    .then(response=> {
-                        this.categories = response.data;
-                        this.categories.unshift({
-                            'id' : null,
-                            'name' : '全部'
-                        });
-                    })
-                    .catch(error=> {
-                        console.log(error);
+                .then(response=> {
+                    this.post_categories = response.data;
+                    this.post_categories.unshift({
+                        'id' : null,
+                        'name' : '全部'
                     });
+                })
+                .catch(error=> {
+                    console.log(error);
+                });
             },
+            setPostCateId(post_category_id){
+                this.params.post_category_id = post_category_id;
+                //刷新请求
+                this.getCircles();
+            },
+            //显示评论框
+            showComment(index, post_id, obj_user_id, obj_username){
+                arguments[1] ? arguments[1] : 0; //设置默认值
+                arguments[2] ? arguments[2] : '';
+                //将默认值赋值给参数
+                this.comment.index = index;
+                this.comment.post_id = post_id;
+                this.comment.obj_user_id = obj_user_id;
+                this.comment.obj_username = obj_username;
+                this.comment.placeholder = '说点什么吧...'
+                if(obj_user_id && obj_username){
+                    this.comment.placeholder = '回复' + obj_username + '：';
+                }
+                //显示发送框
+                this.comment.is_show = true;
+                //使发送框获得焦点
+                this.$nextTick(function () { //要等上面的数据变化完毕后再调用获得焦点事件
+                    $('[name=comment]').focus();
+                });
+            },
+            //取消评论框
+            cancelComment(){
+                //200ms后进行判断焦点是否丢失,如果丢失则运行
+                setTimeout(() => {
+                   //判断是否没有获得焦点
+                    if(!$('[name="comment"]:focus').length){
+                        this.comment.is_show = false;
+                    }
+                }, 100);
+            },
+            //创建一条评论
+            createComment(){
+                //点击该按钮的时候不是textarea失去焦点
+                $('[name=comment]').focus();
+                if(!this.comment.content){
+                    return
+                }
+                //todo 帖子评论字数的前端限制
+                let loading = weui.loading('请稍等');
+                 axios.post('/api/post_comments', this.comment)
+                 .then((response)=> {
+                     //确定评论的index,往数组的底部添加一条数据,
+                     this.posts[this.comment.index].post_comments.push(response.data);
+                     this.posts[this.comment.index].post_comments_count ++;
+                     //清空回答框,并隐藏
+                     this.comment =  { //评论对象只有一套,保证了唯一性
+                         is_show : false,
+                         post_id : null,
+                         obj_user_id : 0,
+                         obj_username : '',
+                         placeholder : null,
+                         content : '',
+                     };
+                     //关闭loading并提示添加成功
+                     loading.hide(function () {
+                       /* weui.toast('评论成功', 1000);*/
+                     });
+                 })
+                 .catch((error)=> {
+                 	console.log('失败')
+                 });
+            },
+            //删除帖子
+            delPost(index, post){
+                weui.confirm('你确定要删除该帖子吗？', () =>{
+                    this.posts.splice(index, 1);
+                    //发送ajax请求
+                     axios.delete('/api/posts/'+post.id, {
+                      	//key : value
+                     })
+                });
+            },
+            //删除帖子评论
+            delPostComment(index, post_comment, post_comments){
+                weui.confirm('你确定要删除这条评论吗？', () =>{
+                    post_comments.splice(index, 1);
+                    //发送ajax请求
+                    axios.delete('/api/post_comments/'+ post_comment.id, {
+                        //key : value
+                    })
+                });
+            },
+            //使用jssdk预览图片
             showImages(current_img, imgs){
                 //调用微信接口
                 let urls = [];
                 for(let i = 0; i< imgs.length; ++i){
-//                    urls.push('http://' + location.hostname+ imgs[i].image)
-                    urls.push(imgs[i].image)
+                    urls.push('http://' + location.hostname+ imgs[i].image)
+//                    urls.push(imgs[i].image)
                 }
-                 console.log(urls);
                 wx.previewImage({
                     current: 'http://' + location.hostname+ current_img, // 当前显示图片的http链接
                     urls: urls // 需要预览的图片http链接列表
+                });
+            },
+            //
+            setTextArea(){
+                let replyHeight = $('.critic-reply-frame textarea ').height();
+                $('.critic-reply-frame textarea ').each(function () {
+                    this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
+                }).on('input', function () {
+                    this.style.height = 'auto';
+                    this.style.height = (this.scrollHeight) + 'px';
+                    if( this.scrollHeight >= replyHeight*4 ){
+                        this.style.overflowY = 'scroll';
+                        this.style.height = replyHeight*4+'px';
+                    }
                 });
             }
         }
     }
 </script>
 <style>
-
+    .weshop-center-block{width:60%;margin-top:10%;text-align:center;color:#bbb;margin-left: auto;margin-right: auto; margin-top: 30%;}
+    .weshop-center-block i{font-size:8rem;}
 </style>

@@ -73,7 +73,7 @@
 "use strict";
 
 
-var bind = __webpack_require__(9);
+var bind = __webpack_require__(8);
 
 /*global toString:true*/
 
@@ -10657,10 +10657,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(5);
+    adapter = __webpack_require__(4);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(5);
+    adapter = __webpack_require__(4);
   }
   return adapter;
 }
@@ -10921,59 +10921,6 @@ process.umask = function() { return 0; };
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports) {
-
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  scopeId,
-  cssModules
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
-
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
-  }
-
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
-
-  // inject cssModules
-  if (cssModules) {
-    var computed = options.computed || (options.computed = {})
-    Object.keys(cssModules).forEach(function (key) {
-      var module = cssModules[key]
-      computed[key] = function () { return module }
-    })
-  }
-
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
-  }
-}
-
-
-/***/ }),
-/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10984,7 +10931,7 @@ var settle = __webpack_require__(21);
 var buildURL = __webpack_require__(24);
 var parseHeaders = __webpack_require__(30);
 var isURLSameOrigin = __webpack_require__(28);
-var createError = __webpack_require__(8);
+var createError = __webpack_require__(7);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(23);
 
 module.exports = function xhrAdapter(config) {
@@ -11158,7 +11105,7 @@ module.exports = function xhrAdapter(config) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11184,7 +11131,7 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11196,7 +11143,7 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11220,7 +11167,7 @@ module.exports = function createError(message, config, code, response) {
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11238,8 +11185,8 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 10 */,
-/* 11 */
+/* 9 */,
+/* 10 */
 /***/ (function(module, exports) {
 
 var g;
@@ -11266,8 +11213,61 @@ module.exports = g;
 
 
 /***/ }),
+/* 11 */,
 /* 12 */,
-/* 13 */,
+/* 13 */
+/***/ (function(module, exports) {
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  scopeId,
+  cssModules
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  // inject cssModules
+  if (cssModules) {
+    var computed = options.computed || (options.computed = {})
+    Object.keys(cssModules).forEach(function (key) {
+      var module = cssModules[key]
+      computed[key] = function () { return module }
+    })
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11281,7 +11281,7 @@ module.exports = __webpack_require__(15);
 
 
 var utils = __webpack_require__(0);
-var bind = __webpack_require__(9);
+var bind = __webpack_require__(8);
 var Axios = __webpack_require__(17);
 var defaults = __webpack_require__(2);
 
@@ -11316,9 +11316,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(6);
+axios.Cancel = __webpack_require__(5);
 axios.CancelToken = __webpack_require__(16);
-axios.isCancel = __webpack_require__(7);
+axios.isCancel = __webpack_require__(6);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -11339,7 +11339,7 @@ module.exports.default = axios;
 "use strict";
 
 
-var Cancel = __webpack_require__(6);
+var Cancel = __webpack_require__(5);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -11556,7 +11556,7 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(22);
-var isCancel = __webpack_require__(7);
+var isCancel = __webpack_require__(6);
 var defaults = __webpack_require__(2);
 
 /**
@@ -11666,7 +11666,7 @@ module.exports = function enhanceError(error, config, code, response) {
 "use strict";
 
 
-var createError = __webpack_require__(8);
+var createError = __webpack_require__(7);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -12110,8 +12110,7 @@ module.exports = function spread(callback) {
 
 /***/ }),
 /* 32 */,
-/* 33 */,
-/* 34 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -29200,11 +29199,10 @@ module.exports = function spread(callback) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), __webpack_require__(37)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10), __webpack_require__(35)(module)))
 
 /***/ }),
-/* 35 */,
-/* 36 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38529,10 +38527,10 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(11)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(10)))
 
 /***/ }),
-/* 37 */
+/* 35 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -38560,10 +38558,9 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 38 */,
-/* 39 */,
-/* 40 */,
-/* 41 */
+/* 36 */,
+/* 37 */,
+/* 38 */
 /***/ (function(module, exports) {
 
 /*
@@ -38619,7 +38616,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 42 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -38840,14 +38837,14 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 43 */,
-/* 44 */,
-/* 45 */
+/* 40 */,
+/* 41 */,
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
-window._ = __webpack_require__(34);
+window._ = __webpack_require__(33);
 
-window.Vue = __webpack_require__(36);
+window.Vue = __webpack_require__(34);
 window.axios = __webpack_require__(14);
 
 window.axios.defaults.headers.common = {
@@ -38860,22 +38857,57 @@ window.$ = window.jQuery = __webpack_require__(1);
 //引入weui.js
 
 // require('bootstrap-sass');
-Vue.component('CreateCircle', __webpack_require__(62));
-Vue.component('Circles', __webpack_require__(61));
+Vue.component('CreateCircle', __webpack_require__(61));
+Vue.component('Circles', __webpack_require__(60));
 
 var app = new Vue({
     el: '#app'
 });
 
 /***/ }),
+/* 43 */,
+/* 44 */,
+/* 45 */,
 /* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */
+/* 47 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* WEBPACK VAR INJECTION */(function($) {Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -38983,10 +39015,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 limit: 8,
                 order: 'created_at',
                 sort: 'desc',
-                category_id: null
+                post_category_id: null
             },
-            categories: [],
-            circles: []
+            comment: { //评论对象只有一套,保证了唯一性
+                is_show: false,
+                post_id: null,
+                obj_user_id: 0,
+                obj_username: '',
+                placeholder: null,
+                content: '',
+                index: null
+            },
+            post_categories: [],
+            posts: []
         };
     },
     created: function created() {
@@ -38996,27 +39037,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     mounted: function mounted() {},
 
     methods: {
+        //得到帖子数据,包括评论,图片
         getCircles: function getCircles() {
             var _this = this;
 
             axios.get('/api/posts', {
                 params: this.params //params参数会被附加到get请求中
             }).then(function (response) {
-                _this.circles = response.data;
+                _this.posts = response.data;
             }).catch(function (error) {
                 console.log(error);
             });
         },
+
+        //得到帖子分类数据
         getPostCate: function getPostCate() {
             var _this2 = this;
 
-            axios.get('/post_categories', {
+            axios.get('/api/post_categories', {
                 /*params: {
                  article_id: this.article_id,
                  }*/
             }).then(function (response) {
-                _this2.categories = response.data;
-                _this2.categories.unshift({
+                _this2.post_categories = response.data;
+                _this2.post_categories.unshift({
                     'id': null,
                     'name': '全部'
                 });
@@ -39024,24 +39068,138 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 console.log(error);
             });
         },
+        setPostCateId: function setPostCateId(post_category_id) {
+            this.params.post_category_id = post_category_id;
+            //刷新请求
+            this.getCircles();
+        },
+
+        //显示评论框
+        showComment: function showComment(index, post_id, obj_user_id, obj_username) {
+            arguments[1] ? arguments[1] : 0; //设置默认值
+            arguments[2] ? arguments[2] : '';
+            //将默认值赋值给参数
+            this.comment.index = index;
+            this.comment.post_id = post_id;
+            this.comment.obj_user_id = obj_user_id;
+            this.comment.obj_username = obj_username;
+            this.comment.placeholder = '说点什么吧...';
+            if (obj_user_id && obj_username) {
+                this.comment.placeholder = '回复' + obj_username + '：';
+            }
+            //显示发送框
+            this.comment.is_show = true;
+            //使发送框获得焦点
+            this.$nextTick(function () {
+                //要等上面的数据变化完毕后再调用获得焦点事件
+                $('[name=comment]').focus();
+            });
+        },
+
+        //取消评论框
+        cancelComment: function cancelComment() {
+            var _this3 = this;
+
+            //200ms后进行判断焦点是否丢失,如果丢失则运行
+            setTimeout(function () {
+                //判断是否没有获得焦点
+                if (!$('[name="comment"]:focus').length) {
+                    _this3.comment.is_show = false;
+                }
+            }, 100);
+        },
+
+        //创建一条评论
+        createComment: function createComment() {
+            var _this4 = this;
+
+            //点击该按钮的时候不是textarea失去焦点
+            $('[name=comment]').focus();
+            if (!this.comment.content) {
+                return;
+            }
+            //todo 帖子评论字数的前端限制
+            var loading = weui.loading('请稍等');
+            axios.post('/api/post_comments', this.comment).then(function (response) {
+                //确定评论的index,往数组的底部添加一条数据,
+                _this4.posts[_this4.comment.index].post_comments.push(response.data);
+                _this4.posts[_this4.comment.index].post_comments_count++;
+                //清空回答框,并隐藏
+                _this4.comment = { //评论对象只有一套,保证了唯一性
+                    is_show: false,
+                    post_id: null,
+                    obj_user_id: 0,
+                    obj_username: '',
+                    placeholder: null,
+                    content: ''
+                };
+                //关闭loading并提示添加成功
+                loading.hide(function () {
+                    /* weui.toast('评论成功', 1000);*/
+                });
+            }).catch(function (error) {
+                console.log('失败');
+            });
+        },
+
+        //删除帖子
+        delPost: function delPost(index, post) {
+            var _this5 = this;
+
+            weui.confirm('你确定要删除该帖子吗？', function () {
+                _this5.posts.splice(index, 1);
+                //发送ajax请求
+                axios.delete('/api/posts/' + post.id, {
+                    //key : value
+                });
+            });
+        },
+
+        //删除帖子评论
+        delPostComment: function delPostComment(index, post_comment, post_comments) {
+            weui.confirm('你确定要删除这条评论吗？', function () {
+                post_comments.splice(index, 1);
+                //发送ajax请求
+                axios.delete('/api/post_comments/' + post_comment.id, {
+                    //key : value
+                });
+            });
+        },
+
+        //使用jssdk预览图片
         showImages: function showImages(current_img, imgs) {
             //调用微信接口
             var urls = [];
             for (var i = 0; i < imgs.length; ++i) {
-                //                    urls.push('http://' + location.hostname+ imgs[i].image)
-                urls.push(imgs[i].image);
+                urls.push('http://' + location.hostname + imgs[i].image);
+                //                    urls.push(imgs[i].image)
             }
-            console.log(urls);
             wx.previewImage({
                 current: 'http://' + location.hostname + current_img, // 当前显示图片的http链接
                 urls: urls // 需要预览的图片http链接列表
             });
+        },
+
+        //
+        setTextArea: function setTextArea() {
+            var replyHeight = $('.critic-reply-frame textarea ').height();
+            $('.critic-reply-frame textarea ').each(function () {
+                this.setAttribute('style', 'height:' + this.scrollHeight + 'px;overflow-y:hidden;');
+            }).on('input', function () {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+                if (this.scrollHeight >= replyHeight * 4) {
+                    this.style.overflowY = 'scroll';
+                    this.style.height = replyHeight * 4 + 'px';
+                }
+            });
         }
     }
 });
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
 
 /***/ }),
-/* 50 */
+/* 48 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39181,7 +39339,7 @@ var that;
         getPostCate: function getPostCate() {
             var _this2 = this;
 
-            axios.get('/post_categories', {
+            axios.get('/api/post_categories', {
                 /*params: {
                 	article_id: this.article_id,
                 }*/
@@ -39290,7 +39448,7 @@ var that;
             weui.toast('发表成功', {
                 duration: 1000,
                 callback: function callback() {
-                    //                        location.href='/circles'
+                    location.href = '/circles';
                 }
             });
         }
@@ -39299,6 +39457,8 @@ var that;
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
 
 /***/ }),
+/* 49 */,
+/* 50 */,
 /* 51 */,
 /* 52 */,
 /* 53 */,
@@ -39308,17 +39468,16 @@ var that;
 /* 57 */,
 /* 58 */,
 /* 59 */,
-/* 60 */,
-/* 61 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(64)
+__webpack_require__(63)
 
-var Component = __webpack_require__(4)(
+var Component = __webpack_require__(13)(
   /* script */
-  __webpack_require__(49),
+  __webpack_require__(47),
   /* template */
   __webpack_require__(68),
   /* scopeId */
@@ -39347,16 +39506,16 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 62 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(63)
+__webpack_require__(62)
 
-var Component = __webpack_require__(4)(
+var Component = __webpack_require__(13)(
   /* script */
-  __webpack_require__(50),
+  __webpack_require__(48),
   /* template */
   __webpack_require__(67),
   /* scopeId */
@@ -39385,17 +39544,17 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 63 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(65);
+var content = __webpack_require__(64);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(42)("eab8042a", content, false);
+var update = __webpack_require__(39)("eab8042a", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -39411,17 +39570,17 @@ if(false) {
 }
 
 /***/ }),
-/* 64 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(66);
+var content = __webpack_require__(65);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(42)("9a0df70e", content, false);
+var update = __webpack_require__(39)("9a0df70e", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -39437,20 +39596,21 @@ if(false) {
 }
 
 /***/ }),
-/* 65 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(41)();
+exports = module.exports = __webpack_require__(38)();
 exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 /***/ }),
-/* 66 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(41)();
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports = module.exports = __webpack_require__(38)();
+exports.push([module.i, "\n.weshop-center-block{width:60%;margin-top:10%;text-align:center;color:#bbb;margin-left: auto;margin-right: auto; margin-top: 30%;\n}\n.weshop-center-block i{font-size:8rem;\n}\n", ""]);
 
 /***/ }),
+/* 66 */,
 /* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -39620,15 +39780,20 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', [_vm._m(0), _vm._v(" "), _c('div', {
     staticClass: "home-circle-nav"
-  }, [_c('div', {
+  }, [_vm._m(1), _vm._v(" "), _c('hr'), _vm._v(" "), _c('div', {
     staticClass: "circle-nav-b"
-  }, _vm._l((_vm.categories), function(category) {
+  }, _vm._l((_vm.post_categories), function(post_category) {
     return _c('a', {
       class: {
-        'action': category.id == _vm.params.category_id
+        'active': post_category.id == _vm.params.post_category_id
+      },
+      on: {
+        "click": function($event) {
+          _vm.setPostCateId(post_category.id)
+        }
       }
-    }, [_vm._v(_vm._s(category.name))])
-  }))]), _vm._v(" "), _vm._l((_vm.circles), function(circle) {
+    }, [_vm._v("\n                " + _vm._s(post_category.name) + "\n            ")])
+  }))]), _vm._v(" "), _vm._l((_vm.posts), function(post, index) {
     return _c('div', {
       staticClass: "circle-home-content"
     }, [_c('div', {
@@ -39638,27 +39803,36 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [_c('img', {
       staticClass: "me-img lazy",
       attrs: {
-        "src": circle.logo
+        "src": post.logo
       }
     })]), _vm._v(" "), _c('div', {
       staticClass: "me-flex-9"
     }, [_c('div', {
       staticClass: "circle-name"
-    }, [_c('b', [_vm._v(_vm._s(circle.username))]), _c('span', {
+    }, [_c('b', [_vm._v(_vm._s(post.username))]), _c('span', {
       staticClass: "lv"
     })]), _vm._v(" "), _c('span', {
       staticClass: "circle-time"
-    }, [_vm._v(_vm._s(circle.created_at_str))]), _vm._v(" "), _c('span', {
+    }, [_vm._v(_vm._s(post.created_at_str))]), _vm._v(" "), _c('span', {
       staticClass: "circle-block"
-    }, [_vm._v(" 板块："), _c('tt', [_vm._v(_vm._s(circle.post_category_name))])], 1)])]), _vm._v(" "), _c('div', {
+    }, [_vm._v(" 板块："), _c('tt', [_vm._v(_vm._s(post.post_category_name))])], 1)]), _vm._v(" "), _c('div', {
+      staticClass: "me-flex-1"
+    }, [(post.is_author) ? _c('a', {
+      on: {
+        "click": function($event) {
+          $event.preventDefault();
+          _vm.delPost(index, post)
+        }
+      }
+    }, [_vm._v("删除")]) : _vm._e()])]), _vm._v(" "), _c('div', {
       staticClass: "circle-content"
     }, [_c('div', {
       domProps: {
-        "innerHTML": _vm._s(circle.content)
+        "innerHTML": _vm._s(post.content)
       }
-    })]), _vm._v(" "), (circle.post_images.length) ? _c('div', {
+    })]), _vm._v(" "), (post.post_images.length) ? _c('div', {
       staticClass: "circle-content-img"
-    }, _vm._l((circle.post_images), function(post_image) {
+    }, _vm._l((post.post_images), function(post_image) {
       return _c('div', {
         staticClass: "me-flex-4"
       }, [_c('img', {
@@ -39668,7 +39842,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         },
         on: {
           "click": function($event) {
-            _vm.showImages(post_image.image, circle.post_images)
+            _vm.showImages(post_image.image, post.post_images)
           }
         }
       })])
@@ -39678,49 +39852,97 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "critic-top"
     }, [_c('span', {
       staticClass: "critic-t-r"
-    }, [_vm._m(1, true), _vm._v(" "), _c('i', {
-      staticClass: "fa fa-thumbs-o-up"
-    }), _c('span', {
-      staticStyle: {
-        "font-size": "0.8rem"
+    }, [_c('a', {
+      staticClass: "onReply",
+      on: {
+        "click": function($event) {
+          $event.preventDefault();
+          _vm.showComment(index, post.id)
+        }
       }
-    }, [_vm._v(" " + _vm._s(circle.likes_count))])])])])])
-  }), _vm._v(" "), _c('div', {
+    }, [_c('i', {
+      staticClass: "fa fa-commenting-o"
+    }), _c('span', [_vm._v(" " + _vm._s(post.post_comments_count))])]), _vm._v(" "), _c('i', {
+      staticClass: "fa fa-thumbs-o-up"
+    }), _c('span', [_vm._v(" " + _vm._s(post.likes_count))])])]), _vm._v(" "), (post.post_comments.length) ? _c('div', {
+      staticClass: "critic-replys"
+    }, _vm._l((post.post_comments), function(post_comment, index2) {
+      return _c('div', {
+        staticClass: "item",
+        on: {
+          "click": function($event) {
+            _vm.showComment(index, post.id, post_comment.user_id, post_comment.username)
+          }
+        }
+      }, [_c('a', [_vm._v(_vm._s(post_comment.username))]), _vm._v(" "), (post_comment.obj_username) ? [_vm._v("回复 "), _c('a', {
+        attrs: {
+          "href": ""
+        }
+      }, [_vm._v(_vm._s(post_comment.obj_username))])] : _vm._e(), _vm._v("\n                    :"), _c('span', [_vm._v(_vm._s(post_comment.content))]), _vm._v(" "), (post_comment.is_author || post.is_author) ? _c('a', {
+        staticClass: "del",
+        attrs: {
+          "href": ""
+        },
+        on: {
+          "click": function($event) {
+            $event.preventDefault();
+            _vm.delPostComment(index2, post_comment, post.post_comments)
+          }
+        }
+      }, [_vm._v("删除")]) : _vm._e()], 2)
+    })) : _vm._e()])])
+  }), _vm._v(" "), (_vm.posts.length == 0) ? _c('div', {
+    staticClass: "weshop-center-block",
+    staticStyle: {
+      "display": "block"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-tencent-weibo fa-5x"
+  }), _vm._v(" "), _c('div', [_vm._v("暂时没有相关帖子")])]) : _vm._e(), _vm._v(" "), _c('div', {
     staticStyle: {
       "height": "2rem"
     }
-  }), _vm._v(" "), _vm._m(2)], 2)
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "circle-head"
-  }, [_c('div', {
-    staticClass: "logo"
+  }), _vm._v(" "), (_vm.comment.is_show) ? _c('div', {
+    staticClass: "critic-reply-frame"
+  }, [_c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.comment.content),
+      expression: "comment.content"
+    }],
+    staticClass: "me-flex-10",
+    attrs: {
+      "rows": "1",
+      "name": "comment",
+      "placeholder": _vm.comment.placeholder
+    },
+    domProps: {
+      "value": (_vm.comment.content)
+    },
+    on: {
+      "blur": function($event) {
+        _vm.cancelComment()
+      },
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.comment.content = $event.target.value
+      }
+    }
   }), _vm._v(" "), _c('div', {
-    staticClass: "circle-h-mid"
-  }, [_c('span', {
-    staticClass: "me-flex-3"
-  }), _vm._v(" "), _c('span', {
-    staticClass: "me-flex-6",
-    staticStyle: {
-      "font-size": "0.9rem"
+    staticClass: "me-flex-2"
+  }, [_c('button', {
+    staticClass: "weui-btn weui-btn_mini",
+    class: [_vm.comment.content ? 'weui-btn_primary' : 'weui-btn_default weui-btn_plain-disabled'],
+    attrs: {
+      "disabled": !_vm.comment.content
+    },
+    on: {
+      "click": function($event) {
+        _vm.createComment()
+      }
     }
-  }, [_vm._v("校园商城")]), _vm._v(" "), _c('span', {
-    staticClass: "me-flex-3"
-  }, [_vm._v("进来逛逛 "), _c('i', {
-    staticClass: "fa fa-angle-right"
-  })])])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('a', {
-    staticClass: "onReply"
-  }, [_c('i', {
-    staticClass: "fa fa-commenting-o"
-  }), _c('span', {
-    staticStyle: {
-      "font-size": "0.8rem"
-    }
-  }, [_vm._v(" 0")])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
+  }, [_vm._v("发送\n            ")])])]) : _c('div', {
     staticClass: "circle-home-bottom"
   }, [_c('div', {
     staticClass: "me-flex-4"
@@ -39734,9 +39956,51 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "fa fa-pencil-square-o"
-  }), _vm._v("\n                    发帖子\n                ")])]), _vm._v(" "), _c('div', {
+  }), _vm._v("\n                发送\n            ")])]), _vm._v(" "), _c('div', {
     staticClass: "me-flex-4"
-  }, [_vm._v(" ")])])
+  }, [_vm._v(" ")])])], 2)
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "circle-head"
+  }, [_c('div', {
+    staticClass: "logo"
+  }), _vm._v(" "), _c('div', {
+    staticClass: "circle-h-mid"
+  }, [_c('span', {
+    staticClass: "me-flex-3"
+  }), _vm._v(" "), _c('span', {
+    staticClass: "me-flex-6"
+  }, [_vm._v("校园商城")]), _vm._v(" "), _c('span', {
+    staticClass: "me-flex-3"
+  }, [_c('a', {
+    attrs: {
+      "href": "/"
+    }
+  }, [_vm._v("进来逛逛 "), _c('i', {
+    staticClass: "fa fa-angle-right"
+  })])])])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "circle-nav"
+  }, [_c('span', {
+    staticClass: "me-flex-4 active"
+  }, [_c('a', {
+    attrs: {
+      "href": ""
+    }
+  }, [_vm._v("首页")])]), _vm._v(" "), _c('span', {
+    staticClass: "me-flex-4"
+  }, [_c('a', {
+    attrs: {
+      "href": ""
+    }
+  }, [_vm._v("精华")])]), _vm._v(" "), _c('span', {
+    staticClass: "me-flex-4"
+  }, [_c('a', {
+    attrs: {
+      "href": ""
+    }
+  }, [_vm._v("我的")])])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
@@ -39785,7 +40049,7 @@ module.exports = function listToStyles (parentId, list) {
 /* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(45);
+module.exports = __webpack_require__(42);
 
 
 /***/ })

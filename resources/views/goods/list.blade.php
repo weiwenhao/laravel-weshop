@@ -9,6 +9,7 @@
     .goods-list > .shaixuan > div {
         text-align: center;
         background-color: #fff;
+        line-height: 2rem;
     }
     .goods-list > .shaixuan > .active > a {
         color: #ff005c;
@@ -86,8 +87,6 @@
             ])->links('goods.goods_list_page') }}
         </div>
     </div>
-    <!--**********   底部导航  **************-->
-    @include('layouts.bottom_nav')
 @stop
 @section('js')
 <script>

@@ -50,9 +50,9 @@
         <!--**************** 加入购物车 立即购买 ********************-->
         <div calss="container" id="mai">
             <div class="row">
-                <div class="col-xs-4 switch-collect">
-                    <a><i class="fa fa-shopping-cart"></i><div>购物车</div></a>
-                    <a><i class="fa {{ $goods->is_collect?'fa-heart':'fa-heart-o' }} collect-icon"></i><div>收藏</div></a>
+                <div class="col-xs-4">
+                    <a href="{{ url('shop_carts') }}"><i class="fa fa-shopping-cart"></i><div>购物车</div></a>
+                    <a class="switch-collect"><i class="fa {{ $goods->is_collect?'fa-heart':'fa-heart-o' }} collect-icon"></i><div>收藏</div></a>
                 </div>
                 <div class="col-xs-4">
                     <a class="weui-btn weui-btn_warn showIOSActionSheet" ></i> 加入购物车</a>

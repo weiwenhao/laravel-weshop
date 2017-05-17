@@ -132,7 +132,7 @@
                 this.createdSuccess();
             },
             getPostCate(){
-                axios.get('/post_categories', {
+                axios.get('/api/post_categories', {
                 	/*params: {
                 		article_id: this.article_id,
                 	}*/
@@ -241,7 +241,7 @@
                 weui.toast('发表成功',  {
                     duration: 1000,
                     callback: function(){
-//                        location.href='/circles'
+                        location.href='/circles'
                     }
                 });
             },
