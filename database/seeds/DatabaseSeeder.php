@@ -24,6 +24,6 @@ class DatabaseSeeder extends Seeder
 //        $this->call(shopCartsTableSeeder::class);
 
         //圈子填充
-//        $this->call(PostsTableSeeder::class);
+        $this->call(PostsTableSeeder::class);
     }
 }

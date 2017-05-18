@@ -32,8 +32,8 @@
                         <label for="status">订单状态：</label>
                         <select name="shaixuan" id="status" class="form-control">
                             <option value="">全部</option>
-                            <option value=0 selected>未处理</option>
-                            <option value=1>已处理</option>
+                            <option value=0 selected>待处理</option>
+                            <option value=1>待完成</option>
                             <option value=2>已完成</option>
                             <option value=3>已关闭</option>
                         </select>
@@ -85,7 +85,7 @@
                     批量操作：
                     <button class="btn btn-primary handel-order" value="1">处理</button>
                     <button class="btn btn-success handel-order" value="2">完成</button>
-                    <button class="btn btn-danger handel-order" value="3">关闭</button>
+                    {{--<button class="btn btn-danger handel-order" value="3">关闭</button>--}}
                     <div id="buttons">
                     </div>
             </div>

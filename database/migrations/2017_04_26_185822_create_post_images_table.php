@@ -17,7 +17,7 @@ class CreatePostImagesTable extends Migration
             $table->increments('id');
             $table->string('image', 255)->comment('原图url');
             $table->string('sm_image', 255)->comment('略缩图url');
-            $table->unsignedInteger('post_id')->comment('对应的说说id');
+            $table->unsignedInteger('post_id')->index()->default(0)->comment('对应的说说id');
             $table->timestamps();
         });
     }

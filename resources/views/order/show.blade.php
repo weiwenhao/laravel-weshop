@@ -58,33 +58,35 @@
             </div>
             <?php $sum_price=0 ?>
             @foreach($order->orderGoods as $item)
-                <div class="row">
-                    <div class="col-xs-3">
-                        <img src="{{ $item->sm_image }}" class="img-responsive"/>
-                    </div>
-                    <div class="col-xs-7">
-                        <p>{{ $item->goods_name }}</p>
-                        <small>{{ $item->goods_attributes }}</small>
-                    </div>
-                    <div class="col-xs-2">
-                        <div class="pull-right">
-                            <span class="">￥{{ $item->shop_price }}</span>
-                            <br>
-                            <span class="pull-right">
+                <a href="{{ url('goods').'/'.$item->goods_id }}">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <img src="{{ $item->sm_image }}" class="img-responsive"/>
+                        </div>
+                        <div class="col-xs-7">
+                            <p>{{ $item->goods_name }}</p>
+                            <small>{{ $item->goods_attributes }}</small>
+                        </div>
+                        <div class="col-xs-2">
+                            <div class="pull-right">
+                                <span class="">￥{{ $item->shop_price }}</span>
+                                <br>
+                                <span class="pull-right">
                                  ×{{ $item->shop_number }}
                             </span>
+                            </div>
+                            @if($item->status == 0)
+                                <span class="pull-right" style="color: orange">未处理</span>
+                            @elseif($item->status == 1)
+                                <span class="pull-right" style="color: #2196f3">已处理</span>
+                            @elseif($item->status == 2)
+                                <span class="pull-right" style="color: #57bb5b">已完成</span>
+                            @elseif($item->status == 3)
+                                <span class="pull-right" style="color: red">已关闭</span>
+                            @endif
                         </div>
-                        @if($item->status == 0)
-                            <span class="pull-right" style="color: orange">未处理</span>
-                        @elseif($item->status == 1)
-                            <span class="pull-right" style="color: #2196f3">已处理</span>
-                        @elseif($item->status == 2)
-                            <span class="pull-right" style="color: #57bb5b">已完成</span>
-                        @elseif($item->status == 3)
-                            <span class="pull-right" style="color: red">已关闭</span>
-                        @endif
                     </div>
-                </div>
+                </a>
                 @if(!$loop->last)
                     <hr>
                 @endif

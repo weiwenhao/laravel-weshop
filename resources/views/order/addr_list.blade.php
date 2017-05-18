@@ -33,7 +33,7 @@
             <span class="fa fa-map-marker fa-5x"></span>
             <h3>你还没有收货地址</h3>
             <p>快去添加一个吧!</p>
-            <a href="{{ url('addrs/create') }}" class="btn btn-success btn-lg" style=""><i class="fa fa-plus"></i> 添加</a>
+            <a href="{{ url('addrs/create') }}" class="weui-btn  weui-btn_primary" style=""><i class="fa fa-plus"></i> 添加</a>
         </div>
 @stop
 @section('js')

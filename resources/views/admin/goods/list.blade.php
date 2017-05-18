@@ -160,22 +160,30 @@
         });
         $('body').on('click', 'button.del', function() {
             var url = '/admin/goods/'+$(this).val(); //this代表删除按钮的DOM对象
-            if( !confirm('你确定删除该商品吗?')){
-                return false;
-            }
-            $.ajax({
-                type: "DELETE",
-                url: url,
-                success: function(data){
-                    if (data == 1){
+
+            swal({
+                title: "你确定要删除该商品吗?",
+                text: "商品被删除后会进入到回收站，且对用户不可见。",
+                /*type: "warning",*/
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                closeOnConfirm: true
+            }, function(){
+                //点击确定后回调
+                $.ajax({
+                    type: "DELETE",
+                    url: url,
+                    success: function(data){
                         //刷新dt
                         table.ajax.reload(null, false); //databales对象从新加载
-                        alert('删除成功');
+                        swal("删除成功", '', 'success')
+                    },
+                    error : function (errors) {
+                        swal(errors.responseText, '', "danger")
                     }
-                },
-                error : function (errors) {
-                     alert(errors.responseText);
-                }
+                });
             });
         });
     </script>

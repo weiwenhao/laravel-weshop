@@ -1,10 +1,10 @@
 <?php
 
-
 Route::get('/test', function (){
-    /*$dt = \Carbon\Carbon::createFromTimestamp(strtotime('+ 28 minute'));
-    $res = timeDiff(time(),strtotime('2017-5-10 09:20:20'));*/
+   $post = \App\Models\Post::find(35);
+   dd($post->postImages);
 });
+
 
 
 Route::get('/', function (){
@@ -42,12 +42,25 @@ Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
     Route::resource('orders', 'OrderController');
     //个人中心
     Route::get('me', 'MeController@index'); //个人中心主页
+
+    /******************圈子管理******************/
+    //帖子管理
+    Route::post('circles/upload', 'CircleController@upload');
+    Route::resource('circles', 'CircleController');
+    //帖子分类
+    Route::get('api/post_categories', 'CircleController@ajaxCategories');
+    Route::get('api/posts', 'CircleController@ajaxPosts');
+    Route::delete('api/posts/{id}', 'CircleController@ajaxDestroy');
+    Route::put('api/post_likes/{post_id}', 'CircleController@switchLikes');
+    //帖子评论
+    Route::post('api/post_comments', 'PostCommentController@Create');
+    Route::delete('api/post_comments/{id}', 'PostCommentController@destroy');
 });
 
 /**
  * 后台登陆注册区
  */
-Route::group(['prefix' => 'admin','namespace'=>'Admin'], function () {
+Route::group(['prefix' => 'admin', 'namespace'=>'Admin'], function () {
     //登录
     Route::get('login','Auth\LoginController@showLoginForm');
     Route::post('login','Auth\LoginController@login');

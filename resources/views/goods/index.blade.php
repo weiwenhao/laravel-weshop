@@ -70,23 +70,23 @@
             </div>
             <p class="weui-grid__label">校园商城</p>
         </a>
-        <a href="#" class="weui-grid">
+        <a href="{{ url('circles') }}" class="weui-grid">
             <div class="weui-grid__icon">
                 <img src="/images/icon4.png" alt="">
             </div>
             <p class="weui-grid__label">校园圈子</p>
-        </a>
-        <a href="#" class="weui-grid">
-            <div class="weui-grid__icon">
-                <img src="/images/icon5.png" alt="">
-            </div>
-            <p class="weui-grid__label">校内资讯</p>
         </a>
         <a href="{{ url('orders') }}" class="weui-grid">
             <div class="weui-grid__icon">
                 <img src="/images/icon6.png" alt="">
             </div>
             <p class="weui-grid__label">订单管理</p>
+        </a>
+        <a href="#" class="weui-grid">
+            <div class="weui-grid__icon">
+                <img src="/images/icon5.png" alt="">
+            </div>
+            <p class="weui-grid__label">消息中心</p>
         </a>
     </div>
     <!-- 商品列表-->
@@ -113,7 +113,6 @@
             </div>
         @endforeach
     </div>
-    <div class="height-4rem"></div>
     <!--**********   底部导航  **************-->
     @include('layouts.bottom_nav')
 @stop

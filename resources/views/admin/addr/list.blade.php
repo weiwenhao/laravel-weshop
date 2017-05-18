@@ -25,7 +25,6 @@
                         <th>ID</th>
                         <th>姓名</th>
                         <th>手机号</th>
-                        <th>宿舍园</th>
                         <th>宿舍楼</th>
                         <th>门牌号</th>
                         <th>创建时间</th>
@@ -95,9 +94,6 @@
                     'data':'phone'
                 },
                 {
-                    'data':'garden_name'
-                },
-                {
                     'data':'floor_name'
                 },
                 {
@@ -131,7 +127,7 @@
             var url = '/admin/addrs/'+$(this).val(); //this代表删除按钮的DOM对象
             swal({
                     title: "你确定要删除该地址吗?",
-                    text: "删除该地址后,用户将无法看到该地址,请慎重!",
+                    text: "删除该地址后,用户将无法看到该地址。如果地址无错误,请勿删除该地址!",
                         /*type: "warning",*/
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",

@@ -47,9 +47,6 @@
         <h3>暂时没有收藏</h3>
         <div>快去逛逛吧</div>
     </div>
-    <div class="height-4rem"></div>
-    {{--底部导航--}}
-    @include('layouts.bottom_nav')
 @stop
 @section('js')
     <script type="text/javascript" src="/js/address.js"></script>

@@ -17,7 +17,6 @@ class CreatePostsTable extends Migration
             $table->increments('id');
             $table->string('content', 255);
             $table->unsignedInteger('user_id')->comment('用户id');
-            $table->unsignedInteger('likes_count')->default(0);
             $table->unsignedTinyInteger('post_category_id')->index()->comment('对应分类id');
             $table->timestamps();
         });

@@ -90,9 +90,8 @@
             <p>可以去看看有哪些想买的</p>
         </div>
     </div>
-    <div class="height-4rem"></div>
     {{--底部导航--}}
-    @include('layouts.bottom_nav')
+    {{--@include('layouts.bottom_nav')--}}
 @stop
 @section('js')
 <script>
@@ -111,6 +110,9 @@
             });
         }
     });
+    /**
+     * 重新下单
+     */
     $('.pay-order').click(function () {
         if(!$(this).attr('value')){
             alert('系统错误，请联系客服');

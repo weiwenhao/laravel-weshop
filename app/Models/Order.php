@@ -129,9 +129,11 @@ class Order extends Model
      * @param int $goods_id
      * @param string $goods_attribute_ids
      * @param int $shop_number
+     * @param bool $is_lock
+     * @param bool $is_check_number
      * @return string 错误信息 或者 '';
      */
-    public function checkOneGoods($goods_id, $goods_attribute_ids='', $shop_number=1){
+    public function checkOneGoods($goods_id, $goods_attribute_ids='', $shop_number=1, $is_lock = false, $is_check_number = true){
         //检验商品id是否存在 (用户伪造表单时造成的情况)
         $goods = Goods::find($goods_id); // model or null
         if(!$goods){
@@ -150,14 +152,21 @@ class Order extends Model
             }
         }
 
-        //库存量检测 无论有商品属性还是没有商品属性都需要进行库存量的检测
-        $number = Number::where('goods_id', $goods_id)->where('goods_attribute_ids', $goods_attribute_ids)->first();
-        if(!$number || $number->number == 0){
-            return str_limit($goods->name, 15, '').'    '.$this->getAttrValues($goods_attribute_ids).'  已售馨';
-        }
-        //库存量再次检测
-        if($shop_number > $number->number){
-            return str_limit($goods->name, 15, '').' '.$this->getAttrValues($goods_attribute_ids).'  仅剩'.$number->number.'件';
+        if($is_check_number){
+            //库存量检测 无论有商品属性还是没有商品属性都需要进行库存量的检测
+            if($is_lock){
+                //如果第4个参数为true时则加入排它锁, todo 这里 goods_id都等于8时, goods_attribute_ids 不同,会出现死锁情况吗? 如果两者联合使用一个唯一索引的话,则不会出现死锁情况
+                $number = Number::where('goods_id', $goods_id)->where('goods_attribute_ids', $goods_attribute_ids)->lockForUpdate()->first();
+            }else{
+                $number = Number::where('goods_id', $goods_id)->where('goods_attribute_ids', $goods_attribute_ids)->first();
+            }
+            if(!$number || $number->number == 0){
+                return str_limit($goods->name, 15, '').'    '.$this->getAttrValues($goods_attribute_ids).'  已售馨';
+            }
+            //库存量再次检测
+            if($shop_number > $number->number){
+                return str_limit($goods->name, 15, '').' '.$this->getAttrValues($goods_attribute_ids).'  仅剩'.$number->number.'件';
+            }
         }
         return '';
     }
@@ -192,6 +201,7 @@ class Order extends Model
 
     /**
      * todo 防止该方法被重复调用
+     * todo 开启事务
      * @param $order_goods session中的商品, 包含的信息有  'goods.name', 'goods.sm_image', 'shop_carts.shop_number', 'shop_carts.id',
      * 'shop_carts.goods_id', 'shop_carts.goods_attribute_ids'
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response
@@ -216,7 +226,7 @@ class Order extends Model
             'total_price' => $total_price
         ]);
 
-        //订单商品数据转移
+        //订单商品数据转移 //todo 分成两个方法来处理
         foreach ($order_goods as $item){
             //订单商品表创建数据, tips 必须使用模型创建才能 生成 created_at和updated_at时间, 通过改时间在后台进行订单的统计
             OrderGoods::create([
@@ -229,12 +239,18 @@ class Order extends Model
                 'shop_number' => $item->shop_number,
                 'shop_price' => $item->shop_price,
             ]);
+            //库存递减  购买量递增
+            Number::where('goods_id', $item->goods_id)->where('goods_attribute_ids', $item->goods_attribute_ids)->decrement('number', $item->shop_number);
+            Goods::where('id', $item->goods_id)->increment('buy_count', $item->shop_number);
             //删除购物车表中的这条记录
-//            ShopCart::where('id', $item->id)->delete(); //todo 待取消注释
+            ShopCart::where('goods_id', $item->goods_id)
+                ->where('goods_attribute_ids', $item->goods_attribute_ids)
+                ->where('user_id', \Auth::user()->id)
+                ->delete();
         }
         //删除session中的数据
-//        session()->forget('order_goods'); //todo 待取消注释
-//        session()->forget('order_addr_id'); //todo 待取消注释
+        session()->forget('order_goods');
+        session()->forget('order_addr_id');
         //像微信客户端发起预付款id申请
         return $order;
     }

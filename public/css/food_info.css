@@ -5,7 +5,7 @@
 .me-header-food-info a span{position:absolute; left:.6rem;top:.6rem;font-size: 1.4rem}
 
 .goods-info-img{position:fixed;top:0;z-index:0;width:100%;}
-.goods-info-img img{ max-width: 100%; height: auto;    display: block; width: 100%} /*不加width100% 无法适应大屏幕手机*/
+.goods-info-img img{width:100%;}
 .goods-info-img-empty{height:20rem;opacity:0;}
 .goods-info{position:relative;z-index:1;width:100%;background:whitesmoke}
 .goods-info .goods-list{padding:.2rem .7rem;background:#fff}
@@ -26,9 +26,10 @@
 #mai{position:fixed;width:100%;z-index:5;bottom:0;}
 #mai .row{position:relative; width:100%;  margin:0;background:#fff}
 #mai .row .off{position:absolute;width:66.7%;height:100%;right:0;background: rgba(0, 0, 0, 0.6);z-index:10;}
-#mai .row .off .icon{position:relative;font-size:3rem;margin-left:44%;line-height:90%;color:#fff;z-index:10}
+#mai .row .off .icon{position:relative;font-size:3rem;margin-left:42%;line-height:100%;color:#fff;z-index:10}
 #mai .row .col-xs-4{padding:0;}
-#mai .row .col-xs-4:nth-of-type(1) a{background:#eee;border-radius:0;color:#f90;}
+#mai .row .col-xs-4:nth-of-type(1) a{background:#fff;border-radius:0;color:#777;display:block;float:left;width:50%;line-height:;text-align:center;border-right:1px solid #eee;border-top:1px solid #eee}
+#mai .row .col-xs-4:nth-of-type(1) a>div{font-size:.6rem}
 #mai .row .col-xs-4:nth-of-type(2){font-size:13px;}
 #mai .row .col-xs-4:nth-of-type(2) a{background:#f90}
 #mai .row .col-xs-4:nth-of-type(2) tt{color:#f90;font-size:16px;font-weight:600;}
@@ -37,4 +38,4 @@
 #mai .row .col-xs-4 .weui-btn_warn{padding: 0 .5rem;}
 #mai .row .weui-btn{border-radius:0;}
 #mai .row p{margin-bottom:0;}
-#mai .weui-btn{font-size:1rem;}
+#mai .weui-btn{font-size:1.2rem;}

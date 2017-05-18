@@ -27,9 +27,15 @@ class OrderController extends Controller
     {
 //        dd(request()->all());
         $where = [];
-        if(\request('is_pay') !== null){
-            $where[] = ['is_pay', \request('is_pay')];
+        if(\request('is_pay') === '1'){ //处理通过.
+            //直接进行一个query的得到?
+            $query = Order::whereNotNull('paid_at');
+        }elseif(\request('is_pay') === '0'){
+            $query = Order::whereNull('paid_at');
+        }elseif(\request('is_pay') === null){
+            $query = Order::query();
         }
+
         if(\request('status') !== null){
             $where[] = ['status', \request('status')];
         }
@@ -40,7 +46,7 @@ class OrderController extends Controller
             $where[] = ['category_id', \request('category_id')];
         }
 
-        $query = Order::select('orders.*', 'goods.id as goods_id', 'goods.name as goods_name', 'goods.category_id',
+        $query = $query->select('orders.*', 'goods.id as goods_id', 'goods.name as goods_name', 'goods.category_id',
             'order_goods.goods_attribute_ids', 'order_goods.shop_price', 'order_goods.shop_number', 'order_goods.status', 'order_goods.id as order_goods_id') //order_goods_id
             ->join('order_goods', 'order_goods.order_id', '=', 'orders.id')
             ->join('goods', 'order_goods.goods_id', '=', 'goods.id')
@@ -49,7 +55,7 @@ class OrderController extends Controller
         return Datatables::of($query)
             ->addColumn('self_info', function (Order $order){
             //通过admin,处理出一段希望展示出来的roles字段,以行为单位
-                return "$order->name<br/>$order->phone<br>$order->garden_name $order->floor_name $order->number";
+                return "$order->name<br/>$order->phone<br> $order->floor_name $order->number";
             })
             ->addColumn('order_content', function (Order $order){
                 return $order->orderContent();
