@@ -70,7 +70,7 @@
             </div>
             <p class="weui-grid__label">校园商城</p>
         </a>
-        <a href="{{ url('circles') }}" class="weui-grid">
+        <a href="{{ url('posts') }}" class="weui-grid">
             <div class="weui-grid__icon">
                 <img src="/images/icon4.png" alt="">
             </div>

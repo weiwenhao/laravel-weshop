@@ -45,13 +45,17 @@ Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
 
     /******************圈子管理******************/
     //帖子管理
-    Route::post('circles/upload', 'CircleController@upload');
-    Route::resource('circles', 'CircleController');
-    //帖子分类
-    Route::get('api/post_categories', 'CircleController@ajaxCategories');
-    Route::get('api/posts', 'CircleController@ajaxPosts');
-    Route::delete('api/posts/{id}', 'CircleController@ajaxDestroy');
-    Route::put('api/post_likes/{post_id}', 'CircleController@switchLikes');
+    Route::get('posts', 'PostController@index');
+    Route::get('posts/create', 'PostController@create');
+    Route::get('posts/{post_id}', 'PostController@show');
+    //圈子api管理
+    Route::post('api/posts/upload', 'PostController@upload');
+    Route::post('api/posts', 'PostController@postStore');
+    Route::get('api/post_categories', 'PostController@ajaxCategories');
+    Route::get('api/posts', 'PostController@ajaxPosts');
+    Route::get('api/posts/{post_id}', 'PostController@ajaxPost');
+    Route::delete('api/posts/{post_id}', 'PostController@ajaxDestroy');
+    Route::put('api/post_likes/{post_id}', 'PostController@switchLikes');
     //帖子评论
     Route::post('api/post_comments', 'PostCommentController@Create');
     Route::delete('api/post_comments/{id}', 'PostCommentController@destroy');

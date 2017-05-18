@@ -8,7 +8,7 @@ use App\Models\PostImage;
 use EasyWeChat\Foundation\Application;
 use Illuminate\Http\Request;
 
-class CircleController extends Controller
+class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,7 +20,7 @@ class CircleController extends Controller
     {
         //jssdk
         $js = $wechat->js;
-        return view('circle.list', compact('js'));
+        return view('post.list', compact('js'));
     }
 
     /**
@@ -30,16 +30,27 @@ class CircleController extends Controller
      */
     public function create()
     {
-        return view('circle.create');
+        return view('post.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Display the specified resource.
      *
-     * @param PostRequest $request
+     * @param  int $post_id
+     * @param Application $wechat
      * @return \Illuminate\Http\Response
      */
-    public function store(PostRequest $request)
+    public function show($post_id, Application $wechat)
+    {
+        //jssdk
+        $js = $wechat->js;
+        return view('post.show', compact('post_id', 'js'));
+    }
+
+
+
+
+    public function postStore(PostRequest $request)
     {
         $post_category_id = $request->get('post_category_id');
         $content = $request->get('content');
@@ -50,52 +61,6 @@ class CircleController extends Controller
         ]);
         return $post;
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
 
     /**
      * 存储文章图片
@@ -149,6 +114,12 @@ class CircleController extends Controller
         return $posts;
     }
 
+    public function ajaxPost(Post $post, $post_id)
+    {
+        $post = $post->getPost($post_id);
+        return $post;
+    }
+
     /**
      * ajax删除帖子
      * @param $id
@@ -176,11 +147,11 @@ class CircleController extends Controller
      */
     public function switchLikes($post_id)
     {
-        //判断用户是否关注了该帖子
-        $post_likes = \DB::table('post_likes')
+        $query = \DB::table('post_likes')
             ->where('user_id', \Auth::user()->id)
-            ->where('post_id', $post_id)
-            ->first();
+            ->where('post_id', $post_id);
+        //判断用户是否关注了该帖子
+        $post_likes = $query->first();
         if(!$post_likes){
             //创建一条
             \DB::table('post_likes')->insert([
@@ -188,7 +159,7 @@ class CircleController extends Controller
                 'post_id' => $post_id,
             ]);
         }else{
-            $post_likes->delete();
+            $query->delete();
         }
     }
 }

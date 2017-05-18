@@ -138,5 +138,5 @@ img{vertical-align:middl;}
 .critic-replys-info .me-flex-10 p{margin:.2rem 0;color:#444;}
 .critic-replys-info .on-reply{float:right;margin-right:.6rem;font-size:1rem;} 
 .discuss-bottom{position: fixed;z-index: 10;bottom: 0;width: 100%;padding: .5rem 0;border-top: 1px solid #ccc;background: #fff;text-align:center;color:#777;font-size:1.1rem}
-.discuss-bottom .me-flex-6 a{display:block;border-left:1px solid #eee;border-right:1px solid #eee;}
+.discuss-bottom .me-flex-4 a{display:block;border-left:1px solid #eee;border-right:1px solid #eee;}
 /*↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑- 帖子信息end  -↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑*/

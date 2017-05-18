@@ -18,6 +18,10 @@ class PostCommentController extends Controller
             'obj_username' => (string) $request->get('obj_username')
         ]);
         $post_comment->username = \Auth::user()->username;
+        $post_comment->logo = \Auth::user()->logo;
+        $post_comment->created_at_str = $post_comment->created_at->format('m-d H:i');
+        //评论内容换行
+        $post_comment->content = nl2br(htmlspecialchars($post_comment->content));
         return $post_comment;
     }
 

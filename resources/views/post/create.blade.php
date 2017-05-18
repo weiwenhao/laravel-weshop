@@ -1,11 +1,11 @@
-@extends('circle.layout')
+@extends('post.layout')
 @section('css')
 <style>
 
 </style>
 @stop
 @section('content')
-<create-circle></create-circle>
+<create-post></create-post>
 @stop
 @section('js')
 <script type="text/javascript" class="uploader js_show">
