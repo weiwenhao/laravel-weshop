@@ -133,7 +133,7 @@ class CircleController extends Controller
      */
     public function ajaxCategories()
     {
-        $categories = \DB::table('post_categories')->get();
+        $categories = \DB::table('post_categories')->orderBy('sort', 'asc')->get();
         return $categories;
     }
 
@@ -167,5 +167,28 @@ class CircleController extends Controller
         //删除图片
         $post->delImage($post->id);
         return response('你成功删除了'.$res.'条帖子', 200);
+    }
+
+    /**
+     * 用户关注或者取消关注帖子
+     * @param $post_id
+     * @return void
+     */
+    public function switchLikes($post_id)
+    {
+        //判断用户是否关注了该帖子
+        $post_likes = \DB::table('post_likes')
+            ->where('user_id', \Auth::user()->id)
+            ->where('post_id', $post_id)
+            ->first();
+        if(!$post_likes){
+            //创建一条
+            \DB::table('post_likes')->insert([
+                'user_id' => \Auth::user()->id,
+                'post_id' => $post_id,
+            ]);
+        }else{
+            $post_likes->delete();
+        }
     }
 }

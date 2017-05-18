@@ -51,6 +51,7 @@ Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
     Route::get('api/post_categories', 'CircleController@ajaxCategories');
     Route::get('api/posts', 'CircleController@ajaxPosts');
     Route::delete('api/posts/{id}', 'CircleController@ajaxDestroy');
+    Route::put('api/post_likes/{post_id}', 'CircleController@switchLikes');
     //帖子评论
     Route::post('api/post_comments', 'PostCommentController@Create');
     Route::delete('api/post_comments/{id}', 'PostCommentController@destroy');

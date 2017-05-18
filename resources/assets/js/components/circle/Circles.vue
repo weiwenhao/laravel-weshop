@@ -63,7 +63,12 @@
                         <a class="onReply" @click.prevent="showComment(index ,post.id)">
                             <i class="fa fa-commenting-o"></i><span> {{ post.post_comments_count }}</span>
                         </a>
-                        <i class="fa fa-thumbs-o-up"></i><span> {{ post.likes_count }}</span>
+                        <a href="" @click.prevent="switchLike(post)">
+                           <i class="fa fa-thumbs-o-up"
+                              :class="[post.is_like?'fa-thumbs-up':'fa-thumbs-o-up']"
+                           ></i>
+                            <span>{{ post.user_likes_count }}</span>
+                        </a>
                     </span>
                 </div>
                 <!--评论-->
@@ -74,7 +79,7 @@
                         <template v-if="post_comment.obj_username">回复 <a href="">{{ post_comment.obj_username }}</a></template>
                         :<span>{{ post_comment.content }}</span>
                         <a href="" class="del" v-if="post_comment.is_author || post.is_author"
-                           @click.prevent="delPostComment(index2, post_comment, post.post_comments)"
+                           @click.prevent.stop="delPostComment(index2, post_comment, post.post_comments)"
                         >删除</a>
                     </div>
                 </div>
@@ -82,16 +87,30 @@
         </div>
         <!--帖子内容end-->
 
-        <!--帖子为空时start-->
-        <div class="weshop-center-block"
-             style="display:block;"
-             v-if="posts.length == 0"
-        >
-            <i class="fa fa-tencent-weibo fa-5x"></i>
-            <div>暂时没有相关帖子</div>
-        </div>
-        <!--帖子为空时end-->
 
+        <!--loading start-->
+        <div class="weui-loadmore" v-if="is_show_loading">
+            <i class="weui-loading"></i>
+            <span class="weui-loadmore__tips">正在加载</span>
+        </div>
+        <!--loading end-->
+        <template v-else>
+            <!--帖子为空时start-->
+            <div class="weshop-center-block"
+                 style="display:block;"
+                 v-if="posts.length == 0"
+            >
+                <i class="fa fa-tencent-weibo fa-5x"></i>
+                <div>暂时没有相关帖子</div>
+            </div>
+            <!--帖子为空时end-->
+
+            <!-- on more start-->
+            <div class="weui-loadmore weui-loadmore_line" v-else-if="!is_more">
+                <span class="weui-loadmore__tips">已经到底啦</span>
+            </div>
+            <!--on more end-->
+        </template>
 
         <!--底部start-->
         <div style="height:2rem"></div>
@@ -120,7 +139,7 @@
             <div class="me-flex-4">
                 <a class="circle_send" id="fatie" href="/circles/create"><!---->
                     <i class="fa fa-pencil-square-o" ></i>
-                    发送
+                    发帖子
                 </a>
             </div>
             <div class="me-flex-4">&nbsp;</div>
@@ -141,6 +160,7 @@
                     sort : 'desc',
                     post_category_id : null
                 },
+                next_offset : 0,
                 comment : { //评论对象只有一套,保证了唯一性
                     is_show : false,
                     post_id : null,
@@ -152,6 +172,8 @@
                 },
                 post_categories : [],
                 posts : [],
+                is_show_loading : false,
+                is_more : true,
             }
         },
         created(){
@@ -159,19 +181,66 @@
             this.getCircles();
         },
         mounted(){
-
+            $(window).scroll(() =>{
+                 /*console.log('整个页面的高度:'+ $(document).height()); //固定值
+                 console.log('可视区域的高度:'+ $(window).height()); //缩小浏览器时会改变
+                 console.log('匹配元素相对于滚动条顶部的偏移' + $(document).scrollTop());*/
+//                 console.log('可视区域高度:'+this.height());
+                if($(document).height() - $(window).height() < $(document).scrollTop() +$('.circle-home-bottom').height()){
+                    //不在loading中并且存在更多的数据才能请求该方法加载更多的数据
+                    if(!this.is_show_loading && this.is_more){
+                         this.nextCircles();
+                     }
+                }
+            })
         },
         methods : {
             //得到帖子数据,包括评论,图片
             getCircles(){
+                this.is_show_loading = true;
                 axios.get('/api/posts', {
-                    params: this.params //params参数会被附加到get请求中
+                    params: this.params
                 })
                 .then(response=> {
                     this.posts = response.data;
+                    if(response.data.length < this.params.limit) {
+                        this.is_more = false; //不存在多数据了
+                    }
+                    this.$nextTick(function () {
+                        this.is_show_loading = false;
+                    })
                 })
                 .catch(error=> {
                 	console.log(error);
+                });
+            },
+            nextCircles(){
+                this.is_show_loading = true;
+                this.next_offset = this.next_offset + this.params.limit + 1; //当前的偏移量,加上条数,+1
+                //得到第一次的next_params
+                axios.get('/api/posts', {
+                    params: {
+                        offset : this.next_offset,
+                        limit : this.params.limit,
+                        order :  this.params.order,
+                        sort :  this.params.sort,
+                        post_category_id :  this.params.post_category_id
+                    }
+                })
+                .then(response=> {
+                   if(response.data.length > 0) {
+                       //如果数据为空时也应吧is_show_loading = false;
+                       //将取出的数据push到中
+                       this.posts.push.apply(this.posts, response.data);
+                   }else{
+                       this.is_more = false; //如果没有返回说明不存在更多的贴子了
+                   }
+                    this.$nextTick(function () {
+                        this.is_show_loading = false;
+                    })
+                })
+                .catch(error=> {
+                    console.log(error);
                 });
             },
             //得到帖子分类数据
@@ -215,6 +284,7 @@
                 //使发送框获得焦点
                 this.$nextTick(function () { //要等上面的数据变化完毕后再调用获得焦点事件
                     $('[name=comment]').focus();
+                    this.setTextarea()//设置评论框js特效
                 });
             },
             //取消评论框
@@ -235,7 +305,14 @@
                     return
                 }
                 //todo 帖子评论字数的前端限制
+
                 let loading = weui.loading('请稍等');
+                setTimeout(function () { //如果超过5秒钟没有响应则自动关闭loading框,并提示一个超时响应
+                    loading.hide(function() {
+                        weui.topTips('请求超时', 3000);
+                    });
+                }, 5000);
+
                  axios.post('/api/post_comments', this.comment)
                  .then((response)=> {
                      //确定评论的index,往数组的底部添加一条数据,
@@ -256,7 +333,9 @@
                      });
                  })
                  .catch((error)=> {
-                 	console.log('失败')
+                     loading.hide(function () {
+                         weui.topTips('评论失败，请联系客服', 3000);
+                     });
                  });
             },
             //删除帖子
@@ -292,8 +371,8 @@
                     urls: urls // 需要预览的图片http链接列表
                 });
             },
-            //
-            setTextArea(){
+            //设置评论框js事件
+            setTextarea(){
                 let replyHeight = $('.critic-reply-frame textarea ').height();
                 $('.critic-reply-frame textarea ').each(function () {
                     this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
@@ -305,6 +384,15 @@
                         this.style.height = replyHeight*4+'px';
                     }
                 });
+            },
+            //点赞或者取消点赞
+            switchLike(post){
+                //根据状态+或者-
+                post.is_like?post.user_likes_count--:post.user_likes_count++;
+                post.is_like = !post.is_like;
+                 axios.put('/api/post_likes/'+post.id, {
+                  	//key : value
+                 })
             }
         }
     }
@@ -312,4 +400,7 @@
 <style>
     .weshop-center-block{width:60%;margin-top:10%;text-align:center;color:#bbb;margin-left: auto;margin-right: auto; margin-top: 30%;}
     .weshop-center-block i{font-size:8rem;}
+    .weui-loadmore_line .weui-loadmore__tips {
+        background-color: #f5f5f5;
+    }
 </style>

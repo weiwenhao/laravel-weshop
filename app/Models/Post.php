@@ -34,6 +34,15 @@ class Post extends Model
         return $this->belongsTo(PostCategory::class);
     }
 
+    public function userLikes()
+    {
+        return $this->belongsToMany(User::class, 'post_likes', 'post_id', 'user_id');
+    }
+
+
+
+    /*****************************可调用方法区域******************************/
+
     public function getPosts($request)
     {
         $offset = $request->get('offset', 0);
@@ -45,11 +54,18 @@ class Post extends Model
             $where[] = ['post_category_id', $post_category_id];
         }
         $posts = $this->select('posts.id', 'posts.content', 'posts.post_category_id', 'posts.created_at',
-            'posts.likes_count', 'users.username', 'users.id as user_id', 'users.logo', 'post_categories.name as post_category_name')
+            /*'posts.likes_count',*/ 'users.username', 'users.id as user_id', 'users.logo', 'post_categories.name as post_category_name',
+            'post_likes.user_id as is_like'
+            )
             ->with('postImages', 'postComments')
             ->withCount('postComments')
+            ->withCount('userLikes')
             ->join('users', 'users.id', '=', 'posts.user_id')
             ->join('post_categories', 'post_categories.id', '=', 'posts.post_category_id')
+            ->leftJoin('post_likes', function ($join){ //判断当前用户是否点赞了该帖子 结合上面的  post_likes.user_id as is_like
+                $join->on('posts.id', '=', 'post_likes.post_id')
+                    ->where('post_likes.user_id', \Auth::user()->id);
+            })
             ->offset($offset)
             ->limit($limit)
             ->orderBy('posts.'.$order , $sort)
@@ -57,7 +73,6 @@ class Post extends Model
             ->get();
         $posts = $this->transform($posts);
         return $posts;
-
     }
 
     private function transform($posts)
@@ -67,6 +82,9 @@ class Post extends Model
             $item->created_at_str = $item->created_at->format('m-d H:i');
             //当前用户是否为当前帖子的作者
             $item->is_author = \Auth::user()->id == $item->user_id;
+            //当前用户是否点赞过该篇帖子
+//            $item->is_like = $this->isLike($item);
+            //帖子评论信息
             $item->post_comments = $this->commentTransform($item->postComments);
             return $item;
         });
@@ -94,5 +112,10 @@ class Post extends Model
             @unlink(public_path($post_image->sm_image));
             $post_image->delete();
         }
+    }
+
+    private function isLike($post)
+    {
+        //得到被点赞的所有人? 然后判断当前用户是否在这些人里面?
     }
 }

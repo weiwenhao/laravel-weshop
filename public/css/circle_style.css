@@ -73,7 +73,7 @@ img{vertical-align:middl;}
 .circle-critic{}
 .circle-critic .critic-top{width:100%;height:2rem;line-height:2rem;}
 .circle-critic .critic-top>.critic-t-r{float:right;padding-right:1rem;color:#777;font-size:1.1rem}
-.circle-critic .critic-top>.critic-t-r>i{margin-left:1rem;}
+.circle-critic .critic-top>.critic-t-r>a{margin-left:1rem;}
 /*回复*/
 .critic-replys{background:whitesmoke;width:95%;padding:.4rem;border-radius:5%;}
 .critic-replys .item{font-size:.8rem;}

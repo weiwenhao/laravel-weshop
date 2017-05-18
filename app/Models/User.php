@@ -26,4 +26,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function postLikes()
+    {
+        return $this->belongsToMany(Post::class, 'post_likes', 'user_id', 'post_id');
+    }
 }
