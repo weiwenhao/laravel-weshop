@@ -34,7 +34,7 @@
         <div class="swiper-wrapper">
             @foreach($actives as $active)
                 <div class="swiper-slide">
-                    <a href="{{ $active->is_content?'/actives/'.$active->url:'#' }}">
+                    <a href="{{ $active->is_content?'/actives/'.$active->id:'#' }}">
                         <img class="img-responsive" src="{{ $active->image }}" />
                     </a>
                 </div>

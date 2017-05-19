@@ -24,62 +24,62 @@
             <div class="circle-content-img" v-if="post.post_images && post.post_images[0]">
                 <div class="me-flex-12" v-for="post_image in post.post_images">
                     <img class="me-img lazy"
-                         :src="post_image.sm_image"
+                         :src="post_image.image"
                          @click="showImages(post_image.image, post.post_images)"
                     >
                 </div>
             </div>
             <!--评论-->
-            <template v-if="post.post_comments && post.post_comments[0]">
-                <div class="circle-critic">
-                    <!--<div class="critic-top">&lt;!&ndash;评论数量和赞&ndash;&gt;
-                        <span class="critic-t-r">
-                            <a class="onReply" @click.prevent="showComment(index ,post.id)">
-                                <i class="fa fa-commenting-o"></i><span> {{ post.post_comments_count }}</span>
-                            </a>
-                            <a href="" @click.prevent="switchLike(post)">
-                               <i class="fa fa-thumbs-o-up"
-                                  :class="[post.is_like?'fa-thumbs-up':'fa-thumbs-o-up']"
-                               ></i>
-                                <span>{{ post.user_likes_count }}</span>
-                            </a>
-                        </span>
-                    </div>-->
-                    <!--评论内容区-->
-                    <div class="replys-top">
-                        <span class="replys-num">{{ post.post_comments_count }} 条评论</span>
-                        <span class="sort">{{ post.user_likes_count }} 赞</span>
-                    </div>
+            <div class="circle-critic">
+                <!--<div class="critic-top">&lt;!&ndash;评论数量和赞&ndash;&gt;
+                    <span class="critic-t-r">
+                        <a class="onReply" @click.prevent="showComment(index ,post.id)">
+                            <i class="fa fa-commenting-o"></i><span> {{ post.post_comments_count }}</span>
+                        </a>
+                        <a href="" @click.prevent="switchLike(post)">
+                           <i class="fa fa-thumbs-o-up"
+                              :class="[post.is_like?'fa-thumbs-up':'fa-thumbs-o-up']"
+                           ></i>
+                            <span>{{ post.user_likes_count }}</span>
+                        </a>
+                    </span>
+                </div>-->
+                <!--评论内容区-->
+                <div class="replys-top">
+                    <span class="replys-num">{{ post.post_comments_count }} 条评论</span>
+                    <span class="sort">{{ post.user_likes_count }} 赞</span>
+                </div>
+                <template v-if="post.post_comments && post.post_comments[0]">
                     <hr>
                     <!--回复详情-->
                     <div class="critic-replys-info" v-for="(post_comment, index) in  post.post_comments">
-                        <!--头像,名称,日期,板块-->
-                        <div class="circle-top">
-                            <div class="me-flex-2">
-                                <img class="me-img lazy" :src="post_comment.logo">
+                    <!--头像,名称,日期,板块-->
+                    <div class="circle-top">
+                        <div class="me-flex-2">
+                            <img class="me-img lazy" :src="post_comment.logo">
+                        </div>
+                        <div class="me-flex-10">
+                            <div class="circle-name">
+                                <a>{{ post_comment.username }}</a>
+                                <template v-if="post_comment.obj_username">回复 <a href="">{{ post_comment.obj_username }}</a></template>
+                                <a href="" class="floor" v-if="post_comment.is_author || post.is_author"
+                                   @click.prevent.stop="delPostComment(index, post_comment, post.post_comments)"
+                                >删除</a>
                             </div>
-                            <div class="me-flex-10">
-                                <div class="circle-name">
-                                    <a>{{ post_comment.username }}</a>
-                                    <template v-if="post_comment.obj_username">回复 <a href="">{{ post_comment.obj_username }}</a></template>
-                                    <a href="" class="floor" v-if="post_comment.is_author || post.is_author"
-                                       @click.prevent.stop="delPostComment(index, post_comment, post.post_comments)"
-                                    >删除</a>
-                                </div>
 
-                                <div class="circle-content">
-                                    <div v-html="post_comment.content"></div>
-                                </div>
-
-                                <span class="circle-time">{{ post_comment.created_at_str }} </span>
-                                <i class="fa fa-mail-reply on-reply"
-                                   @click="showComment(post.id, post_comment.user_id, post_comment.username)"
-                                ></i>
+                            <div class="circle-content">
+                                <div v-html="post_comment.content"></div>
                             </div>
+
+                            <span class="circle-time">{{ post_comment.created_at_str }} </span>
+                            <i class="fa fa-mail-reply on-reply"
+                               @click="showComment(post.id, post_comment.user_id, post_comment.username)"
+                            ></i>
                         </div>
                     </div>
                 </div>
-            </template>
+                </template>
+            </div>
         </div>
 
 
@@ -88,7 +88,7 @@
             <i class="weui-loading"></i>
             <span class="weui-loadmore__tips">正在加载</span>
         </div>
-        <div class="weshop-center-block"
+        <div class="post-weshop-center-block"
              style="display:block;"
              v-else-if="!post.post_comments || !post.post_comments[0]"
         >
@@ -316,15 +316,14 @@
     }
 </script>
 <style>
-    .weshop-center-block {
+    .post-weshop-center-block {
         width:60%;
-        margin-top:10%;
+        margin-top:5%;
         text-align:center;
         color:#bbb;
         margin-left: auto;
         margin-right: auto;
-        margin-top: 30%;
         background-color: whitesmoke
     }
-    .weshop-center-block i{font-size:8rem;}
+    .post-weshop-center-block i{font-size:5rem;}
 </style>

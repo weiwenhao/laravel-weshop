@@ -17,6 +17,7 @@ window.$ = window.jQuery = require('jquery');
 Vue.component('CreatePost', require('./components/circle/CreatePost.vue'));
 Vue.component('Posts', require('./components/circle/Posts.vue'));
 Vue.component('Post', require('./components/circle/Post.vue'));
+Vue.component('PostNews', require('./components/circle/PostNews.vue'));
 
 const app = new Vue({
  el: '#app',

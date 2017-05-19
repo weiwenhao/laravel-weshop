@@ -87,4 +87,15 @@ return [
          "country" =>"中国",
          "headimgurl" => "http://wx.qlogo.cn/mmopen/C2rEUskXQiblFYMUl9O0G05Q6pKibg7V1WpHX6CIQaic824apriabJw4r6EWxziaSt5BATrlbx1GVzwW2qjUCqtYpDvIJLjKgP1ug/0",
      ],
+    /*'mock_user' => [
+        "openid" =>"ojRsVvyIdzMpnpSdqZbEzp744Irc",
+        // 以下字段为 scope 为 snsapi_userinfo 时需要
+        "nickname" => "Hannah",
+        "sex" =>"1",
+        "province" =>"广东",
+        "city" =>"惠州",
+        "country" =>"中国",
+        "headimgurl" => "https://avatars1.githubusercontent.com/u/2395166?v=3&s=40",
+    ],*/
+
 ];

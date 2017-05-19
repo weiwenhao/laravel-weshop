@@ -54,8 +54,19 @@ class Post extends Model
             $where[] = ['post_category_id', $post_category_id];
         }
 
-        $posts = $this->select('posts.id', 'posts.content', 'posts.post_category_id', 'posts.created_at',
-            /*'posts.likes_count',*/ 'users.username', 'users.id as user_id', 'users.logo', 'post_categories.name as post_category_name',
+        if($request->get('type')){
+            //type = 1 ->精品贴
+            //type = 2 ->个人帖子
+            if($request->get('type') == 1) {
+                $where[] = ['posts.is_best', 1];
+            }
+            if($request->get('type') == 2){
+                $where[] = ['posts.user_id', \Auth::user()->id];
+            }
+        }
+
+        $posts = $this->select('posts.id', 'posts.content', 'posts.post_category_id', 'posts.created_at', 'posts.user_id',
+            /*'posts.likes_count',*/ 'users.username', 'users.logo', 'post_categories.name as post_category_name',
             'post_likes.user_id as is_like'
             )
             ->with('postImages', 'postComments')

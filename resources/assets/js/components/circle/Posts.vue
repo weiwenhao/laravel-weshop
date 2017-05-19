@@ -13,9 +13,9 @@
         <!--导航-->
         <div class="home-circle-nav">
             <div class="circle-nav">
-                <span class="me-flex-4 active"><a href="">首页</a></span>
-                <span class="me-flex-4"><a href="">精华</a></span>
-                <span class="me-flex-4"><a href="">我的</a></span>
+                <span class="me-flex-4" :class="[params.type == null?'active':'']"><a href="" @click.prevent="setType(null)">首页</a></span>
+                <span class="me-flex-4" :class="[params.type == 1?'active':'']"><a href="" @click.prevent="setType(1)">精华</a></span>
+                <span class="me-flex-4" :class="[params.type == 2?'active':'']"><a href="" @click.prevent="setType(2)">我的</a></span>
             </div>
             <hr>
             <div class="circle-nav-b">
@@ -66,7 +66,7 @@
                             <i class="fa fa-comment-o"></i><span> {{ post.post_comments_count }}</span>
                         </a>
                         <a href="" @click.prevent="switchLike(post)">
-                           <i class="fa fa-thumbs-o-up"
+                           <i class="fa"
                               :class="[post.is_like?'fa-thumbs-up':'fa-thumbs-o-up']"
                            ></i>
                             <span>{{ post.user_likes_count }}</span>
@@ -102,7 +102,9 @@
                  v-if="posts.length == 0"
             >
                 <i class="fa fa-tencent-weibo fa-5x"></i>
-                <div>暂时没有相关帖子</div>
+                <div v-if="params.type == null">暂时没有相关帖子~</div>
+                <div v-else-if="params.type == 1">暂时没有精品帖子哦~</div>
+                <div v-else-if="params.type == 2">你还没有发过帖子~</div>
             </div>
             <!--帖子为空时end-->
 
@@ -143,7 +145,13 @@
                     发帖子
                 </a>
             </div>
-            <div class="me-flex-4">&nbsp;</div>
+            <div class="me-flex-4">
+                <a class="new-reply" href="/post_news">
+                    <span class="new-info" v-if="user.is_news">{{ user.is_news }}<!--右上角新消息数量--></span>
+
+                    <i class="fa fa-user-circle-o"></i>
+                </a>
+            </div>
         </div>
         <!--底部end-->
     </div>
@@ -151,7 +159,7 @@
 <script>
     /*组件选项定义,包括data,methods,等*/
     export default {
-        name: 'Circles',
+        name: 'Posts',
         data () {
             return {
                 params : {
@@ -159,7 +167,8 @@
                     limit : 8,
                     order : 'created_at',
                     sort : 'desc',
-                    post_category_id : null
+                    post_category_id : null,
+                    type : null,
                 },
                 next_offset : 0,
                 comment : { //评论对象只有一套,保证了唯一性
@@ -175,11 +184,18 @@
                 posts : [],
                 is_show_loading : false,
                 is_more : true,
+                user : {
+                    id : null,
+                    logo : null,
+                    is_news : false,
+                }
             }
         },
         created(){
             this.getPostCate();
             this.getPosts();
+            this.getUser();
+            //每30秒调用一次getUser()
         },
         mounted(){
             $(window).scroll(() =>{
@@ -193,12 +209,33 @@
                          this.nextPosts();
                      }
                 }
-            })
+            });
+            window.setInterval(()=>{
+                this.getUser();
+            }, 30000);
         },
         methods : {
+            getUser(){
+                axios.get('/api/posts/user', {
+
+                })
+                .then(response=> {
+                    this.user = response.data;
+                })
+                .catch(error=> {
+                	console.log(error);
+                });
+            },
             //得到帖子数据,包括评论,图片
             getPosts(){
+                //数据初始化
+                this.posts = [];
                 this.is_show_loading = true;
+                this.is_more = true;
+                //初始化next_offset
+                this. next_offset = 0;
+
+
                 axios.get('/api/posts', {
                     params: this.params
                 })
@@ -207,14 +244,16 @@
                     if(response.data.length < this.params.limit) {
                         this.is_more = false; //不存在多数据了
                     }
+
                     this.$nextTick(function () {
                         this.is_show_loading = false;
                     })
                 })
                 .catch(error=> {
-                	console.log(error);
+                    this.is_show_loading = false;
                 });
             },
+            //加载更多接口
             nextPosts(){
                 this.is_show_loading = true;
                 this.next_offset = this.next_offset + this.params.limit + 1; //当前的偏移量,加上条数,+1
@@ -225,7 +264,8 @@
                         limit : this.params.limit,
                         order :  this.params.order,
                         sort :  this.params.sort,
-                        post_category_id :  this.params.post_category_id
+                        post_category_id :  this.params.post_category_id,
+                        type : this.params.type
                     }
                 })
                 .then(response=> {
@@ -296,7 +336,7 @@
                     if(!$('[name="comment"]:focus').length){
                         this.comment.is_show = false;
                     }
-                }, 100);
+                }, 200);
             },
             //创建一条评论
             createComment(){
@@ -400,6 +440,12 @@
                     return
                 }
                 location.href = 'posts/' + post.id;
+            },
+            //设置类型
+            setType(type){
+                this.params.type = type;
+                //刷新数据
+                this.getPosts();
             }
         }
     }

@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 72);
+/******/ 	return __webpack_require__(__webpack_require__.s = 82);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -73,7 +73,7 @@
 "use strict";
 
 
-var bind = __webpack_require__(8);
+var bind = __webpack_require__(9);
 
 /*global toString:true*/
 
@@ -10640,7 +10640,7 @@ return jQuery;
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(0);
-var normalizeHeaderName = __webpack_require__(29);
+var normalizeHeaderName = __webpack_require__(31);
 
 var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 var DEFAULT_CONTENT_TYPE = {
@@ -10657,10 +10657,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(4);
+    adapter = __webpack_require__(5);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(4);
+    adapter = __webpack_require__(5);
   }
   return adapter;
 }
@@ -10921,18 +10921,71 @@ process.umask = function() { return 0; };
 
 /***/ }),
 /* 4 */
+/***/ (function(module, exports) {
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  scopeId,
+  cssModules
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  // inject cssModules
+  if (cssModules) {
+    var computed = options.computed || (options.computed = {})
+    Object.keys(cssModules).forEach(function (key) {
+      var module = cssModules[key]
+      computed[key] = function () { return module }
+    })
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(0);
-var settle = __webpack_require__(21);
-var buildURL = __webpack_require__(24);
-var parseHeaders = __webpack_require__(30);
-var isURLSameOrigin = __webpack_require__(28);
-var createError = __webpack_require__(7);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(23);
+var settle = __webpack_require__(23);
+var buildURL = __webpack_require__(26);
+var parseHeaders = __webpack_require__(32);
+var isURLSameOrigin = __webpack_require__(30);
+var createError = __webpack_require__(8);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(25);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -11028,7 +11081,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(26);
+      var cookies = __webpack_require__(28);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -11105,7 +11158,7 @@ module.exports = function xhrAdapter(config) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11131,7 +11184,7 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11143,13 +11196,13 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var enhanceError = __webpack_require__(20);
+var enhanceError = __webpack_require__(22);
 
 /**
  * Create an Error with the specified message, config, error code, and response.
@@ -11167,7 +11220,7 @@ module.exports = function createError(message, config, code, response) {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11185,8 +11238,8 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 9 */,
-/* 10 */
+/* 10 */,
+/* 11 */
 /***/ (function(module, exports) {
 
 var g;
@@ -11213,76 +11266,300 @@ module.exports = g;
 
 
 /***/ }),
-/* 11 */,
 /* 12 */,
-/* 13 */
+/* 13 */,
+/* 14 */
 /***/ (function(module, exports) {
 
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  scopeId,
-  cssModules
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function() {
+	var list = [];
 
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
+	// return the list of modules as css string
+	list.toString = function toString() {
+		var result = [];
+		for(var i = 0; i < this.length; i++) {
+			var item = this[i];
+			if(item[2]) {
+				result.push("@media " + item[2] + "{" + item[1] + "}");
+			} else {
+				result.push(item[1]);
+			}
+		}
+		return result.join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+  Modified by Evan You @yyx990803
+*/
+
+var hasDocument = typeof document !== 'undefined'
+
+if (typeof DEBUG !== 'undefined' && DEBUG) {
+  if (!hasDocument) {
+    throw new Error(
+    'vue-style-loader cannot be used in a non-browser environment. ' +
+    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
+  ) }
+}
+
+var listToStyles = __webpack_require__(79)
+
+/*
+type StyleObject = {
+  id: number;
+  parts: Array<StyleObjectPart>
+}
+
+type StyleObjectPart = {
+  css: string;
+  media: string;
+  sourceMap: ?string
+}
+*/
+
+var stylesInDom = {/*
+  [id: number]: {
+    id: number,
+    refs: number,
+    parts: Array<(obj?: StyleObjectPart) => void>
+  }
+*/}
+
+var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
+var singletonElement = null
+var singletonCounter = 0
+var isProduction = false
+var noop = function () {}
+
+// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+// tags it will allow on a page
+var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
+
+module.exports = function (parentId, list, _isProduction) {
+  isProduction = _isProduction
+
+  var styles = listToStyles(parentId, list)
+  addStylesToDom(styles)
+
+  return function update (newList) {
+    var mayRemove = []
+    for (var i = 0; i < styles.length; i++) {
+      var item = styles[i]
+      var domStyle = stylesInDom[item.id]
+      domStyle.refs--
+      mayRemove.push(domStyle)
+    }
+    if (newList) {
+      styles = listToStyles(parentId, newList)
+      addStylesToDom(styles)
+    } else {
+      styles = []
+    }
+    for (var i = 0; i < mayRemove.length; i++) {
+      var domStyle = mayRemove[i]
+      if (domStyle.refs === 0) {
+        for (var j = 0; j < domStyle.parts.length; j++) {
+          domStyle.parts[j]()
+        }
+        delete stylesInDom[domStyle.id]
+      }
+    }
+  }
+}
+
+function addStylesToDom (styles /* Array<StyleObject> */) {
+  for (var i = 0; i < styles.length; i++) {
+    var item = styles[i]
+    var domStyle = stylesInDom[item.id]
+    if (domStyle) {
+      domStyle.refs++
+      for (var j = 0; j < domStyle.parts.length; j++) {
+        domStyle.parts[j](item.parts[j])
+      }
+      for (; j < item.parts.length; j++) {
+        domStyle.parts.push(addStyle(item.parts[j]))
+      }
+      if (domStyle.parts.length > item.parts.length) {
+        domStyle.parts.length = item.parts.length
+      }
+    } else {
+      var parts = []
+      for (var j = 0; j < item.parts.length; j++) {
+        parts.push(addStyle(item.parts[j]))
+      }
+      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
+    }
+  }
+}
+
+function createStyleElement () {
+  var styleElement = document.createElement('style')
+  styleElement.type = 'text/css'
+  head.appendChild(styleElement)
+  return styleElement
+}
+
+function addStyle (obj /* StyleObjectPart */) {
+  var update, remove
+  var styleElement = document.querySelector('style[data-vue-ssr-id~="' + obj.id + '"]')
+
+  if (styleElement) {
+    if (isProduction) {
+      // has SSR styles and in production mode.
+      // simply do nothing.
+      return noop
+    } else {
+      // has SSR styles but in dev mode.
+      // for some reason Chrome can't handle source map in server-rendered
+      // style tags - source maps in <style> only works if the style tag is
+      // created and inserted dynamically. So we remove the server rendered
+      // styles and inject new ones.
+      styleElement.parentNode.removeChild(styleElement)
+    }
   }
 
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
+  if (isOldIE) {
+    // use singleton mode for IE9.
+    var styleIndex = singletonCounter++
+    styleElement = singletonElement || (singletonElement = createStyleElement())
+    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
+    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
+  } else {
+    // use multi-style-tag mode in all other cases
+    styleElement = createStyleElement()
+    update = applyToTag.bind(null, styleElement)
+    remove = function () {
+      styleElement.parentNode.removeChild(styleElement)
+    }
   }
 
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
+  update(obj)
+
+  return function updateStyle (newObj /* StyleObjectPart */) {
+    if (newObj) {
+      if (newObj.css === obj.css &&
+          newObj.media === obj.media &&
+          newObj.sourceMap === obj.sourceMap) {
+        return
+      }
+      update(obj = newObj)
+    } else {
+      remove()
+    }
+  }
+}
+
+var replaceText = (function () {
+  var textStore = []
+
+  return function (index, replacement) {
+    textStore[index] = replacement
+    return textStore.filter(Boolean).join('\n')
+  }
+})()
+
+function applyToSingletonTag (styleElement, index, remove, obj) {
+  var css = remove ? '' : obj.css
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = replaceText(index, css)
+  } else {
+    var cssNode = document.createTextNode(css)
+    var childNodes = styleElement.childNodes
+    if (childNodes[index]) styleElement.removeChild(childNodes[index])
+    if (childNodes.length) {
+      styleElement.insertBefore(cssNode, childNodes[index])
+    } else {
+      styleElement.appendChild(cssNode)
+    }
+  }
+}
+
+function applyToTag (styleElement, obj) {
+  var css = obj.css
+  var media = obj.media
+  var sourceMap = obj.sourceMap
+
+  if (media) {
+    styleElement.setAttribute('media', media)
   }
 
-  // inject cssModules
-  if (cssModules) {
-    var computed = options.computed || (options.computed = {})
-    Object.keys(cssModules).forEach(function (key) {
-      var module = cssModules[key]
-      computed[key] = function () { return module }
-    })
+  if (sourceMap) {
+    // https://developer.chrome.com/devtools/docs/javascript-debugging
+    // this makes source maps inside style tags work properly in Chrome
+    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
+    // http://stackoverflow.com/a/26603875
+    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
   }
 
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild)
+    }
+    styleElement.appendChild(document.createTextNode(css))
   }
 }
 
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(15);
+module.exports = __webpack_require__(17);
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(0);
-var bind = __webpack_require__(8);
-var Axios = __webpack_require__(17);
+var bind = __webpack_require__(9);
+var Axios = __webpack_require__(19);
 var defaults = __webpack_require__(2);
 
 /**
@@ -11316,15 +11593,15 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(5);
-axios.CancelToken = __webpack_require__(16);
-axios.isCancel = __webpack_require__(6);
+axios.Cancel = __webpack_require__(6);
+axios.CancelToken = __webpack_require__(18);
+axios.isCancel = __webpack_require__(7);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(31);
+axios.spread = __webpack_require__(33);
 
 module.exports = axios;
 
@@ -11333,13 +11610,13 @@ module.exports.default = axios;
 
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Cancel = __webpack_require__(5);
+var Cancel = __webpack_require__(6);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -11397,7 +11674,7 @@ module.exports = CancelToken;
 
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11405,10 +11682,10 @@ module.exports = CancelToken;
 
 var defaults = __webpack_require__(2);
 var utils = __webpack_require__(0);
-var InterceptorManager = __webpack_require__(18);
-var dispatchRequest = __webpack_require__(19);
-var isAbsoluteURL = __webpack_require__(27);
-var combineURLs = __webpack_require__(25);
+var InterceptorManager = __webpack_require__(20);
+var dispatchRequest = __webpack_require__(21);
+var isAbsoluteURL = __webpack_require__(29);
+var combineURLs = __webpack_require__(27);
 
 /**
  * Create a new instance of Axios
@@ -11489,7 +11766,7 @@ module.exports = Axios;
 
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11548,15 +11825,15 @@ module.exports = InterceptorManager;
 
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(0);
-var transformData = __webpack_require__(22);
-var isCancel = __webpack_require__(6);
+var transformData = __webpack_require__(24);
+var isCancel = __webpack_require__(7);
 var defaults = __webpack_require__(2);
 
 /**
@@ -11634,7 +11911,7 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11660,13 +11937,13 @@ module.exports = function enhanceError(error, config, code, response) {
 
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var createError = __webpack_require__(7);
+var createError = __webpack_require__(8);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -11692,7 +11969,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11719,7 +11996,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11762,7 +12039,7 @@ module.exports = btoa;
 
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11837,7 +12114,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11856,7 +12133,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11916,7 +12193,7 @@ module.exports = (
 
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11937,7 +12214,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12012,7 +12289,7 @@ module.exports = (
 
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12031,7 +12308,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12075,7 +12352,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12109,8 +12386,8 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 32 */,
-/* 33 */
+/* 34 */,
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -29199,10 +29476,10 @@ module.exports = function spread(callback) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10), __webpack_require__(35)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), __webpack_require__(37)(module)))
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38527,10 +38804,10 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(10)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(11)))
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -38558,294 +38835,17 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 36 */,
-/* 37 */,
-/* 38 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function() {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		var result = [];
-		for(var i = 0; i < this.length; i++) {
-			var item = this[i];
-			if(item[2]) {
-				result.push("@media " + item[2] + "{" + item[1] + "}");
-			} else {
-				result.push(item[1]);
-			}
-		}
-		return result.join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-
-/***/ }),
-/* 39 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
-  MIT License http://www.opensource.org/licenses/mit-license.php
-  Author Tobias Koppers @sokra
-  Modified by Evan You @yyx990803
-*/
-
-var hasDocument = typeof document !== 'undefined'
-
-if (typeof DEBUG !== 'undefined' && DEBUG) {
-  if (!hasDocument) {
-    throw new Error(
-    'vue-style-loader cannot be used in a non-browser environment. ' +
-    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
-  ) }
-}
-
-var listToStyles = __webpack_require__(69)
-
-/*
-type StyleObject = {
-  id: number;
-  parts: Array<StyleObjectPart>
-}
-
-type StyleObjectPart = {
-  css: string;
-  media: string;
-  sourceMap: ?string
-}
-*/
-
-var stylesInDom = {/*
-  [id: number]: {
-    id: number,
-    refs: number,
-    parts: Array<(obj?: StyleObjectPart) => void>
-  }
-*/}
-
-var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
-var singletonElement = null
-var singletonCounter = 0
-var isProduction = false
-var noop = function () {}
-
-// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-// tags it will allow on a page
-var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
-
-module.exports = function (parentId, list, _isProduction) {
-  isProduction = _isProduction
-
-  var styles = listToStyles(parentId, list)
-  addStylesToDom(styles)
-
-  return function update (newList) {
-    var mayRemove = []
-    for (var i = 0; i < styles.length; i++) {
-      var item = styles[i]
-      var domStyle = stylesInDom[item.id]
-      domStyle.refs--
-      mayRemove.push(domStyle)
-    }
-    if (newList) {
-      styles = listToStyles(parentId, newList)
-      addStylesToDom(styles)
-    } else {
-      styles = []
-    }
-    for (var i = 0; i < mayRemove.length; i++) {
-      var domStyle = mayRemove[i]
-      if (domStyle.refs === 0) {
-        for (var j = 0; j < domStyle.parts.length; j++) {
-          domStyle.parts[j]()
-        }
-        delete stylesInDom[domStyle.id]
-      }
-    }
-  }
-}
-
-function addStylesToDom (styles /* Array<StyleObject> */) {
-  for (var i = 0; i < styles.length; i++) {
-    var item = styles[i]
-    var domStyle = stylesInDom[item.id]
-    if (domStyle) {
-      domStyle.refs++
-      for (var j = 0; j < domStyle.parts.length; j++) {
-        domStyle.parts[j](item.parts[j])
-      }
-      for (; j < item.parts.length; j++) {
-        domStyle.parts.push(addStyle(item.parts[j]))
-      }
-      if (domStyle.parts.length > item.parts.length) {
-        domStyle.parts.length = item.parts.length
-      }
-    } else {
-      var parts = []
-      for (var j = 0; j < item.parts.length; j++) {
-        parts.push(addStyle(item.parts[j]))
-      }
-      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
-    }
-  }
-}
-
-function createStyleElement () {
-  var styleElement = document.createElement('style')
-  styleElement.type = 'text/css'
-  head.appendChild(styleElement)
-  return styleElement
-}
-
-function addStyle (obj /* StyleObjectPart */) {
-  var update, remove
-  var styleElement = document.querySelector('style[data-vue-ssr-id~="' + obj.id + '"]')
-
-  if (styleElement) {
-    if (isProduction) {
-      // has SSR styles and in production mode.
-      // simply do nothing.
-      return noop
-    } else {
-      // has SSR styles but in dev mode.
-      // for some reason Chrome can't handle source map in server-rendered
-      // style tags - source maps in <style> only works if the style tag is
-      // created and inserted dynamically. So we remove the server rendered
-      // styles and inject new ones.
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  if (isOldIE) {
-    // use singleton mode for IE9.
-    var styleIndex = singletonCounter++
-    styleElement = singletonElement || (singletonElement = createStyleElement())
-    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
-    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
-  } else {
-    // use multi-style-tag mode in all other cases
-    styleElement = createStyleElement()
-    update = applyToTag.bind(null, styleElement)
-    remove = function () {
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  update(obj)
-
-  return function updateStyle (newObj /* StyleObjectPart */) {
-    if (newObj) {
-      if (newObj.css === obj.css &&
-          newObj.media === obj.media &&
-          newObj.sourceMap === obj.sourceMap) {
-        return
-      }
-      update(obj = newObj)
-    } else {
-      remove()
-    }
-  }
-}
-
-var replaceText = (function () {
-  var textStore = []
-
-  return function (index, replacement) {
-    textStore[index] = replacement
-    return textStore.filter(Boolean).join('\n')
-  }
-})()
-
-function applyToSingletonTag (styleElement, index, remove, obj) {
-  var css = remove ? '' : obj.css
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = replaceText(index, css)
-  } else {
-    var cssNode = document.createTextNode(css)
-    var childNodes = styleElement.childNodes
-    if (childNodes[index]) styleElement.removeChild(childNodes[index])
-    if (childNodes.length) {
-      styleElement.insertBefore(cssNode, childNodes[index])
-    } else {
-      styleElement.appendChild(cssNode)
-    }
-  }
-}
-
-function applyToTag (styleElement, obj) {
-  var css = obj.css
-  var media = obj.media
-  var sourceMap = obj.sourceMap
-
-  if (media) {
-    styleElement.setAttribute('media', media)
-  }
-
-  if (sourceMap) {
-    // https://developer.chrome.com/devtools/docs/javascript-debugging
-    // this makes source maps inside style tags work properly in Chrome
-    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
-    // http://stackoverflow.com/a/26603875
-    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
-  }
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = css
-  } else {
-    while (styleElement.firstChild) {
-      styleElement.removeChild(styleElement.firstChild)
-    }
-    styleElement.appendChild(document.createTextNode(css))
-  }
-}
-
-
-/***/ }),
+/* 38 */,
+/* 39 */,
 /* 40 */,
 /* 41 */,
 /* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
-window._ = __webpack_require__(33);
+window._ = __webpack_require__(35);
 
-window.Vue = __webpack_require__(34);
-window.axios = __webpack_require__(14);
+window.Vue = __webpack_require__(36);
+window.axios = __webpack_require__(16);
 
 window.axios.defaults.headers.common = {
     'X-CSRF-TOKEN': window.Laravel.csrfToken,
@@ -38857,9 +38857,10 @@ window.$ = window.jQuery = __webpack_require__(1);
 //引入weui.js
 
 // require('bootstrap-sass');
-Vue.component('CreatePost', __webpack_require__(109));
-Vue.component('Posts', __webpack_require__(99));
-Vue.component('Post', __webpack_require__(104));
+Vue.component('CreatePost', __webpack_require__(62));
+Vue.component('Posts', __webpack_require__(65));
+Vue.component('Post', __webpack_require__(63));
+Vue.component('PostNews', __webpack_require__(64));
 
 var app = new Vue({
     el: '#app'
@@ -38870,96 +38871,7 @@ var app = new Vue({
 /* 44 */,
 /* 45 */,
 /* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */,
-/* 50 */,
-/* 51 */,
-/* 52 */,
-/* 53 */,
-/* 54 */,
-/* 55 */,
-/* 56 */,
-/* 57 */,
-/* 58 */,
-/* 59 */,
-/* 60 */,
-/* 61 */,
-/* 62 */,
-/* 63 */,
-/* 64 */,
-/* 65 */,
-/* 66 */,
-/* 67 */,
-/* 68 */,
-/* 69 */
-/***/ (function(module, exports) {
-
-/**
- * Translates the list format produced by css-loader into something
- * easier to manipulate.
- */
-module.exports = function listToStyles (parentId, list) {
-  var styles = []
-  var newStyles = {}
-  for (var i = 0; i < list.length; i++) {
-    var item = list[i]
-    var id = item[0]
-    var css = item[1]
-    var media = item[2]
-    var sourceMap = item[3]
-    var part = {
-      id: parentId + ':' + i,
-      css: css,
-      media: media,
-      sourceMap: sourceMap
-    }
-    if (!newStyles[id]) {
-      styles.push(newStyles[id] = { id: id, parts: [part] })
-    } else {
-      newStyles[id].parts.push(part)
-    }
-  }
-  return styles
-}
-
-
-/***/ }),
-/* 70 */,
-/* 71 */,
-/* 72 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(42);
-
-
-/***/ }),
-/* 73 */,
-/* 74 */,
-/* 75 */,
-/* 76 */,
-/* 77 */,
-/* 78 */,
-/* 79 */,
-/* 80 */,
-/* 81 */,
-/* 82 */,
-/* 83 */,
-/* 84 */,
-/* 85 */,
-/* 86 */,
-/* 87 */,
-/* 88 */,
-/* 89 */,
-/* 90 */,
-/* 91 */,
-/* 92 */,
-/* 93 */,
-/* 94 */,
-/* 95 */,
-/* 96 */,
-/* 97 */,
-/* 98 */
+/* 47 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39022,716 +38934,201 @@ module.exports = __webpack_require__(42);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /*组件选项定义,包括data,methods,等*/
+var that;
 /* harmony default export */ __webpack_exports__["default"] = ({
-    name: 'Circles',
     data: function data() {
         return {
-            params: {
-                offset: 0,
-                limit: 8,
-                order: 'created_at',
-                sort: 'desc',
-                post_category_id: null
-            },
-            next_offset: 0,
-            comment: { //评论对象只有一套,保证了唯一性
-                is_show: false,
-                post_id: null,
-                obj_user_id: 0,
-                obj_username: '',
-                placeholder: null,
-                content: '',
-                index: null
-            },
-            post_categories: [],
-            posts: [],
-            is_show_loading: false,
-            is_more: true
+            categories: [],
+            post_category_id: null,
+            content: '',
+            uploadList: [],
+            post_id: 0,
+            create_loading: null
         };
     },
     created: function created() {
+        that = this;
         this.getPostCate();
-        this.getPosts();
     },
     mounted: function mounted() {
-        var _this = this;
-
-        $(window).scroll(function () {
-            /*console.log('整个页面的高度:'+ $(document).height()); //固定值
-            console.log('可视区域的高度:'+ $(window).height()); //缩小浏览器时会改变
-            console.log('匹配元素相对于滚动条顶部的偏移' + $(document).scrollTop());*/
-            //                 console.log('可视区域高度:'+this.height());
-            if ($(document).height() - $(window).height() < $(document).scrollTop() + $('.circle-home-bottom').height()) {
-                //不在loading中并且存在更多的数据才能请求该方法加载更多的数据
-                if (!_this.is_show_loading && _this.is_more) {
-                    _this.nextPosts();
-                }
-            }
-        });
+        this.uploaderImg();
     },
 
     methods: {
-        //得到帖子数据,包括评论,图片
-        getPosts: function getPosts() {
-            var _this2 = this;
+        /*
+        * 场景分析:  操作① 点击发送按钮时将说说内容发送到后台,后台返回创建成功的 数据 {}
+        *           操作② 从操作①中提取出 post_id.附加到图片上传的头信息中,保存图片
+        *           操作③ 提示发表成功,跳转到圈子主页
+        * */
+        createPost: function createPost() {
+            var _this = this;
 
-            this.is_show_loading = true;
-            axios.get('/api/posts', {
-                params: this.params
+            //                this.createPostImage();return
+            if (!this.content) {
+                weui.alert('说点什么吧');
+                return;
+            }
+            if (!this.post_category_id) {
+                weui.alert('你还没有选择版块呢');
+                return;
+            }
+
+            this.create_loading = weui.loading('发表中');
+            //发送说说
+            axios.post('/api/posts', {
+                'post_category_id': this.post_category_id,
+                'content': this.content
             }).then(function (response) {
-                _this2.posts = response.data;
-                if (response.data.length < _this2.params.limit) {
-                    _this2.is_more = false; //不存在多数据了
-                }
-                _this2.$nextTick(function () {
-                    this.is_show_loading = false;
+                _this.post_id = response.data.id;
+                _this.$nextTick(function () {
+                    this.createPostImage();
                 });
             }).catch(function (error) {
-                console.log(error);
+                var validator_err = error.response.data;
+                if (validator_err.post_category_id) {
+                    _this.create_loading.hide();
+                    weui.alert(validator_err.post_category_id[0]);
+                    return;
+                }
+                if (validator_err.content) {
+                    _this.create_loading.hide();
+                    weui.alert(validator_err.content[0]);
+                    return;
+                }
             });
         },
-        nextPosts: function nextPosts() {
-            var _this3 = this;
-
-            this.is_show_loading = true;
-            this.next_offset = this.next_offset + this.params.limit + 1; //当前的偏移量,加上条数,+1
-            //得到第一次的next_params
-            axios.get('/api/posts', {
-                params: {
-                    offset: this.next_offset,
-                    limit: this.params.limit,
-                    order: this.params.order,
-                    sort: this.params.sort,
-                    post_category_id: this.params.post_category_id
-                }
-            }).then(function (response) {
-                if (response.data.length > 0) {
-                    //如果数据为空时也应吧is_show_loading = false;
-                    //将取出的数据push到中
-                    _this3.posts.push.apply(_this3.posts, response.data);
-                } else {
-                    _this3.is_more = false; //如果没有返回说明不存在更多的贴子了
-                }
-                _this3.$nextTick(function () {
-                    this.is_show_loading = false;
-                });
-            }).catch(function (error) {
-                console.log(error);
+        createPostImage: function createPostImage() {
+            //异步上传图片
+            that.uploadList.forEach(function (file) {
+                file.upload();
             });
+            //图片上传完毕后方可调用该方法 todo bug待测试
+            this.createdSuccess();
         },
-
-        //得到帖子分类数据
         getPostCate: function getPostCate() {
-            var _this4 = this;
+            var _this2 = this;
 
             axios.get('/api/post_categories', {
                 /*params: {
-                 article_id: this.article_id,
-                 }*/
+                	article_id: this.article_id,
+                }*/
             }).then(function (response) {
-                _this4.post_categories = response.data;
-                _this4.post_categories.unshift({
-                    'id': null,
-                    'name': '全部'
-                });
+                _this2.categories = response.data;
             }).catch(function (error) {
                 console.log(error);
             });
         },
-        setPostCateId: function setPostCateId(post_category_id) {
-            this.params.post_category_id = post_category_id;
-            //刷新请求
-            this.getPosts();
-        },
+        uploaderImg: function uploaderImg() {
+            var uploadCount = 0;
+            var uploadCountDom = document.getElementById("uploadCount");
+            weui.uploader('#uploader', {
+                url: 'http://' + location.hostname + '/api/posts/upload',
+                auto: false, //不开启自动上传,手动触发上传
+                type: 'file',
+                fileVal: 'post_img',
+                compress: {
+                    width: 1600,
+                    height: 1600,
+                    quality: .8
+                },
+                onBeforeQueued: function onBeforeQueued(files) {
+                    if (["image/jpg", "image/jpeg", "image/png", "image/gif"].indexOf(this.type) < 0) {
+                        weui.alert('请上传图片');
+                        return false;
+                    }
+                    if (this.size > 10 * 1024 * 1024) {
+                        weui.alert('请上传不超过10M的图片');
+                        return false;
+                    }
+                    if (files.length > 6) {
+                        // 防止一下子选中过多文件
+                        weui.alert('最多只能上传6张图片，请重新选择');
+                        return false;
+                    }
+                    if (uploadCount + 1 > 6) {
+                        weui.alert('最多只能上传6张图片');
+                        return false;
+                    }
 
-        //显示评论框
-        showComment: function showComment(index, post_id, obj_user_id, obj_username) {
-            arguments[1] ? arguments[1] : 0; //设置默认值
-            arguments[2] ? arguments[2] : '';
-            //将默认值赋值给参数
-            this.comment.index = index;
-            this.comment.post_id = post_id;
-            this.comment.obj_user_id = obj_user_id;
-            this.comment.obj_username = obj_username;
-            this.comment.placeholder = '说点什么吧...';
-            if (obj_user_id && obj_username) {
-                this.comment.placeholder = '回复' + obj_username + '：';
-            }
-            //显示发送框
-            this.comment.is_show = true;
-            //使发送框获得焦点
-            this.$nextTick(function () {
-                //要等上面的数据变化完毕后再调用获得焦点事件
-                $('[name=comment]').focus();
-                this.setTextarea(); //设置评论框js特效
-            });
-        },
+                    ++uploadCount;
+                    uploadCountDom.innerHTML = uploadCount;
+                },
+                onQueued: function onQueued() {
+                    that.uploadList.push(this);
+                    //                        console.log(this);
+                },
+                onBeforeSend: function onBeforeSend(data, headers) {
+                    //文件上传前调用
+                    //                        console.log(this, data, headers);
+                    $.extend(data, { 'post_id': that.post_id }); // 可以扩展此对象来控制上传参数
+                    $.extend(headers, { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }); // 可以扩展此对象来控制上传头部
 
-        //取消评论框
-        cancelComment: function cancelComment() {
-            var _this5 = this;
-
-            //200ms后进行判断焦点是否丢失,如果丢失则运行
-            setTimeout(function () {
-                //判断是否没有获得焦点
-                if (!$('[name="comment"]:focus').length) {
-                    _this5.comment.is_show = false;
-                }
-            }, 100);
-        },
-
-        //创建一条评论
-        createComment: function createComment() {
-            var _this6 = this;
-
-            //点击该按钮的时候不是textarea失去焦点
-            $('[name=comment]').focus();
-            if (!this.comment.content) {
-                return;
-            }
-            //todo 帖子评论字数的前端限制
-
-            var loading = weui.loading('请稍等');
-            setTimeout(function () {
-                //如果超过5秒钟没有响应则自动关闭loading框,并提示一个超时响应
-                loading.hide(function () {
-                    weui.topTips('请求超时', 3000);
-                });
-            }, 5000);
-
-            axios.post('/api/post_comments', this.comment).then(function (response) {
-                //确定评论的index,往数组的底部添加一条数据,
-                _this6.posts[_this6.comment.index].post_comments.push(response.data);
-                _this6.posts[_this6.comment.index].post_comments_count++;
-                //清空回答框,并隐藏
-                _this6.comment = { //评论对象只有一套,保证了唯一性
-                    is_show: false,
-                    post_id: null,
-                    obj_user_id: 0,
-                    obj_username: '',
-                    placeholder: null,
-                    content: ''
-                };
-                //关闭loading并提示添加成功
-                loading.hide(function () {
-                    /* weui.toast('评论成功', 1000);*/
-                });
-            }).catch(function (error) {
-                loading.hide(function () {
-                    weui.topTips('评论失败，请联系客服', 3000);
-                });
-            });
-        },
-
-        //删除帖子
-        delPost: function delPost(index, post) {
-            var _this7 = this;
-
-            weui.confirm('你确定要删除该帖子吗？', function () {
-                _this7.posts.splice(index, 1);
-                //发送ajax请求
-                axios.delete('/api/posts/' + post.id, {
-                    //key : value
-                });
-            });
-        },
-
-        //删除帖子评论
-        delPostComment: function delPostComment(index, post_comment, post_comments) {
-            weui.confirm('你确定要删除这条评论吗？', function () {
-                post_comments.splice(index, 1);
-                //发送ajax请求
-                axios.delete('/api/post_comments/' + post_comment.id, {
-                    //key : value
-                });
-            });
-        },
-
-        //使用jssdk预览图片
-        showImages: function showImages(current_img, imgs) {
-            //调用微信接口
-            var urls = [];
-            for (var i = 0; i < imgs.length; ++i) {
-                urls.push('http://' + location.hostname + imgs[i].image);
-                //                    urls.push(imgs[i].image)
-            }
-            wx.previewImage({
-                current: 'http://' + location.hostname + current_img, // 当前显示图片的http链接
-                urls: urls // 需要预览的图片http链接列表
-            });
-        },
-
-        //设置评论框js事件
-        setTextarea: function setTextarea() {
-            var replyHeight = $('.critic-reply-frame textarea ').height();
-            $('.critic-reply-frame textarea ').each(function () {
-                this.setAttribute('style', 'height:' + this.scrollHeight + 'px;overflow-y:hidden;');
-            }).on('input', function () {
-                this.style.height = 'auto';
-                this.style.height = this.scrollHeight + 'px';
-                if (this.scrollHeight >= replyHeight * 4) {
-                    this.style.overflowY = 'scroll';
-                    this.style.height = replyHeight * 4 + 'px';
+                    // return false; // 阻止文件上传
+                },
+                onProgress: function onProgress(procent) {//上传进度的回调
+                    //                        console.log(this, procent);
+                },
+                onSuccess: function onSuccess(ret) {//上传成功的回调
+                    //                        console.log(this, ret); //分开的
+                },
+                onError: function onError(err) {//上传失败的回调
+                    //                        console.log(this, err);
                 }
             });
-        },
 
-        //点赞或者取消点赞
-        switchLike: function switchLike(post) {
-            //根据状态+或者-
-            post.is_like ? post.user_likes_count-- : post.user_likes_count++;
-            post.is_like = !post.is_like;
-            axios.put('/api/post_likes/' + post.id);
-        },
+            //图片预览
+            document.querySelector('#uploaderFiles').addEventListener('click', function (e) {
+                var target = e.target;
 
-        //跳转到帖子详情页
-        skipPostInfo: function skipPostInfo(post) {
-            //如果comment框显示则不进行跳转
-            if (this.comment.is_show) {
-                return;
-            }
-            location.href = 'posts/' + post.id;
+                while (!target.classList.contains('weui-uploader__file') && target) {
+                    target = target.parentNode;
+                }
+                if (!target) return;
+
+                var url = target.getAttribute('style') || '';
+                var id = target.getAttribute('data-id');
+
+                if (url) {
+                    url = url.match(/url\((.*?)\)/)[1].replace(/"/g, '');
+                }
+                var gallery = weui.gallery(url, {
+                    className: 'custom-name',
+                    onDelete: function onDelete() {
+                        weui.confirm('确定删除该图片？', function () {
+                            --uploadCount;
+                            uploadCountDom.innerHTML = uploadCount;
+                            for (var i = 0, len = that.uploadList.length; i < len; ++i) {
+                                var file = that.uploadList[i];
+                                if (file.id == id) {
+                                    file.stop();
+                                    break;
+                                }
+                            }
+                            target.remove();
+                            gallery.hide();
+                        });
+                    }
+                });
+            });
+        },
+        createdSuccess: function createdSuccess() {
+            //关闭loading
+            this.create_loading.hide();
+            weui.toast('发表成功', {
+                duration: 1000,
+                callback: function callback() {
+                    location.href = '/posts';
+                }
+            });
         }
     }
 });
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
 
 /***/ }),
-/* 99 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-/* styles */
-__webpack_require__(100)
-
-var Component = __webpack_require__(13)(
-  /* script */
-  __webpack_require__(98),
-  /* template */
-  __webpack_require__(102),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "c:\\php\\laragon\\www\\weshop\\resources\\assets\\js\\components\\circle\\Posts.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Posts.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-54ede3a8", Component.options)
-  } else {
-    hotAPI.reload("data-v-54ede3a8", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 100 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(101);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(39)("70cb7054", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/._css-loader@0.14.5@css-loader/index.js!../../../../../node_modules/._vue-loader@10.3.0@vue-loader/lib/style-rewriter.js?id=data-v-54ede3a8!../../../../../node_modules/._vue-loader@10.3.0@vue-loader/lib/selector.js?type=styles&index=0!./Posts.vue", function() {
-     var newContent = require("!!../../../../../node_modules/._css-loader@0.14.5@css-loader/index.js!../../../../../node_modules/._vue-loader@10.3.0@vue-loader/lib/style-rewriter.js?id=data-v-54ede3a8!../../../../../node_modules/._vue-loader@10.3.0@vue-loader/lib/selector.js?type=styles&index=0!./Posts.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 101 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(38)();
-exports.push([module.i, "\n.weshop-center-block{width:60%;margin-top:10%;text-align:center;color:#bbb;margin-left: auto;margin-right: auto; margin-top: 30%;\n}\n.weshop-center-block i{font-size:8rem;\n}\n.weui-loadmore_line .weui-loadmore__tips {\n    background-color: #f5f5f5;\n}\n", ""]);
-
-/***/ }),
-/* 102 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_vm._m(0), _vm._v(" "), _c('div', {
-    staticClass: "home-circle-nav"
-  }, [_vm._m(1), _vm._v(" "), _c('hr'), _vm._v(" "), _c('div', {
-    staticClass: "circle-nav-b"
-  }, _vm._l((_vm.post_categories), function(post_category) {
-    return _c('a', {
-      class: {
-        'active': post_category.id == _vm.params.post_category_id
-      },
-      on: {
-        "click": function($event) {
-          _vm.setPostCateId(post_category.id)
-        }
-      }
-    }, [_vm._v("\n                " + _vm._s(post_category.name) + "\n            ")])
-  }))]), _vm._v(" "), _vm._l((_vm.posts), function(post, index) {
-    return _c('div', {
-      staticClass: "circle-home-content"
-    }, [_c('div', {
-      staticClass: "circle-top"
-    }, [_c('div', {
-      staticClass: "me-flex-2"
-    }, [_c('img', {
-      staticClass: "me-img lazy",
-      attrs: {
-        "src": post.logo
-      }
-    })]), _vm._v(" "), _c('div', {
-      staticClass: "me-flex-9"
-    }, [_c('div', {
-      staticClass: "circle-name"
-    }, [_c('b', [_vm._v(_vm._s(post.username))]), _c('span', {
-      staticClass: "lv"
-    })]), _vm._v(" "), _c('span', {
-      staticClass: "circle-time"
-    }, [_vm._v(_vm._s(post.created_at_str))]), _vm._v(" "), _c('span', {
-      staticClass: "circle-block"
-    }, [_vm._v(" 板块："), _c('tt', [_vm._v(_vm._s(post.post_category_name))])], 1)]), _vm._v(" "), _c('div', {
-      staticClass: "me-flex-1"
-    }, [(post.is_author) ? _c('a', {
-      on: {
-        "click": function($event) {
-          $event.preventDefault();
-          _vm.delPost(index, post)
-        }
-      }
-    }, [_vm._v("删除")]) : _vm._e()])]), _vm._v(" "), _c('div', {
-      on: {
-        "click": function($event) {
-          _vm.skipPostInfo(post)
-        }
-      }
-    }, [_c('div', {
-      staticClass: "circle-content"
-    }, [_c('div', {
-      domProps: {
-        "innerHTML": _vm._s(post.content)
-      }
-    })]), _vm._v(" "), (post.post_images.length) ? _c('div', {
-      staticClass: "circle-content-img"
-    }, _vm._l((post.post_images), function(post_image) {
-      return _c('div', {
-        staticClass: "me-flex-4"
-      }, [_c('img', {
-        staticClass: "me-img lazy",
-        attrs: {
-          "src": post_image.sm_image
-        },
-        on: {
-          "click": function($event) {
-            $event.stopPropagation();
-            _vm.showImages(post_image.image, post.post_images)
-          }
-        }
-      })])
-    })) : _vm._e()]), _vm._v(" "), _c('div', {
-      staticClass: "circle-critic"
-    }, [_c('div', {
-      staticClass: "critic-top"
-    }, [_c('span', {
-      staticClass: "critic-t-r"
-    }, [_c('a', {
-      on: {
-        "click": function($event) {
-          $event.preventDefault();
-          _vm.showComment(index, post.id)
-        }
-      }
-    }, [_c('i', {
-      staticClass: "fa fa-comment-o"
-    }), _c('span', [_vm._v(" " + _vm._s(post.post_comments_count))])]), _vm._v(" "), _c('a', {
-      attrs: {
-        "href": ""
-      },
-      on: {
-        "click": function($event) {
-          $event.preventDefault();
-          _vm.switchLike(post)
-        }
-      }
-    }, [_c('i', {
-      staticClass: "fa fa-thumbs-o-up",
-      class: [post.is_like ? 'fa-thumbs-up' : 'fa-thumbs-o-up']
-    }), _vm._v(" "), _c('span', [_vm._v(_vm._s(post.user_likes_count))])])])]), _vm._v(" "), (post.post_comments.length) ? _c('div', {
-      staticClass: "critic-replys"
-    }, _vm._l((post.post_comments), function(post_comment, index2) {
-      return _c('div', {
-        staticClass: "item",
-        on: {
-          "click": function($event) {
-            _vm.showComment(index, post.id, post_comment.user_id, post_comment.username)
-          }
-        }
-      }, [_c('a', [_vm._v(_vm._s(post_comment.username))]), _vm._v(" "), (post_comment.obj_username) ? [_vm._v("回复 "), _c('a', {
-        attrs: {
-          "href": ""
-        }
-      }, [_vm._v(_vm._s(post_comment.obj_username))])] : _vm._e(), _vm._v("\n                    :"), _c('span', {
-        domProps: {
-          "innerHTML": _vm._s(post_comment.content)
-        }
-      }), _vm._v(" "), (post_comment.is_author || post.is_author) ? _c('a', {
-        staticClass: "del",
-        attrs: {
-          "href": ""
-        },
-        on: {
-          "click": function($event) {
-            $event.preventDefault();
-            $event.stopPropagation();
-            _vm.delPostComment(index2, post_comment, post.post_comments)
-          }
-        }
-      }, [_vm._v("删除")]) : _vm._e()], 2)
-    })) : _vm._e()])])
-  }), _vm._v(" "), (_vm.is_show_loading) ? _c('div', {
-    staticClass: "weui-loadmore"
-  }, [_c('i', {
-    staticClass: "weui-loading"
-  }), _vm._v(" "), _c('span', {
-    staticClass: "weui-loadmore__tips"
-  }, [_vm._v("正在加载")])]) : [(_vm.posts.length == 0) ? _c('div', {
-    staticClass: "weshop-center-block",
-    staticStyle: {
-      "display": "block"
-    }
-  }, [_c('i', {
-    staticClass: "fa fa-tencent-weibo fa-5x"
-  }), _vm._v(" "), _c('div', [_vm._v("暂时没有相关帖子")])]) : (!_vm.is_more) ? _c('div', {
-    staticClass: "weui-loadmore weui-loadmore_line"
-  }, [_c('span', {
-    staticClass: "weui-loadmore__tips"
-  }, [_vm._v("已经到底啦")])]) : _vm._e()], _vm._v(" "), _c('div', {
-    staticStyle: {
-      "height": "2rem"
-    }
-  }), _vm._v(" "), (_vm.comment.is_show) ? _c('div', {
-    staticClass: "critic-reply-frame"
-  }, [_c('textarea', {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: (_vm.comment.content),
-      expression: "comment.content"
-    }],
-    staticClass: "me-flex-10",
-    attrs: {
-      "rows": "1",
-      "name": "comment",
-      "placeholder": _vm.comment.placeholder
-    },
-    domProps: {
-      "value": (_vm.comment.content)
-    },
-    on: {
-      "blur": function($event) {
-        _vm.cancelComment()
-      },
-      "input": function($event) {
-        if ($event.target.composing) { return; }
-        _vm.comment.content = $event.target.value
-      }
-    }
-  }), _vm._v(" "), _c('div', {
-    staticClass: "me-flex-2"
-  }, [_c('button', {
-    staticClass: "weui-btn weui-btn_mini",
-    class: [_vm.comment.content ? 'weui-btn_primary' : 'weui-btn_default weui-btn_plain-disabled'],
-    attrs: {
-      "disabled": !_vm.comment.content
-    },
-    on: {
-      "click": function($event) {
-        _vm.createComment()
-      }
-    }
-  }, [_vm._v("发送\n            ")])])]) : _c('div', {
-    staticClass: "circle-home-bottom"
-  }, [_c('div', {
-    staticClass: "me-flex-4"
-  }, [_vm._v(" ")]), _vm._v(" "), _c('div', {
-    staticClass: "me-flex-4"
-  }, [_c('a', {
-    staticClass: "circle_send",
-    attrs: {
-      "id": "fatie",
-      "href": "/posts/create"
-    }
-  }, [_c('i', {
-    staticClass: "fa fa-pencil-square-o"
-  }), _vm._v("\n                发帖子\n            ")])]), _vm._v(" "), _c('div', {
-    staticClass: "me-flex-4"
-  }, [_vm._v(" ")])])], 2)
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "circle-head"
-  }, [_c('div', {
-    staticClass: "logo"
-  }), _vm._v(" "), _c('div', {
-    staticClass: "circle-h-mid"
-  }, [_c('span', {
-    staticClass: "me-flex-3"
-  }), _vm._v(" "), _c('span', {
-    staticClass: "me-flex-6"
-  }, [_vm._v("校园商城")]), _vm._v(" "), _c('span', {
-    staticClass: "me-flex-3"
-  }, [_c('a', {
-    attrs: {
-      "href": "/"
-    }
-  }, [_vm._v("进来逛逛 "), _c('i', {
-    staticClass: "fa fa-angle-right"
-  })])])])])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "circle-nav"
-  }, [_c('span', {
-    staticClass: "me-flex-4 active"
-  }, [_c('a', {
-    attrs: {
-      "href": ""
-    }
-  }, [_vm._v("首页")])]), _vm._v(" "), _c('span', {
-    staticClass: "me-flex-4"
-  }, [_c('a', {
-    attrs: {
-      "href": ""
-    }
-  }, [_vm._v("精华")])]), _vm._v(" "), _c('span', {
-    staticClass: "me-flex-4"
-  }, [_c('a', {
-    attrs: {
-      "href": ""
-    }
-  }, [_vm._v("我的")])])])
-}]}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-54ede3a8", module.exports)
-  }
-}
-
-/***/ }),
-/* 103 */
+/* 48 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -40064,18 +39461,725 @@ if (false) {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
 
 /***/ }),
-/* 104 */
+/* 49 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/*组件选项定义,包括data,methods,等*/
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: '',
+    data: function data() {
+        return {
+            params: {
+                offset: 0,
+                limit: 8,
+                order: 'created_at',
+                sort: 'desc'
+            },
+            next_offset: 0,
+            post_news: [],
+            is_show_loading: false,
+            is_more: true
+        };
+    },
+    created: function created() {
+        this.getPostNews();
+    },
+    mounted: function mounted() {
+        var _this = this;
+
+        $(window).scroll(function () {
+            /*console.log('整个页面的高度:'+ $(document).height()); //固定值
+             console.log('可视区域的高度:'+ $(window).height()); //缩小浏览器时会改变
+             console.log('匹配元素相对于滚动条顶部的偏移' + $(document).scrollTop());*/
+            //                 console.log('可视区域高度:'+this.height());
+            if ($(document).height() - $(window).height() < $(document).scrollTop() + 2) {
+                //不在loading中并且存在更多的数据才能请求该方法加载更多的数据
+                if (!_this.is_show_loading && _this.is_more) {
+                    _this.nextPosts();
+                }
+            }
+        });
+    },
+
+    methods: {
+        getPostNews: function getPostNews() {
+            var _this2 = this;
+
+            this.is_show_loading = true;
+            axios.get('/api/post_news', {
+                params: this.params
+            }).then(function (response) {
+                _this2.post_news = response.data;
+                if (response.data.length < _this2.params.limit) {
+                    _this2.is_more = false; //不存在多数据了
+                } else {
+                    _this2.is_more = true;
+                }
+                _this2.$nextTick(function () {
+                    this.is_show_loading = false;
+                });
+            }).catch(function (error) {
+                _this2.is_show_loading = false;
+            });
+        },
+
+        //加载更多接口
+        nextPosts: function nextPosts() {
+            var _this3 = this;
+
+            this.is_show_loading = true;
+            this.next_offset = this.next_offset + this.params.limit + 1; //当前的偏移量,加上条数,+1
+            //得到第一次的next_params
+            axios.get('/api/posts', {
+                params: {
+                    offset: this.next_offset,
+                    limit: this.params.limit,
+                    order: this.params.order,
+                    sort: this.params.sort,
+                    post_category_id: this.params.post_category_id
+                }
+            }).then(function (response) {
+                if (response.data.length > 0) {
+                    //如果数据为空时也应吧is_show_loading = false;
+                    //将取出的数据push到中
+                    _this3.post_news.push.apply(_this3.post_news, response.data);
+                } else {
+                    _this3.is_more = false; //如果没有返回说明不存在更多的贴子了
+                }
+                _this3.$nextTick(function () {
+                    this.is_show_loading = false;
+                });
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        skipPostInfo: function skipPostInfo(post_id) {
+            location.href = "posts/" + post_id;
+        }
+    }
+});
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
+
+/***/ }),
+/* 50 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/*组件选项定义,包括data,methods,等*/
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: 'Posts',
+    data: function data() {
+        return {
+            params: {
+                offset: 0,
+                limit: 8,
+                order: 'created_at',
+                sort: 'desc',
+                post_category_id: null,
+                type: null
+            },
+            next_offset: 0,
+            comment: { //评论对象只有一套,保证了唯一性
+                is_show: false,
+                post_id: null,
+                obj_user_id: 0,
+                obj_username: '',
+                placeholder: null,
+                content: '',
+                index: null
+            },
+            post_categories: [],
+            posts: [],
+            is_show_loading: false,
+            is_more: true,
+            user: {
+                id: null,
+                logo: null,
+                is_news: false
+            }
+        };
+    },
+    created: function created() {
+        this.getPostCate();
+        this.getPosts();
+        this.getUser();
+        //每30秒调用一次getUser()
+    },
+    mounted: function mounted() {
+        var _this = this;
+
+        $(window).scroll(function () {
+            /*console.log('整个页面的高度:'+ $(document).height()); //固定值
+            console.log('可视区域的高度:'+ $(window).height()); //缩小浏览器时会改变
+            console.log('匹配元素相对于滚动条顶部的偏移' + $(document).scrollTop());*/
+            //                 console.log('可视区域高度:'+this.height());
+            if ($(document).height() - $(window).height() < $(document).scrollTop() + $('.circle-home-bottom').height()) {
+                //不在loading中并且存在更多的数据才能请求该方法加载更多的数据
+                if (!_this.is_show_loading && _this.is_more) {
+                    _this.nextPosts();
+                }
+            }
+        });
+        window.setInterval(function () {
+            _this.getUser();
+        }, 30000);
+    },
+
+    methods: {
+        getUser: function getUser() {
+            var _this2 = this;
+
+            axios.get('/api/posts/user', {}).then(function (response) {
+                _this2.user = response.data;
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+
+        //得到帖子数据,包括评论,图片
+        getPosts: function getPosts() {
+            var _this3 = this;
+
+            //数据初始化
+            this.posts = [];
+            this.is_show_loading = true;
+            this.is_more = true;
+            //初始化next_offset
+            this.next_offset = 0;
+
+            axios.get('/api/posts', {
+                params: this.params
+            }).then(function (response) {
+                _this3.posts = response.data;
+                if (response.data.length < _this3.params.limit) {
+                    _this3.is_more = false; //不存在多数据了
+                }
+
+                _this3.$nextTick(function () {
+                    this.is_show_loading = false;
+                });
+            }).catch(function (error) {
+                _this3.is_show_loading = false;
+            });
+        },
+
+        //加载更多接口
+        nextPosts: function nextPosts() {
+            var _this4 = this;
+
+            this.is_show_loading = true;
+            this.next_offset = this.next_offset + this.params.limit + 1; //当前的偏移量,加上条数,+1
+            //得到第一次的next_params
+            axios.get('/api/posts', {
+                params: {
+                    offset: this.next_offset,
+                    limit: this.params.limit,
+                    order: this.params.order,
+                    sort: this.params.sort,
+                    post_category_id: this.params.post_category_id,
+                    type: this.params.type
+                }
+            }).then(function (response) {
+                if (response.data.length > 0) {
+                    //如果数据为空时也应吧is_show_loading = false;
+                    //将取出的数据push到中
+                    _this4.posts.push.apply(_this4.posts, response.data);
+                } else {
+                    _this4.is_more = false; //如果没有返回说明不存在更多的贴子了
+                }
+                _this4.$nextTick(function () {
+                    this.is_show_loading = false;
+                });
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+
+        //得到帖子分类数据
+        getPostCate: function getPostCate() {
+            var _this5 = this;
+
+            axios.get('/api/post_categories', {
+                /*params: {
+                 article_id: this.article_id,
+                 }*/
+            }).then(function (response) {
+                _this5.post_categories = response.data;
+                _this5.post_categories.unshift({
+                    'id': null,
+                    'name': '全部'
+                });
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        setPostCateId: function setPostCateId(post_category_id) {
+            this.params.post_category_id = post_category_id;
+            //刷新请求
+            this.getPosts();
+        },
+
+        //显示评论框
+        showComment: function showComment(index, post_id, obj_user_id, obj_username) {
+            arguments[1] ? arguments[1] : 0; //设置默认值
+            arguments[2] ? arguments[2] : '';
+            //将默认值赋值给参数
+            this.comment.index = index;
+            this.comment.post_id = post_id;
+            this.comment.obj_user_id = obj_user_id;
+            this.comment.obj_username = obj_username;
+            this.comment.placeholder = '说点什么吧...';
+            if (obj_user_id && obj_username) {
+                this.comment.placeholder = '回复' + obj_username + '：';
+            }
+            //显示发送框
+            this.comment.is_show = true;
+            //使发送框获得焦点
+            this.$nextTick(function () {
+                //要等上面的数据变化完毕后再调用获得焦点事件
+                $('[name=comment]').focus();
+                this.setTextarea(); //设置评论框js特效
+            });
+        },
+
+        //取消评论框
+        cancelComment: function cancelComment() {
+            var _this6 = this;
+
+            //200ms后进行判断焦点是否丢失,如果丢失则运行
+            setTimeout(function () {
+                //判断是否没有获得焦点
+                if (!$('[name="comment"]:focus').length) {
+                    _this6.comment.is_show = false;
+                }
+            }, 200);
+        },
+
+        //创建一条评论
+        createComment: function createComment() {
+            var _this7 = this;
+
+            //点击该按钮的时候不是textarea失去焦点
+            $('[name=comment]').focus();
+            if (!this.comment.content) {
+                return;
+            }
+            //todo 帖子评论字数的前端限制
+
+            var loading = weui.loading('请稍等');
+            setTimeout(function () {
+                //如果超过5秒钟没有响应则自动关闭loading框,并提示一个超时响应
+                loading.hide(function () {
+                    weui.topTips('请求超时', 3000);
+                });
+            }, 5000);
+
+            axios.post('/api/post_comments', this.comment).then(function (response) {
+                //确定评论的index,往数组的底部添加一条数据,
+                _this7.posts[_this7.comment.index].post_comments.push(response.data);
+                _this7.posts[_this7.comment.index].post_comments_count++;
+                //清空回答框,并隐藏
+                _this7.comment = { //评论对象只有一套,保证了唯一性
+                    is_show: false,
+                    post_id: null,
+                    obj_user_id: 0,
+                    obj_username: '',
+                    placeholder: null,
+                    content: ''
+                };
+                //关闭loading并提示添加成功
+                loading.hide(function () {
+                    /* weui.toast('评论成功', 1000);*/
+                });
+            }).catch(function (error) {
+                loading.hide(function () {
+                    weui.topTips('评论失败，请联系客服', 3000);
+                });
+            });
+        },
+
+        //删除帖子
+        delPost: function delPost(index, post) {
+            var _this8 = this;
+
+            weui.confirm('你确定要删除该帖子吗？', function () {
+                _this8.posts.splice(index, 1);
+                //发送ajax请求
+                axios.delete('/api/posts/' + post.id, {
+                    //key : value
+                });
+            });
+        },
+
+        //删除帖子评论
+        delPostComment: function delPostComment(index, post_comment, post_comments) {
+            weui.confirm('你确定要删除这条评论吗？', function () {
+                post_comments.splice(index, 1);
+                //发送ajax请求
+                axios.delete('/api/post_comments/' + post_comment.id, {
+                    //key : value
+                });
+            });
+        },
+
+        //使用jssdk预览图片
+        showImages: function showImages(current_img, imgs) {
+            //调用微信接口
+            var urls = [];
+            for (var i = 0; i < imgs.length; ++i) {
+                urls.push('http://' + location.hostname + imgs[i].image);
+                //                    urls.push(imgs[i].image)
+            }
+            wx.previewImage({
+                current: 'http://' + location.hostname + current_img, // 当前显示图片的http链接
+                urls: urls // 需要预览的图片http链接列表
+            });
+        },
+
+        //设置评论框js事件
+        setTextarea: function setTextarea() {
+            var replyHeight = $('.critic-reply-frame textarea ').height();
+            $('.critic-reply-frame textarea ').each(function () {
+                this.setAttribute('style', 'height:' + this.scrollHeight + 'px;overflow-y:hidden;');
+            }).on('input', function () {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+                if (this.scrollHeight >= replyHeight * 4) {
+                    this.style.overflowY = 'scroll';
+                    this.style.height = replyHeight * 4 + 'px';
+                }
+            });
+        },
+
+        //点赞或者取消点赞
+        switchLike: function switchLike(post) {
+            //根据状态+或者-
+            post.is_like ? post.user_likes_count-- : post.user_likes_count++;
+            post.is_like = !post.is_like;
+            axios.put('/api/post_likes/' + post.id);
+        },
+
+        //跳转到帖子详情页
+        skipPostInfo: function skipPostInfo(post) {
+            //如果comment框显示则不进行跳转
+            if (this.comment.is_show) {
+                return;
+            }
+            location.href = 'posts/' + post.id;
+        },
+
+        //设置类型
+        setType: function setType(type) {
+            this.params.type = type;
+            //刷新数据
+            this.getPosts();
+        }
+    }
+});
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
+
+/***/ }),
+/* 51 */,
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 /* styles */
-__webpack_require__(105)
+__webpack_require__(69)
 
-var Component = __webpack_require__(13)(
+var Component = __webpack_require__(4)(
   /* script */
-  __webpack_require__(103),
+  __webpack_require__(47),
   /* template */
-  __webpack_require__(107),
+  __webpack_require__(78),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "c:\\php\\laragon\\www\\weshop\\resources\\assets\\js\\components\\circle\\CreatePost.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] CreatePost.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-f3ba389a", Component.options)
+  } else {
+    hotAPI.reload("data-v-f3ba389a", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 63 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__(68)
+
+var Component = __webpack_require__(4)(
+  /* script */
+  __webpack_require__(48),
+  /* template */
+  __webpack_require__(77),
   /* scopeId */
   null,
   /* cssModules */
@@ -40102,17 +40206,145 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 105 */
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__(67)
+
+var Component = __webpack_require__(4)(
+  /* script */
+  __webpack_require__(49),
+  /* template */
+  __webpack_require__(76),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "c:\\php\\laragon\\www\\weshop\\resources\\assets\\js\\components\\circle\\PostNews.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] PostNews.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-9896386c", Component.options)
+  } else {
+    hotAPI.reload("data-v-9896386c", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+/* styles */
+__webpack_require__(66)
+
+var Component = __webpack_require__(4)(
+  /* script */
+  __webpack_require__(50),
+  /* template */
+  __webpack_require__(75),
+  /* scopeId */
+  null,
+  /* cssModules */
+  null
+)
+Component.options.__file = "c:\\php\\laragon\\www\\weshop\\resources\\assets\\js\\components\\circle\\Posts.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Posts.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-54ede3a8", Component.options)
+  } else {
+    hotAPI.reload("data-v-54ede3a8", Component.options)
+  }
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(106);
+var content = __webpack_require__(70);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(39)("0b6b0947", content, false);
+var update = __webpack_require__(15)("70cb7054", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/._css-loader@0.14.5@css-loader/index.js!../../../../../node_modules/._vue-loader@10.3.0@vue-loader/lib/style-rewriter.js?id=data-v-54ede3a8!../../../../../node_modules/._vue-loader@10.3.0@vue-loader/lib/selector.js?type=styles&index=0!./Posts.vue", function() {
+     var newContent = require("!!../../../../../node_modules/._css-loader@0.14.5@css-loader/index.js!../../../../../node_modules/._vue-loader@10.3.0@vue-loader/lib/style-rewriter.js?id=data-v-54ede3a8!../../../../../node_modules/._vue-loader@10.3.0@vue-loader/lib/selector.js?type=styles&index=0!./Posts.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(71);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(15)("4da15aa6", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/._css-loader@0.14.5@css-loader/index.js!../../../../../node_modules/._vue-loader@10.3.0@vue-loader/lib/style-rewriter.js?id=data-v-9896386c!../../../../../node_modules/._vue-loader@10.3.0@vue-loader/lib/selector.js?type=styles&index=0!./PostNews.vue", function() {
+     var newContent = require("!!../../../../../node_modules/._css-loader@0.14.5@css-loader/index.js!../../../../../node_modules/._vue-loader@10.3.0@vue-loader/lib/style-rewriter.js?id=data-v-9896386c!../../../../../node_modules/._vue-loader@10.3.0@vue-loader/lib/selector.js?type=styles&index=0!./PostNews.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 68 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(72);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(15)("0b6b0947", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -40128,14 +40360,453 @@ if(false) {
 }
 
 /***/ }),
-/* 106 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(38)();
-exports.push([module.i, "\n.weshop-center-block {\n    width:60%;\n    margin-top:10%;\n    text-align:center;\n    color:#bbb;\n    margin-left: auto;\n    margin-right: auto;\n    margin-top: 30%;\n    background-color: whitesmoke\n}\n.weshop-center-block i{font-size:8rem;\n}\n", ""]);
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(73);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(15)("1f9fb2ce", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/._css-loader@0.14.5@css-loader/index.js!../../../../../node_modules/._vue-loader@10.3.0@vue-loader/lib/style-rewriter.js?id=data-v-f3ba389a!../../../../../node_modules/._vue-loader@10.3.0@vue-loader/lib/selector.js?type=styles&index=0!./CreatePost.vue", function() {
+     var newContent = require("!!../../../../../node_modules/._css-loader@0.14.5@css-loader/index.js!../../../../../node_modules/._vue-loader@10.3.0@vue-loader/lib/style-rewriter.js?id=data-v-f3ba389a!../../../../../node_modules/._vue-loader@10.3.0@vue-loader/lib/selector.js?type=styles&index=0!./CreatePost.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
 
 /***/ }),
-/* 107 */
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(14)();
+exports.push([module.i, "\n.weshop-center-block{width:60%;margin-top:10%;text-align:center;color:#bbb;margin-left: auto;margin-right: auto; margin-top: 30%;\n}\n.weshop-center-block i{font-size:8rem;\n}\n.weui-loadmore_line .weui-loadmore__tips {\n    background-color: #f5f5f5;\n}\n", ""]);
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(14)();
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(14)();
+exports.push([module.i, "\n.post-weshop-center-block {\n    width:60%;\n    margin-top:5%;\n    text-align:center;\n    color:#bbb;\n    margin-left: auto;\n    margin-right: auto;\n    background-color: whitesmoke\n}\n.post-weshop-center-block i{font-size:5rem;\n}\n", ""]);
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(14)();
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+/***/ }),
+/* 74 */,
+/* 75 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [_vm._m(0), _vm._v(" "), _c('div', {
+    staticClass: "home-circle-nav"
+  }, [_c('div', {
+    staticClass: "circle-nav"
+  }, [_c('span', {
+    staticClass: "me-flex-4",
+    class: [_vm.params.type == null ? 'active' : '']
+  }, [_c('a', {
+    attrs: {
+      "href": ""
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.setType(null)
+      }
+    }
+  }, [_vm._v("首页")])]), _vm._v(" "), _c('span', {
+    staticClass: "me-flex-4",
+    class: [_vm.params.type == 1 ? 'active' : '']
+  }, [_c('a', {
+    attrs: {
+      "href": ""
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.setType(1)
+      }
+    }
+  }, [_vm._v("精华")])]), _vm._v(" "), _c('span', {
+    staticClass: "me-flex-4",
+    class: [_vm.params.type == 2 ? 'active' : '']
+  }, [_c('a', {
+    attrs: {
+      "href": ""
+    },
+    on: {
+      "click": function($event) {
+        $event.preventDefault();
+        _vm.setType(2)
+      }
+    }
+  }, [_vm._v("我的")])])]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('div', {
+    staticClass: "circle-nav-b"
+  }, _vm._l((_vm.post_categories), function(post_category) {
+    return _c('a', {
+      class: {
+        'active': post_category.id == _vm.params.post_category_id
+      },
+      on: {
+        "click": function($event) {
+          _vm.setPostCateId(post_category.id)
+        }
+      }
+    }, [_vm._v("\n                " + _vm._s(post_category.name) + "\n            ")])
+  }))]), _vm._v(" "), _vm._l((_vm.posts), function(post, index) {
+    return _c('div', {
+      staticClass: "circle-home-content"
+    }, [_c('div', {
+      staticClass: "circle-top"
+    }, [_c('div', {
+      staticClass: "me-flex-2"
+    }, [_c('img', {
+      staticClass: "me-img lazy",
+      attrs: {
+        "src": post.logo
+      }
+    })]), _vm._v(" "), _c('div', {
+      staticClass: "me-flex-9"
+    }, [_c('div', {
+      staticClass: "circle-name"
+    }, [_c('b', [_vm._v(_vm._s(post.username))]), _c('span', {
+      staticClass: "lv"
+    })]), _vm._v(" "), _c('span', {
+      staticClass: "circle-time"
+    }, [_vm._v(_vm._s(post.created_at_str))]), _vm._v(" "), _c('span', {
+      staticClass: "circle-block"
+    }, [_vm._v(" 板块："), _c('tt', [_vm._v(_vm._s(post.post_category_name))])], 1)]), _vm._v(" "), _c('div', {
+      staticClass: "me-flex-1"
+    }, [(post.is_author) ? _c('a', {
+      on: {
+        "click": function($event) {
+          $event.preventDefault();
+          _vm.delPost(index, post)
+        }
+      }
+    }, [_vm._v("删除")]) : _vm._e()])]), _vm._v(" "), _c('div', {
+      on: {
+        "click": function($event) {
+          _vm.skipPostInfo(post)
+        }
+      }
+    }, [_c('div', {
+      staticClass: "circle-content"
+    }, [_c('div', {
+      domProps: {
+        "innerHTML": _vm._s(post.content)
+      }
+    })]), _vm._v(" "), (post.post_images.length) ? _c('div', {
+      staticClass: "circle-content-img"
+    }, _vm._l((post.post_images), function(post_image) {
+      return _c('div', {
+        staticClass: "me-flex-4"
+      }, [_c('img', {
+        staticClass: "me-img lazy",
+        attrs: {
+          "src": post_image.sm_image
+        },
+        on: {
+          "click": function($event) {
+            $event.stopPropagation();
+            _vm.showImages(post_image.image, post.post_images)
+          }
+        }
+      })])
+    })) : _vm._e()]), _vm._v(" "), _c('div', {
+      staticClass: "circle-critic"
+    }, [_c('div', {
+      staticClass: "critic-top"
+    }, [_c('span', {
+      staticClass: "critic-t-r"
+    }, [_c('a', {
+      on: {
+        "click": function($event) {
+          $event.preventDefault();
+          _vm.showComment(index, post.id)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "fa fa-comment-o"
+    }), _c('span', [_vm._v(" " + _vm._s(post.post_comments_count))])]), _vm._v(" "), _c('a', {
+      attrs: {
+        "href": ""
+      },
+      on: {
+        "click": function($event) {
+          $event.preventDefault();
+          _vm.switchLike(post)
+        }
+      }
+    }, [_c('i', {
+      staticClass: "fa",
+      class: [post.is_like ? 'fa-thumbs-up' : 'fa-thumbs-o-up']
+    }), _vm._v(" "), _c('span', [_vm._v(_vm._s(post.user_likes_count))])])])]), _vm._v(" "), (post.post_comments.length) ? _c('div', {
+      staticClass: "critic-replys"
+    }, _vm._l((post.post_comments), function(post_comment, index2) {
+      return _c('div', {
+        staticClass: "item",
+        on: {
+          "click": function($event) {
+            _vm.showComment(index, post.id, post_comment.user_id, post_comment.username)
+          }
+        }
+      }, [_c('a', [_vm._v(_vm._s(post_comment.username))]), _vm._v(" "), (post_comment.obj_username) ? [_vm._v("回复 "), _c('a', {
+        attrs: {
+          "href": ""
+        }
+      }, [_vm._v(_vm._s(post_comment.obj_username))])] : _vm._e(), _vm._v("\n                    :"), _c('span', {
+        domProps: {
+          "innerHTML": _vm._s(post_comment.content)
+        }
+      }), _vm._v(" "), (post_comment.is_author || post.is_author) ? _c('a', {
+        staticClass: "del",
+        attrs: {
+          "href": ""
+        },
+        on: {
+          "click": function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            _vm.delPostComment(index2, post_comment, post.post_comments)
+          }
+        }
+      }, [_vm._v("删除")]) : _vm._e()], 2)
+    })) : _vm._e()])])
+  }), _vm._v(" "), (_vm.is_show_loading) ? _c('div', {
+    staticClass: "weui-loadmore"
+  }, [_c('i', {
+    staticClass: "weui-loading"
+  }), _vm._v(" "), _c('span', {
+    staticClass: "weui-loadmore__tips"
+  }, [_vm._v("正在加载")])]) : [(_vm.posts.length == 0) ? _c('div', {
+    staticClass: "weshop-center-block",
+    staticStyle: {
+      "display": "block"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-tencent-weibo fa-5x"
+  }), _vm._v(" "), (_vm.params.type == null) ? _c('div', [_vm._v("暂时没有相关帖子~")]) : (_vm.params.type == 1) ? _c('div', [_vm._v("暂时没有精品帖子哦~")]) : (_vm.params.type == 2) ? _c('div', [_vm._v("你还没有发过帖子~")]) : _vm._e()]) : (!_vm.is_more) ? _c('div', {
+    staticClass: "weui-loadmore weui-loadmore_line"
+  }, [_c('span', {
+    staticClass: "weui-loadmore__tips"
+  }, [_vm._v("已经到底啦")])]) : _vm._e()], _vm._v(" "), _c('div', {
+    staticStyle: {
+      "height": "2rem"
+    }
+  }), _vm._v(" "), (_vm.comment.is_show) ? _c('div', {
+    staticClass: "critic-reply-frame"
+  }, [_c('textarea', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.comment.content),
+      expression: "comment.content"
+    }],
+    staticClass: "me-flex-10",
+    attrs: {
+      "rows": "1",
+      "name": "comment",
+      "placeholder": _vm.comment.placeholder
+    },
+    domProps: {
+      "value": (_vm.comment.content)
+    },
+    on: {
+      "blur": function($event) {
+        _vm.cancelComment()
+      },
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.comment.content = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('div', {
+    staticClass: "me-flex-2"
+  }, [_c('button', {
+    staticClass: "weui-btn weui-btn_mini",
+    class: [_vm.comment.content ? 'weui-btn_primary' : 'weui-btn_default weui-btn_plain-disabled'],
+    attrs: {
+      "disabled": !_vm.comment.content
+    },
+    on: {
+      "click": function($event) {
+        _vm.createComment()
+      }
+    }
+  }, [_vm._v("发送\n            ")])])]) : _c('div', {
+    staticClass: "circle-home-bottom"
+  }, [_c('div', {
+    staticClass: "me-flex-4"
+  }, [_vm._v(" ")]), _vm._v(" "), _c('div', {
+    staticClass: "me-flex-4"
+  }, [_c('a', {
+    staticClass: "circle_send",
+    attrs: {
+      "id": "fatie",
+      "href": "/posts/create"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-pencil-square-o"
+  }), _vm._v("\n                发帖子\n            ")])]), _vm._v(" "), _c('div', {
+    staticClass: "me-flex-4"
+  }, [_c('a', {
+    staticClass: "new-reply",
+    attrs: {
+      "href": "/post_news"
+    }
+  }, [(_vm.user.is_news) ? _c('span', {
+    staticClass: "new-info"
+  }, [_vm._v(_vm._s(_vm.user.is_news))]) : _vm._e(), _vm._v(" "), _c('i', {
+    staticClass: "fa fa-user-circle-o"
+  })])])])], 2)
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "circle-head"
+  }, [_c('div', {
+    staticClass: "logo"
+  }), _vm._v(" "), _c('div', {
+    staticClass: "circle-h-mid"
+  }, [_c('span', {
+    staticClass: "me-flex-3"
+  }), _vm._v(" "), _c('span', {
+    staticClass: "me-flex-6"
+  }, [_vm._v("校园商城")]), _vm._v(" "), _c('span', {
+    staticClass: "me-flex-3"
+  }, [_c('a', {
+    attrs: {
+      "href": "/"
+    }
+  }, [_vm._v("进来逛逛 "), _c('i', {
+    staticClass: "fa fa-angle-right"
+  })])])])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-54ede3a8", module.exports)
+  }
+}
+
+/***/ }),
+/* 76 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', [_vm._m(0), _vm._v(" "), _c('div', {
+    staticStyle: {
+      "height": "2rem"
+    }
+  }), _vm._v(" "), _vm._l((_vm.post_news), function(item) {
+    return _c('div', {
+      staticClass: "circle-home-content reply-me"
+    }, [_c('div', {
+      staticClass: "circle-top"
+    }, [_c('div', {
+      staticClass: "me-flex-2"
+    }, [_c('img', {
+      staticClass: "me-img lazy",
+      attrs: {
+        "src": item.logo
+      }
+    })]), _vm._v(" "), _c('div', {
+      staticClass: "me-flex-9"
+    }, [_c('div', {
+      staticClass: "circle-name"
+    }, [_c('b', [_vm._v(_vm._s(item.username))]), _vm._v(" "), (item.type == 3) ? _c('b', [_vm._v("\r\n                        赞了我 "), _c('i', {
+      staticClass: "fa fa-thumbs-o-up"
+    })]) : _vm._e()]), _vm._v(" "), _c('span', {
+      staticClass: "circle-time"
+    }, [_vm._v(_vm._s(item.created_at_str))])])]), _vm._v(" "), (item.type == 1 || item.type == 2) ? _c('div', {
+      staticClass: "circle-content"
+    }, [_c('div', {
+      domProps: {
+        "innerHTML": _vm._s(item.content)
+      }
+    })]) : _vm._e(), _vm._v(" "), _c('div', {
+      staticClass: "circle-critic"
+    }, [_c('div', {
+      staticClass: "critic-replys"
+    }, [(item.type == 1 || item.type == 2) ? _c('span', {
+      staticClass: "replys-triangle"
+    }) : _vm._e(), _vm._v(" "), (item.post_content) ? _c('div', {
+      staticClass: "item",
+      on: {
+        "click": function($event) {
+          _vm.skipPostInfo(item.post_id)
+        }
+      }
+    }, [_c('div', [_vm._v("原帖："), _c('span', {
+      domProps: {
+        "innerHTML": _vm._s(item.post_content)
+      }
+    })])]) : _c('div', {
+      staticClass: "item"
+    }, [_vm._v("\r\n                    帖子已经被删除啦!\r\n                ")])]), _vm._v(" "), _c('div', {
+      staticClass: "reply-me-b"
+    })])])
+  }), _vm._v(" "), (_vm.is_show_loading) ? _c('div', {
+    staticClass: "weui-loadmore"
+  }, [_c('i', {
+    staticClass: "weui-loading"
+  }), _vm._v(" "), _c('span', {
+    staticClass: "weui-loadmore__tips"
+  }, [_vm._v("正在加载")])]) : [(_vm.post_news.length == 0) ? _c('div', {
+    staticClass: "weshop-center-block",
+    staticStyle: {
+      "display": "block"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-bell-o fa-5x"
+  }), _vm._v(" "), _c('div', [_vm._v("暂时没有收到消息~")])]) : (!_vm.is_more) ? _c('div', {
+    staticClass: "weui-loadmore weui-loadmore_line"
+  }, [_c('span', {
+    staticClass: "weui-loadmore__tips"
+  }, [_vm._v("已经到底啦")])]) : _vm._e()]], 2)
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "me-header-top"
+  }, [_c('div', [_c('a', {
+    attrs: {
+      "href": "/posts"
+    }
+  }, [_c('span', {
+    staticClass: "fa fa-chevron-left fa-lg"
+  })])]), _vm._v(" "), _c('div', [_vm._v("消息中心")]), _vm._v(" "), _c('div')])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-9896386c", module.exports)
+  }
+}
+
+/***/ }),
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -40188,7 +40859,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [_c('img', {
       staticClass: "me-img lazy",
       attrs: {
-        "src": post_image.sm_image
+        "src": post_image.image
       },
       on: {
         "click": function($event) {
@@ -40196,7 +40867,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }
       }
     })])
-  })) : _vm._e(), _vm._v(" "), (_vm.post.post_comments && _vm.post.post_comments[0]) ? [_c('div', {
+  })) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "circle-critic"
   }, [_c('div', {
     staticClass: "replys-top"
@@ -40204,7 +40875,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "replys-num"
   }, [_vm._v(_vm._s(_vm.post.post_comments_count) + " 条评论")]), _vm._v(" "), _c('span', {
     staticClass: "sort"
-  }, [_vm._v(_vm._s(_vm.post.user_likes_count) + " 赞")])]), _vm._v(" "), _c('hr'), _vm._v(" "), _vm._l((_vm.post.post_comments), function(post_comment, index) {
+  }, [_vm._v(_vm._s(_vm.post.user_likes_count) + " 赞")])]), _vm._v(" "), (_vm.post.post_comments && _vm.post.post_comments[0]) ? [_c('hr'), _vm._v(" "), _vm._l((_vm.post.post_comments), function(post_comment, index) {
     return _c('div', {
       staticClass: "critic-replys-info"
     }, [_c('div', {
@@ -40252,14 +40923,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }
       }
     })])])])
-  })], 2)] : _vm._e()], 2), _vm._v(" "), (_vm.is_show_loading) ? _c('div', {
+  })] : _vm._e()], 2)]), _vm._v(" "), (_vm.is_show_loading) ? _c('div', {
     staticClass: "weui-loadmore"
   }, [_c('i', {
     staticClass: "weui-loading"
   }), _vm._v(" "), _c('span', {
     staticClass: "weui-loadmore__tips"
   }, [_vm._v("正在加载")])]) : (!_vm.post.post_comments || !_vm.post.post_comments[0]) ? _c('div', {
-    staticClass: "weshop-center-block",
+    staticClass: "post-weshop-center-block",
     staticStyle: {
       "display": "block"
     }
@@ -40362,335 +41033,7 @@ if (false) {
 }
 
 /***/ }),
-/* 108 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function($) {Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/*组件选项定义,包括data,methods,等*/
-var that;
-/* harmony default export */ __webpack_exports__["default"] = ({
-    data: function data() {
-        return {
-            categories: [],
-            post_category_id: null,
-            content: '',
-            uploadList: [],
-            post_id: 0,
-            create_loading: null
-        };
-    },
-    created: function created() {
-        that = this;
-        this.getPostCate();
-    },
-    mounted: function mounted() {
-        this.uploaderImg();
-    },
-
-    methods: {
-        /*
-        * 场景分析:  操作① 点击发送按钮时将说说内容发送到后台,后台返回创建成功的 数据 {}
-        *           操作② 从操作①中提取出 post_id.附加到图片上传的头信息中,保存图片
-        *           操作③ 提示发表成功,跳转到圈子主页
-        * */
-        createPost: function createPost() {
-            var _this = this;
-
-            //                this.createPostImage();return
-            if (!this.content) {
-                weui.alert('说点什么吧');
-                return;
-            }
-            if (!this.post_category_id) {
-                weui.alert('你还没有选择版块呢');
-                return;
-            }
-
-            this.create_loading = weui.loading('发表中');
-            //发送说说
-            axios.post('/api/posts', {
-                'post_category_id': this.post_category_id,
-                'content': this.content
-            }).then(function (response) {
-                _this.post_id = response.data.id;
-                _this.$nextTick(function () {
-                    this.createPostImage();
-                });
-            }).catch(function (error) {
-                var validator_err = error.response.data;
-                if (validator_err.post_category_id) {
-                    _this.create_loading.hide();
-                    weui.alert(validator_err.post_category_id[0]);
-                    return;
-                }
-                if (validator_err.content) {
-                    _this.create_loading.hide();
-                    weui.alert(validator_err.content[0]);
-                    return;
-                }
-            });
-        },
-        createPostImage: function createPostImage() {
-            //异步上传图片
-            that.uploadList.forEach(function (file) {
-                file.upload();
-            });
-            //图片上传完毕后方可调用该方法 todo bug待测试
-            this.createdSuccess();
-        },
-        getPostCate: function getPostCate() {
-            var _this2 = this;
-
-            axios.get('/api/post_categories', {
-                /*params: {
-                	article_id: this.article_id,
-                }*/
-            }).then(function (response) {
-                _this2.categories = response.data;
-            }).catch(function (error) {
-                console.log(error);
-            });
-        },
-        uploaderImg: function uploaderImg() {
-            var uploadCount = 0;
-            var uploadCountDom = document.getElementById("uploadCount");
-            weui.uploader('#uploader', {
-                url: 'http://' + location.hostname + '/api/posts/upload',
-                auto: false, //不开启自动上传,手动触发上传
-                type: 'file',
-                fileVal: 'post_img',
-                compress: {
-                    width: 1600,
-                    height: 1600,
-                    quality: .8
-                },
-                onBeforeQueued: function onBeforeQueued(files) {
-                    if (["image/jpg", "image/jpeg", "image/png", "image/gif"].indexOf(this.type) < 0) {
-                        weui.alert('请上传图片');
-                        return false;
-                    }
-                    if (this.size > 10 * 1024 * 1024) {
-                        weui.alert('请上传不超过10M的图片');
-                        return false;
-                    }
-                    if (files.length > 6) {
-                        // 防止一下子选中过多文件
-                        weui.alert('最多只能上传6张图片，请重新选择');
-                        return false;
-                    }
-                    if (uploadCount + 1 > 6) {
-                        weui.alert('最多只能上传6张图片');
-                        return false;
-                    }
-
-                    ++uploadCount;
-                    uploadCountDom.innerHTML = uploadCount;
-                },
-                onQueued: function onQueued() {
-                    that.uploadList.push(this);
-                    //                        console.log(this);
-                },
-                onBeforeSend: function onBeforeSend(data, headers) {
-                    //文件上传前调用
-                    //                        console.log(this, data, headers);
-                    $.extend(data, { 'post_id': that.post_id }); // 可以扩展此对象来控制上传参数
-                    $.extend(headers, { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }); // 可以扩展此对象来控制上传头部
-
-                    // return false; // 阻止文件上传
-                },
-                onProgress: function onProgress(procent) {//上传进度的回调
-                    //                        console.log(this, procent);
-                },
-                onSuccess: function onSuccess(ret) {//上传成功的回调
-                    //                        console.log(this, ret); //分开的
-                },
-                onError: function onError(err) {//上传失败的回调
-                    //                        console.log(this, err);
-                }
-            });
-
-            //图片预览
-            document.querySelector('#uploaderFiles').addEventListener('click', function (e) {
-                var target = e.target;
-
-                while (!target.classList.contains('weui-uploader__file') && target) {
-                    target = target.parentNode;
-                }
-                if (!target) return;
-
-                var url = target.getAttribute('style') || '';
-                var id = target.getAttribute('data-id');
-
-                if (url) {
-                    url = url.match(/url\((.*?)\)/)[1].replace(/"/g, '');
-                }
-                var gallery = weui.gallery(url, {
-                    className: 'custom-name',
-                    onDelete: function onDelete() {
-                        weui.confirm('确定删除该图片？', function () {
-                            --uploadCount;
-                            uploadCountDom.innerHTML = uploadCount;
-                            for (var i = 0, len = that.uploadList.length; i < len; ++i) {
-                                var file = that.uploadList[i];
-                                if (file.id == id) {
-                                    file.stop();
-                                    break;
-                                }
-                            }
-                            target.remove();
-                            gallery.hide();
-                        });
-                    }
-                });
-            });
-        },
-        createdSuccess: function createdSuccess() {
-            //关闭loading
-            this.create_loading.hide();
-            weui.toast('发表成功', {
-                duration: 1000,
-                callback: function callback() {
-                    location.href = '/posts';
-                }
-            });
-        }
-    }
-});
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
-
-/***/ }),
-/* 109 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-/* styles */
-__webpack_require__(110)
-
-var Component = __webpack_require__(13)(
-  /* script */
-  __webpack_require__(108),
-  /* template */
-  __webpack_require__(112),
-  /* scopeId */
-  null,
-  /* cssModules */
-  null
-)
-Component.options.__file = "c:\\php\\laragon\\www\\weshop\\resources\\assets\\js\\components\\circle\\CreatePost.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] CreatePost.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-f3ba389a", Component.options)
-  } else {
-    hotAPI.reload("data-v-f3ba389a", Component.options)
-  }
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 110 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(111);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(39)("1f9fb2ce", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/._css-loader@0.14.5@css-loader/index.js!../../../../../node_modules/._vue-loader@10.3.0@vue-loader/lib/style-rewriter.js?id=data-v-f3ba389a!../../../../../node_modules/._vue-loader@10.3.0@vue-loader/lib/selector.js?type=styles&index=0!./CreatePost.vue", function() {
-     var newContent = require("!!../../../../../node_modules/._css-loader@0.14.5@css-loader/index.js!../../../../../node_modules/._vue-loader@10.3.0@vue-loader/lib/style-rewriter.js?id=data-v-f3ba389a!../../../../../node_modules/._vue-loader@10.3.0@vue-loader/lib/selector.js?type=styles&index=0!./CreatePost.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 111 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(38)();
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
-
-/***/ }),
-/* 112 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -40851,6 +41194,48 @@ if (false) {
      require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-f3ba389a", module.exports)
   }
 }
+
+/***/ }),
+/* 79 */
+/***/ (function(module, exports) {
+
+/**
+ * Translates the list format produced by css-loader into something
+ * easier to manipulate.
+ */
+module.exports = function listToStyles (parentId, list) {
+  var styles = []
+  var newStyles = {}
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i]
+    var id = item[0]
+    var css = item[1]
+    var media = item[2]
+    var sourceMap = item[3]
+    var part = {
+      id: parentId + ':' + i,
+      css: css,
+      media: media,
+      sourceMap: sourceMap
+    }
+    if (!newStyles[id]) {
+      styles.push(newStyles[id] = { id: id, parts: [part] })
+    } else {
+      newStyles[id].parts.push(part)
+    }
+  }
+  return styles
+}
+
+
+/***/ }),
+/* 80 */,
+/* 81 */,
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(42);
+
 
 /***/ })
 /******/ ]);

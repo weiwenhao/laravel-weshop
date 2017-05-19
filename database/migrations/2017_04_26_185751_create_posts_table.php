@@ -16,7 +16,8 @@ class CreatePostsTable extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
             $table->string('content', 255);
-            $table->unsignedInteger('user_id')->comment('用户id');
+            $table->unsignedInteger('user_id')->index()->comment('用户id');
+            $table->unsignedTinyInteger('is_best')->default(0)->index()->comment('是否精品');
             $table->unsignedTinyInteger('post_category_id')->index()->comment('对应分类id');
             $table->timestamps();
         });

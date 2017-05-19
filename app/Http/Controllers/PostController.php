@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use App\Models\PostImage;
+use App\Models\PostNews;
 use EasyWeChat\Foundation\Application;
 use Illuminate\Http\Request;
 
@@ -114,6 +115,7 @@ class PostController extends Controller
         return $posts;
     }
 
+
     public function ajaxPost(Post $post, $post_id)
     {
         $post = $post->getPost($post_id);
@@ -143,23 +145,38 @@ class PostController extends Controller
     /**
      * 用户关注或者取消关注帖子
      * @param $post_id
+     * @param PostNews $post_news
      * @return void
      */
-    public function switchLikes($post_id)
+    public function switchLikes($post_id, PostNews $post_news)
     {
         $query = \DB::table('post_likes')
             ->where('user_id', \Auth::user()->id)
             ->where('post_id', $post_id);
         //判断用户是否关注了该帖子
-        $post_likes = $query->first();
-        if(!$post_likes){
+        $post_like = $query->first();
+        if(!$post_like){
             //创建一条
-            \DB::table('post_likes')->insert([
+            $post_like = \DB::table('post_likes')->insert([
                 'user_id' => \Auth::user()->id,
                 'post_id' => $post_id,
             ]);
+            if($post_like){
+                //创建一条点赞消息提醒
+                $post_news->createLikeNews(\Auth::user()->id, $post_id);
+            }
         }else{
             $query->delete();
         }
+    }
+
+    /**
+     *得到当前用户的信息
+     */
+    public function ajaxUser(PostNews $postNews)
+    {
+        $user = \Auth::user();
+        $user->is_news = $postNews->isNews($user->id);
+        return $user;
     }
 }
