@@ -17,7 +17,7 @@
 .goods-info-price del i{font-size:.7rem;}
 .goods-info-price small{float:right;margin-top:1rem}
 .goods-info-txt{margin:.3rem 0 2rem 0;}
-.goods-info-txt img{ max-width:100%; height: auto;}
+.goods-info-txt img{ max-width:100%; height: auto;width: 100%}
 /*点击查看大图*/
 .weui-skin_android .weui-actionsheet {width:100%;}
 .weui-skin_android .weui-actionsheet span{position:absolute;right:0;top:0;}

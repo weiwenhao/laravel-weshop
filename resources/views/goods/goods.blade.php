@@ -120,6 +120,10 @@
     @if($goods)
         <script type="text/javascript" src="/js/food.js"></script>
         <script>
+            //去掉商品详情中图片的style的高,和宽100%
+            $('.goods-info-txt').find('img').css('height', 'auto');
+            $('.goods-info-txt').find('img').css('width', '100%');
+
             //加入购物车操作
             $('#addShopCart').click(function (event) {
                 event.preventDefault();

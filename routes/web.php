@@ -18,6 +18,8 @@ Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
     Route::get('goods', 'GoodsController@list');
     Route::get('goods/number_price', 'GoodsController@GetPriceAndNumber');
     Route::get('goods/{goods_id}', 'GoodsController@show');
+    //活动详情
+    Route::get('actives/{actives_id}', 'ActiveController@show');
     //收藏区
     Route::post('collects/switch_collect', 'CollectController@switchCollect'); //服务于商品详情页
     Route::post('collects/collect', 'CollectController@collect');//服务于商品列表页
@@ -45,16 +47,24 @@ Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
 
     /******************圈子管理******************/
     //帖子管理
-    Route::post('circles/upload', 'CircleController@upload');
-    Route::resource('circles', 'CircleController');
-    //帖子分类
-    Route::get('api/post_categories', 'CircleController@ajaxCategories');
-    Route::get('api/posts', 'CircleController@ajaxPosts');
-    Route::delete('api/posts/{id}', 'CircleController@ajaxDestroy');
-    Route::put('api/post_likes/{post_id}', 'CircleController@switchLikes');
+    Route::get('posts', 'PostController@index');
+    Route::get('posts/create', 'PostController@create');
+    Route::get('posts/{post_id}', 'PostController@show');
+    //圈子api管理
+    Route::post('api/posts/upload', 'PostController@upload');
+    Route::post('api/posts', 'PostController@postStore');
+    Route::get('api/post_categories', 'PostController@ajaxCategories');
+    Route::get('api/posts', 'PostController@ajaxPosts');
+    Route::get('/api/posts/user', 'PostController@ajaxUser');
+    Route::get('api/posts/{post_id}', 'PostController@ajaxPost');
+    Route::delete('api/posts/{post_id}', 'PostController@ajaxDestroy');
+    Route::put('api/post_likes/{post_id}', 'PostController@switchLikes');
     //帖子评论
     Route::post('api/post_comments', 'PostCommentController@Create');
     Route::delete('api/post_comments/{id}', 'PostCommentController@destroy');
+    //帖子消息
+    Route::get('post_news', 'PostNewsController@index');
+    Route::get('api/post_news', 'PostNewsController@ajaxPostNews');
 });
 
 /**

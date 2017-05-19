@@ -13,9 +13,9 @@
         <!--导航-->
         <div class="home-circle-nav">
             <div class="circle-nav">
-                <span class="me-flex-4 active"><a href="">首页</a></span>
-                <span class="me-flex-4"><a href="">精华</a></span>
-                <span class="me-flex-4"><a href="">我的</a></span>
+                <span class="me-flex-4" :class="[params.type == null?'active':'']"><a href="" @click.prevent="setType(null)">首页</a></span>
+                <span class="me-flex-4" :class="[params.type == 1?'active':'']"><a href="" @click.prevent="setType(1)">精华</a></span>
+                <span class="me-flex-4" :class="[params.type == 2?'active':'']"><a href="" @click.prevent="setType(2)">我的</a></span>
             </div>
             <hr>
             <div class="circle-nav-b">
@@ -43,28 +43,30 @@
                     <a @click.prevent="delPost(index, post)" v-if="post.is_author">删除</a>
                 </div>
             </div>
-            <!--内容-->
-            <div class="circle-content">
-                <div v-html="post.content"></div>
-            </div>
-            <!--图片-->
-            <div class="circle-content-img" v-if="post.post_images.length">
-                <div class="me-flex-4" v-for="post_image in post.post_images">
-                    <img class="me-img lazy"
-                         :src="post_image.sm_image"
-                         @click="showImages(post_image.image, post.post_images)"
-                    >
+            <div  @click="skipPostInfo(post)">
+                <!--内容-->
+                <div class="circle-content">
+                    <div v-html="post.content"></div>
+                </div>
+                <!--图片-->
+                <div class="circle-content-img" v-if="post.post_images.length">
+                    <div class="me-flex-4" v-for="post_image in post.post_images">
+                        <img class="me-img lazy"
+                             :src="post_image.sm_image"
+                             @click.stop="showImages(post_image.image, post.post_images)"
+                        >
+                    </div>
                 </div>
             </div>
             <!--评论-->
             <div class="circle-critic">
                 <div class="critic-top"><!--评论数量和赞-->
                     <span class="critic-t-r">
-                        <a class="onReply" @click.prevent="showComment(index ,post.id)">
-                            <i class="fa fa-commenting-o"></i><span> {{ post.post_comments_count }}</span>
+                        <a @click.prevent="showComment(index ,post.id)">
+                            <i class="fa fa-comment-o"></i><span> {{ post.post_comments_count }}</span>
                         </a>
                         <a href="" @click.prevent="switchLike(post)">
-                           <i class="fa fa-thumbs-o-up"
+                           <i class="fa"
                               :class="[post.is_like?'fa-thumbs-up':'fa-thumbs-o-up']"
                            ></i>
                             <span>{{ post.user_likes_count }}</span>
@@ -73,11 +75,10 @@
                 </div>
                 <!--评论-->
                 <div class="critic-replys" v-if="post.post_comments.length">
-                    <!--todo class=item 添加一个点击特效,类似qq-->
                     <div class="item" v-for="(post_comment, index2) in  post.post_comments" @click="showComment(index, post.id, post_comment.user_id, post_comment.username)">
                         <a>{{ post_comment.username }}</a>
                         <template v-if="post_comment.obj_username">回复 <a href="">{{ post_comment.obj_username }}</a></template>
-                        :<span>{{ post_comment.content }}</span>
+                        :<span v-html="post_comment.content"></span>
                         <a href="" class="del" v-if="post_comment.is_author || post.is_author"
                            @click.prevent.stop="delPostComment(index2, post_comment, post.post_comments)"
                         >删除</a>
@@ -101,7 +102,9 @@
                  v-if="posts.length == 0"
             >
                 <i class="fa fa-tencent-weibo fa-5x"></i>
-                <div>暂时没有相关帖子</div>
+                <div v-if="params.type == null">暂时没有相关帖子~</div>
+                <div v-else-if="params.type == 1">暂时没有精品帖子哦~</div>
+                <div v-else-if="params.type == 2">你还没有发过帖子~</div>
             </div>
             <!--帖子为空时end-->
 
@@ -137,12 +140,18 @@
         <div class="circle-home-bottom" v-else>
             <div class="me-flex-4">&nbsp;</div>
             <div class="me-flex-4">
-                <a class="circle_send" id="fatie" href="/circles/create"><!---->
+                <a class="circle_send" id="fatie" href="/posts/create"><!---->
                     <i class="fa fa-pencil-square-o" ></i>
                     发帖子
                 </a>
             </div>
-            <div class="me-flex-4">&nbsp;</div>
+            <div class="me-flex-4">
+                <a class="new-reply" href="/post_news">
+                    <span class="new-info" v-if="user.is_news">{{ user.is_news }}<!--右上角新消息数量--></span>
+
+                    <i class="fa fa-user-circle-o"></i>
+                </a>
+            </div>
         </div>
         <!--底部end-->
     </div>
@@ -150,7 +159,7 @@
 <script>
     /*组件选项定义,包括data,methods,等*/
     export default {
-        name: 'Circles',
+        name: 'Posts',
         data () {
             return {
                 params : {
@@ -158,7 +167,8 @@
                     limit : 8,
                     order : 'created_at',
                     sort : 'desc',
-                    post_category_id : null
+                    post_category_id : null,
+                    type : null,
                 },
                 next_offset : 0,
                 comment : { //评论对象只有一套,保证了唯一性
@@ -174,11 +184,18 @@
                 posts : [],
                 is_show_loading : false,
                 is_more : true,
+                user : {
+                    id : null,
+                    logo : null,
+                    is_news : false,
+                }
             }
         },
         created(){
             this.getPostCate();
-            this.getCircles();
+            this.getPosts();
+            this.getUser();
+            //每30秒调用一次getUser()
         },
         mounted(){
             $(window).scroll(() =>{
@@ -189,15 +206,36 @@
                 if($(document).height() - $(window).height() < $(document).scrollTop() +$('.circle-home-bottom').height()){
                     //不在loading中并且存在更多的数据才能请求该方法加载更多的数据
                     if(!this.is_show_loading && this.is_more){
-                         this.nextCircles();
+                         this.nextPosts();
                      }
                 }
-            })
+            });
+            window.setInterval(()=>{
+                this.getUser();
+            }, 30000);
         },
         methods : {
+            getUser(){
+                axios.get('/api/posts/user', {
+
+                })
+                .then(response=> {
+                    this.user = response.data;
+                })
+                .catch(error=> {
+                	console.log(error);
+                });
+            },
             //得到帖子数据,包括评论,图片
-            getCircles(){
+            getPosts(){
+                //数据初始化
+                this.posts = [];
                 this.is_show_loading = true;
+                this.is_more = true;
+                //初始化next_offset
+                this. next_offset = 0;
+
+
                 axios.get('/api/posts', {
                     params: this.params
                 })
@@ -206,15 +244,17 @@
                     if(response.data.length < this.params.limit) {
                         this.is_more = false; //不存在多数据了
                     }
+
                     this.$nextTick(function () {
                         this.is_show_loading = false;
                     })
                 })
                 .catch(error=> {
-                	console.log(error);
+                    this.is_show_loading = false;
                 });
             },
-            nextCircles(){
+            //加载更多接口
+            nextPosts(){
                 this.is_show_loading = true;
                 this.next_offset = this.next_offset + this.params.limit + 1; //当前的偏移量,加上条数,+1
                 //得到第一次的next_params
@@ -224,7 +264,8 @@
                         limit : this.params.limit,
                         order :  this.params.order,
                         sort :  this.params.sort,
-                        post_category_id :  this.params.post_category_id
+                        post_category_id :  this.params.post_category_id,
+                        type : this.params.type
                     }
                 })
                 .then(response=> {
@@ -264,7 +305,7 @@
             setPostCateId(post_category_id){
                 this.params.post_category_id = post_category_id;
                 //刷新请求
-                this.getCircles();
+                this.getPosts();
             },
             //显示评论框
             showComment(index, post_id, obj_user_id, obj_username){
@@ -295,7 +336,7 @@
                     if(!$('[name="comment"]:focus').length){
                         this.comment.is_show = false;
                     }
-                }, 100);
+                }, 200);
             },
             //创建一条评论
             createComment(){
@@ -390,9 +431,21 @@
                 //根据状态+或者-
                 post.is_like?post.user_likes_count--:post.user_likes_count++;
                 post.is_like = !post.is_like;
-                 axios.put('/api/post_likes/'+post.id, {
-                  	//key : value
-                 })
+                 axios.put('/api/post_likes/'+post.id)
+            },
+            //跳转到帖子详情页
+            skipPostInfo(post){
+                //如果comment框显示则不进行跳转
+                if(this.comment.is_show){
+                    return
+                }
+                location.href = 'posts/' + post.id;
+            },
+            //设置类型
+            setType(type){
+                this.params.type = type;
+                //刷新数据
+                this.getPosts();
             }
         }
     }

@@ -267,11 +267,11 @@ class OrderController extends Controller
            // 用户是否支付成功
            if ($successful) {
                //将支付时间更新为当前时间
-               $order->paid_at = time(); // 更新支付时间为当前时间
+               $order->paid_at = date('Y-m-d H:i:s'); // 更新支付时间为当前时间
+               $order->save(); // 保存订单
            } /*else { // 用户支付失败
                $order->status = 'paid_fail';
            }*/
-           $order->save(); // 保存订单
            return true; // 返回处理完成
        });
        return $response;

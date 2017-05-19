@@ -13,7 +13,7 @@ class OrdersSeeder extends Seeder
      */
     public function run()
     {
-        //填充一条地址
+        /*//填充一条地址
         $addr = \App\Models\Addr::create([
             'name' => '魏文豪',
             'phone' => '13168065609',
@@ -81,7 +81,7 @@ class OrdersSeeder extends Seeder
             'goods_id' => $ceshi2->id,
             'shop_number' => '2',
             'shop_price' => $ceshi2->price,
-        ]);
+        ]);*/
 
     }
 }

@@ -17,7 +17,7 @@
                     <!--i class="fa fa-smile-o" data-val="2"></i-->
                 </div>
                 <div class="poster-top-right">
-                    <a href="/circles">取消&nbsp;&nbsp;</a>
+                    <a href="/posts">取消&nbsp;&nbsp;</a>
                     <a class="poster-top-sub" id="posterBtn" @click.prevent="createPost()">发送</a>
                 </div>
             </div>
@@ -60,7 +60,6 @@
     /*组件选项定义,包括data,methods,等*/
     var that;
     export default {
-        name: 'CreateCircle',
         data () {
             return {
                 categories : [],
@@ -98,7 +97,7 @@
 
                 this.create_loading = weui.loading('发表中');
                 //发送说说
-                 axios.post('/circles', {
+                 axios.post('/api/posts', {
                   	 'post_category_id' : this.post_category_id,
                      'content' : this.content,
                  })
@@ -148,7 +147,7 @@
                 var uploadCount = 0;
                 var uploadCountDom = document.getElementById("uploadCount");
                 weui.uploader('#uploader', {
-                    url: 'http://' + location.hostname + '/circles/upload',
+                    url: 'http://' + location.hostname + '/api/posts/upload',
                     auto: false, //不开启自动上传,手动触发上传
                     type: 'file',
                     fileVal :'post_img',
@@ -241,7 +240,7 @@
                 weui.toast('发表成功',  {
                     duration: 1000,
                     callback: function(){
-                        location.href='/circles'
+                        location.href='/posts'
                     }
                 });
             },

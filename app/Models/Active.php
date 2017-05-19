@@ -37,7 +37,7 @@ class Active extends Model
     public function getActives()
     {
         //根据设置中的数量取出封面封面,不包含商品详情
-        $actives = $this->select('id', 'name', 'url', 'image', 'sort', 'is_content', 'created_at')
+        $actives = $this->select('id', 'name', 'url', 'image', 'sort', 'is_content')
             ->where('is_show', 1)
             ->orderBy('sort', 'asc')
             ->limit(config('shop.active_img_count'))

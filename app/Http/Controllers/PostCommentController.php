@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostCommentRequest;
 use App\Models\PostComment;
+use App\Models\PostNews;
 use Illuminate\Http\Request;
 
 class PostCommentController extends Controller
 {
-    public function create(PostCommentRequest $request)
+    public function create(PostCommentRequest $request, PostNews $post_news)
     {
         $post_comment = PostComment::create([
             'user_id' => \Auth::user()->id,
@@ -17,7 +18,17 @@ class PostCommentController extends Controller
             'obj_user_id' => (int)$request->get('obj_user_id'),
             'obj_username' => (string) $request->get('obj_username')
         ]);
+
+        //评论成功创建消息提醒
+        if($post_comment)
+            $post_news->createCommentNews($post_comment);
+
+        //transform
         $post_comment->username = \Auth::user()->username;
+        $post_comment->logo = \Auth::user()->logo;
+        $post_comment->created_at_str = $post_comment->created_at->format('m-d H:i');
+        //评论内容换行
+        $post_comment->content = nl2br(htmlspecialchars($post_comment->content));
         return $post_comment;
     }
 

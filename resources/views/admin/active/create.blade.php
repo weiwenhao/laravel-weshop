@@ -121,7 +121,7 @@
                             <div class="tab-pane" id="tab_2">
                                 <div class="row">
                                     <!-- 编辑器容器 -->
-                                    <div class="col-md-5 col-md-offset-4">
+                                    <div class="col-md-12">
                                         <div id="content" name="content" type="text/plain"></div>
                                     </div>
                                 </div>
