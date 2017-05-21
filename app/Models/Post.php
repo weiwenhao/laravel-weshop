@@ -29,7 +29,7 @@ class Post extends Model
         return $post_comments;
     }
 
-    public function post_category()
+    public function postCategory()
     {
         return $this->belongsTo(PostCategory::class);
     }
@@ -39,10 +39,17 @@ class Post extends Model
         return $this->belongsToMany(User::class, 'post_likes', 'post_id', 'user_id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 
 
     /*****************************可调用方法区域******************************/
-
+    /**
+     * @param $request
+     * @return mixed
+     */
     public function getPosts($request)
     {
         $offset = $request->get('offset', 0);

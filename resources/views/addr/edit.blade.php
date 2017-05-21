@@ -93,6 +93,14 @@
 <script>
     $('[type=submit]').click(function (event) {
         event.preventDefault();
+        //等待框
+        let loading = weui.loading('请稍等');
+        setTimeout(function () { //如果超过5秒钟没有响应则自动关闭loading框,并提示一个超时响应
+            loading.hide(function() {
+                weui.topTips('请求超时', 3000);
+            });
+        }, 5000);
+
         let name = $('#name').val();
         let phone = $('#phone').val();
         let floor_name = $('#floor_name option:selected').val();
@@ -109,30 +117,33 @@
                 'is_default' : is_default,
             },
             success: function(msg){
-                toast('修改成功');
+                loading.hide(function () {
+                    weui.toast('修改成功');
+                });
                 //返回上一页
                 window.location.href = document.referrer;//返回上一页并刷新
             },
             error: function (error) { //200以外的状态码走这里
+                loading.hide();
                 let err = error.responseJSON;
                 let msg = '';
                 if(err.name){
-                    msg += err.name[0]+'\n';
+                    msg += err.name[0]+'<br>';
                 }
                 if(err.phone){
-                    msg += err.phone[0]+'\n';
+                    msg += err.phone[0]+'<br>';
                 }
 
                 if(err.floor_name){
-                    msg += err.floor_name[0]+'\n';
+                    msg += err.floor_name[0]+'<br>';
                 }
                 if(err.number){
-                    msg += err.number[0]+'\n';
+                    msg += err.number[0]+'<br>';
                 }
                 if(err.is_default){
-                    msg += err.is_default[0]+'\n';
+                    msg += err.is_default[0]+'<br>';
                 }
-                alert(msg);
+                weui.alert(msg);
             }
         });
     });

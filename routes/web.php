@@ -14,36 +14,41 @@ Route::get('/', function (){
 Route::post('orders/notify', 'OrderController@notify'); //支付结果通知
 Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
     //商品区
-    Route::get('index', 'GoodsController@index');
-    Route::get('goods', 'GoodsController@list');
+    Route::get('index', 'GoodsController@index')->middleware(['exit_url_in:goods_info', 'exit_url_in:orders']);
+    Route::get('goods', 'GoodsController@list')->middleware(['exit_url_in:goods_info']);
     Route::get('goods/number_price', 'GoodsController@GetPriceAndNumber');
-    Route::get('goods/{goods_id}', 'GoodsController@show');
+    Route::get('goods/{goods_id}', 'GoodsController@show')->middleware(['exit_url_in:confirm']);
     //活动详情
     Route::get('actives/{actives_id}', 'ActiveController@show');
     //收藏区
-    Route::post('collects/switch_collect', 'CollectController@switchCollect'); //服务于商品详情页
-    Route::post('collects/collect', 'CollectController@collect');//服务于商品列表页
-    Route::get('collects', 'CollectController@index');//服务于商品列表页
-    Route::delete('collects/{id}', 'CollectController@noCollect');//服务于商品列表页
+    Route::get('collects', 'CollectController@index')->middleware(['exit_url_in:goods_info']);
+    Route::post('collects/switch_collect', 'CollectController@switchCollect');
+    Route::post('collects/collect', 'CollectController@collect');
+
+    Route::delete('collects/{id}', 'CollectController@noCollect');
 
     //购物车
+    Route::get('shop_carts', 'ShopCartController@index')->middleware(['exit_url_in:goods_info', 'exit_url_in:confirm']);
+    Route::post('shop_carts', 'ShopCartController@store');
     Route::put('shop_carts', 'ShopCartController@editShopNumbers');
     Route::delete('shop_carts', 'ShopCartController@delShopCarts');
-    Route::resource('shop_carts', 'ShopCartController');
+
+
     //地址管理
     Route::resource('addrs', 'AddrController');
     //订单管理
         //确认订单
-    Route::get('orders/confirm/addrs', 'OrderController@addrs'); //确定订单中的地址列表
-    Route::post('orders/confirm/addrs/{addr_id}', 'OrderController@setAddrId'); //确定订单中的地址列表
+    Route::get('orders/confirm/addrs', 'OrderController@addrs')->middleware(['exit_url_in:addrs']); //确定订单中的地址列表
+    Route::post('orders/confirm/addrs/{addr_id}', 'OrderController@setAddrId');
     Route::post('orders/shop_cart_confirm', 'OrderController@ShopCartToConfirm'); //将购物车商品经过结算操作转移到确认订单中
     Route::post('orders/goods_confirm', 'OrderController@GoodsToConfirm'); //将商品直接转移到确认订单中
     Route::get('orders/confirm', 'OrderController@confirm'); //确认订单
     //已经有订单id.根据改id再次付款
     Route::post('orders/repay', 'OrderController@repay');
-    Route::resource('orders', 'OrderController');
+    Route::resource('orders', 'OrderController');\
+
     //个人中心
-    Route::get('me', 'MeController@index'); //个人中心主页
+    Route::get('me', 'MeController@index')->middleware(['exit_url_in:addrs', 'exit_url_in:orders']); //个人中心主页
 
     /******************圈子管理******************/
     //帖子管理
@@ -95,7 +100,9 @@ Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.ad
     /******************************商品管理区************************************/
     //商品管理
     Route::get('/goods/dt_data','GoodsController@dtData')->name('goods.index'); //定义路由名称和resource的index一致,方便对权限进行判断
+    Route::put('/goods/is_sale', 'GoodsController@updateIsSale')->name('goods.edit');
     Route::resource('goods', 'GoodsController');
+
     Route::get('/types/ajax_types','TypeController@ajaxTypes')->name('goods.create');
     Route::get('/types/{type_id}/attributes/ajax_attributes','AttributeController@ajaxAttributes')->name('goods.create');
     Route::get('/types/{type_id}/attributes/ajax_edit_attr','AttributeController@ajaxEditAttr')->name('goods.edit');
@@ -139,6 +146,9 @@ Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.ad
     //评论列表
     Route::get('posts/{post_id}/post_comments/dt_data','PostCommentController@dtData')->name('comments.index');
     Route::resource('posts/{post_id}/post_comments', 'PostCommentController', ['only' => ['index', 'destroy']]);
+    //板块管理
+    Route::get('/post_categories/dt_data','PostCategoryController@dtData')->name('post_categories.index');
+    Route::resource('post_categories', 'PostCategoryController');
 
     /******************************活动管理**************************************/
     //活动列表

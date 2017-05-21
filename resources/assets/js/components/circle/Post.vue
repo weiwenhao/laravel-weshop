@@ -92,12 +92,10 @@
              style="display:block;"
              v-else-if="!post.post_comments || !post.post_comments[0]"
         >
-            <i class="fa fa-comment-o fa-5x"></i>
-            <div>暂时没有评论</div>
-            <div>快来占个沙发吧</div>
+            <div>还没有评论，快来占个沙发吧</div>
         </div>
 
-        <div style="height:2rem"></div>
+        <div style="height:3rem"></div>
 
         <!--回复文本框start-->
         <div class="critic-reply-frame"  v-if="comment.is_show">
@@ -318,7 +316,7 @@
 <style>
     .post-weshop-center-block {
         width:60%;
-        margin-top:5%;
+        /*margin-bottom:25%;*/
         text-align:center;
         color:#bbb;
         margin-left: auto;

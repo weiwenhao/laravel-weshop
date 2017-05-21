@@ -19,7 +19,7 @@
         @foreach($shop_carts as $shop_cart)
             <div class="row">
                     <!--添加name='off'出现下架-->
-                    <div class="col-xs-1 {{ $shop_cart->is_on_sale?($shop_cart->number == 0?'off-number':''):'off-sale' }} "><!--选项-->
+                    <div class="col-xs-1 {{ $shop_cart->is_sale?($shop_cart->number == 0?'off-number':''):'off-sale' }} "><!--选项-->
                         <label for='{{ $loop->index }}' class="me-checkbox-icon">
                             <input id="{{ $loop->index }}" class="shop_cart" type="checkbox" name="select"
                                    {{--如果购买数量小于或者等于库存量(常见情况),则不需要修改数据库,所以传递一个空到后台,否则把仅剩的库存量传递到后台,修改购物车中的库存量--}}
@@ -107,6 +107,14 @@
          * 结算操作
          * */
         $('#sub').click(function () {
+            //等待loading
+            let loading = weui.loading('库存检测中');
+            setTimeout(function () { //如果超过5秒钟没有响应则自动关闭loading框,并提示一个超时响应
+                loading.hide(function() {
+                    weui.topTips('请求超时', 3000);
+                });
+            }, 10000);
+
             //判断用户是否选择了商品
             let shop_cart_ids =  [];
             let shop_numbers = [];
@@ -115,7 +123,9 @@
                 shop_numbers[index] = $(dom).attr('shop_number');
             });
             if(shop_cart_ids == ''){
-                alert('您还没有选择商品呢!');
+                loading.hide(function() {
+                    weui.topTips('您还没有选择商品呢', 2000);
+                });
                 return;
             }
             $.ajax({
@@ -129,8 +139,9 @@
                      location.href = '{{ url('orders/confirm') }}';
             	},
             	error: function (error) { //200以外的状态码走这里
+                    loading.hide();
             		 if(error.status == 422){
-            		     alert(error.responseText);
+            		     weui.alert(error.responseText);
                      }
             	}
             });
@@ -208,13 +219,7 @@
             	url: "/shop_carts",
             	data:{
             	    'shop_cart_ids':shop_cart_ids
-                },
-            	success: function(msg){
-
-            	},
-            	error: function (error) { //200以外的状态码走这里
-
-            	}
+                }
             });
         }
     </script>

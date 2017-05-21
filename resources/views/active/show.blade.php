@@ -5,9 +5,6 @@
         .active-info {
             background-color: white;
         }
-        .active-info img {
-            max-width: 100%;
-        }
     </style>
 @stop
 @section('content')

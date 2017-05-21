@@ -33,7 +33,7 @@ class GoodsRequest extends FormRequest
             'promote_start_at' => 'nullable|date_format:Y-m-d H:i:s',
             'promote_stop_at' => 'nullable|date_format:Y-m-d H:i:s',
             'sort' => 'required|integer',
-            'is_on_sale' => 'required|boolean',
+            'is_sale' => 'required|boolean',
             'is_best' => 'required|boolean',
             'image' => 'required|image'
         ];

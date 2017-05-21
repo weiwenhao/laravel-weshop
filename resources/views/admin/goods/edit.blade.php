@@ -131,19 +131,19 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group{{ $errors->has('is_on_sale') ? ' has-error' : '' }}">
-                                        <label for="is_on_sale" class="col-md-4 control-label">是否上架</label>
+                                    <div class="form-group{{ $errors->has('is_sale') ? ' has-error' : '' }}">
+                                        <label for="is_sale" class="col-md-4 control-label">是否上架</label>
 
                                         <div class="col-md-4">
                                             <label class="radio-inline">
-                                                <input type="radio" name="is_on_sale" value="1" {{ old('is_on_sale', $goods->is_on_sale) == 1?'checked':'' }}> 是
+                                                <input type="radio" name="is_sale" value="1" {{ old('is_sale', $goods->is_sale) == 1?'checked':'' }}> 是
                                             </label>
                                             <label class="radio-inline">
-                                                <input type="radio" name="is_on_sale"  value="0" {{ old('is_on_sale', $goods->is_on_sale) == 0?'checked':'' }}> 否
+                                                <input type="radio" name="is_sale"  value="0" {{ old('is_sale', $goods->is_sale) == 0?'checked':'' }}> 否
                                             </label>
-                                            @if ($errors->has('is_on_sale'))
+                                            @if ($errors->has('is_sale'))
                                                 <span class="help-block">
-                                                    <strong>{{ $errors->first('is_on_sale') }}</strong>
+                                                    <strong>{{ $errors->first('is_sale') }}</strong>
                                                 </span>
                                             @endif
                                         </div>

@@ -6,7 +6,6 @@ use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use App\Models\PostImage;
 use App\Models\PostNews;
-use EasyWeChat\Foundation\Application;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -14,14 +13,11 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Application $wechat
      * @return \Illuminate\Http\Response
      */
-    public function index(Application $wechat)
+    public function index()
     {
-        //jssdk
-        $js = $wechat->js;
-        return view('post.list', compact('js'));
+        return view('post.list');
     }
 
     /**
@@ -38,14 +34,11 @@ class PostController extends Controller
      * Display the specified resource.
      *
      * @param  int $post_id
-     * @param Application $wechat
      * @return \Illuminate\Http\Response
      */
-    public function show($post_id, Application $wechat)
+    public function show($post_id)
     {
-        //jssdk
-        $js = $wechat->js;
-        return view('post.show', compact('post_id', 'js'));
+        return view('post.show', compact('post_id'));
     }
 
 

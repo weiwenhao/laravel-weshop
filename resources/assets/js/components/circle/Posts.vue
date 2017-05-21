@@ -451,7 +451,7 @@
     }
 </script>
 <style>
-    .weshop-center-block{width:60%;margin-top:10%;text-align:center;color:#bbb;margin-left: auto;margin-right: auto; margin-top: 30%;}
+    .weshop-center-block{width:60%;text-align:center;color:#bbb;margin-left: auto;margin-right: auto; margin-top: 30%;}
     .weshop-center-block i{font-size:8rem;}
     .weui-loadmore_line .weui-loadmore__tips {
         background-color: #f5f5f5;

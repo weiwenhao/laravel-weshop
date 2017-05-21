@@ -8,16 +8,16 @@
 @section('content')
     <!--**************** 顶部 ********************-->
     <div class="me-header-top me-header-food-info">
-        <div><a href="{{ request()->cookie('goods_previous_url')?:url()->previous() }}"><span class="fa fa-chevron-left "></span></a></div>
+        <div><a href="{{ request()->cookie('goods_info_exit_url')?:'/' }}"><span class="fa fa-chevron-left "></span></a></div>
         <div></div>
-        <div><a href="{{ url('shop_carts') }}"><span class="fa fa fa-shopping-cart"></span></a></div>
+        <div>{{--<a href="{{ url('shop_carts') }}"><span class="fa fa fa-shopping-cart"></span></a>--}}</div>
     </div>
     <!--**************** 详情 ********************-->
     @if($goods)
         <div class="goods-info-img">
             <img class="img-responsive" style="width: 100%" src="{{ $goods->big_image }}" />
         </div>
-        <div class="goods-info-img-empty" id="showAndroidActionSheet"></div>
+        <div class="goods-info-img-empty"></div>
         <div class="goods-info">
             <div class="goods-list goods-info-name"><p>{{ $goods->name }}</p></div>
             <div class="goods-list goods-info-price">
@@ -37,16 +37,6 @@
                 {!! $goods->description !!}
             </div>
         </div>
-        <!--点击图片查看大图-->
-        <div class="page actionsheet">
-            <div class="weui-skin_android" id="androidActionsheet" style="display:none">
-                <div class="weui-mask"></div>
-                <div class="weui-actionsheet">
-                    <img class="img-responsive" src="{{ $goods->big_image }}" />
-                    <span class="fa fa-times-circle-o fa-2x" id="outImg"></span>
-                </div>
-            </div>
-        </div>
         <!--**************** 加入购物车 立即购买 ********************-->
         <div calss="container" id="mai">
             <div class="row">
@@ -57,7 +47,7 @@
                 <div class="col-xs-4">
                     <a class="weui-btn weui-btn_warn showIOSActionSheet" ></i> 加入购物车</a>
                 </div>
-                <div class="col-xs-4  {{ $goods->is_on_sale?'':"off-sale" }}"><!--添加name='off'显示已下架-->
+                <div class="col-xs-4  {{ $goods->is_sale?'':"off-sale" }}"><!--添加name='off'显示已下架-->
                     <a class="weui-btn weui-btn_warn showIOSActionSheet"  >立即购买</a>
                 </div>
             </div>
@@ -118,8 +108,16 @@
 @stop
 @section('js')
     @if($goods)
-        <script type="text/javascript" src="/js/food.js"></script>
         <script>
+            wx.config({!! $js->config(['previewImage'], false) !!});
+            $('.goods-info-img-empty').click(function () {
+                wx.previewImage({
+                    current: 'http://' + location.hostname + '{{ $goods->big_image }}', // 当前显示图片的http链接
+                    urls: [
+                        'http://' + location.hostname + '{{ $goods->big_image }}',
+                    ] // 需要预览的图片http链接列表
+                });
+            });
             //去掉商品详情中图片的style的高,和宽100%
             $('.goods-info-txt').find('img').css('height', 'auto');
             $('.goods-info-txt').find('img').css('width', '100%');
@@ -127,6 +125,13 @@
             //加入购物车操作
             $('#addShopCart').click(function (event) {
                 event.preventDefault();
+                let loading = weui.loading('库存检测中');
+                setTimeout(function () { //如果超过5秒钟没有响应则自动关闭loading框,并提示一个超时响应
+                    loading.hide(function() {
+                        weui.topTips('请求超时', 3000);
+                    });
+                }, 8000);
+
                 //得到购买数量
                 let shop_number = $('[name=shop_number]').val();
                 //得到商品属性
@@ -143,8 +148,11 @@
                         'goods_attribute_ids' : goods_attribute_ids,
                     },
                     success: function(msg){
+                        loading.hide(function () {
+                            weui.toast('加入购物车成功',800);
+                        });
                         //弹出成功
-                        toast('加入购物车成功');
+
                         //关闭下拉框
                         $('#iosActionsheetCancel').trigger('click');
                         //清空number数量
@@ -152,9 +160,10 @@
 
                     },
                     error: function (error) { //200以外的状态码走这里
+                        loading.hide();
         //                error.responseText; //库存量不足
                          if(error.status == 422){
-                             alert(error.responseText)
+                             weui.alert(error.responseText)
                          }
                     }
                 });
@@ -162,7 +171,14 @@
             });
 
             //立即购买操作
-            $('#lijiShop').click(function () {
+            $('#lijiShop').click(function (event) {
+                event.preventDefault();
+                let loading = weui.loading('生成订单中');
+                setTimeout(function () { //如果超过5秒钟没有响应则自动关闭loading框,并提示一个超时响应
+                    loading.hide(function() {
+                        weui.topTips('请求超时', 3000);
+                    });
+                }, 8000);
                 //得到购买数量
                 let shop_number = $('[name=shop_number]').val();
                 //得到商品属性
@@ -182,9 +198,10 @@
                         location.href='{{ url('/orders/confirm') }}';
                     },
                     error: function (error) { //200以外的状态码走这里
+                        loading.hide();
         //                error.responseText; //库存量不足
                         if(error.status == 422){
-                            alert(error.responseText)
+                            weui.alert(error.responseText)
                         }
                     }
                 });

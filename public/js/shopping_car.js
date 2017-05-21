@@ -57,7 +57,7 @@ $(function(){
     function deleteAll(){
         edit.update();//更新
         edit.selected();//选中列表
-        if(confirm('确定删除吗')){
+        weui.confirm('你确定要删除选中的商品吗？', function () {
             ajaxDelGoods();
             edit.selected();//选中列表
             edit.update();//更新
@@ -71,7 +71,7 @@ $(function(){
             if(edit.row.length == 0){//购物车
                 $('.weshop-center-block .fa-shopping-cart').parents().css('display','block');
             }
-        }
+        });
     }
     //编辑 商品
     edit.on.click(function(){//点击编辑时

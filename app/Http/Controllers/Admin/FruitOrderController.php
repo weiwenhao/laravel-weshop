@@ -38,22 +38,19 @@ class FruitOrderController extends Controller
         }
 
 
-        $query = Order::select('orders.*', 'goods.id as goods_id', 'goods.name as goods_name', 'goods.category_id',
-            'order_goods.goods_attribute_ids', 'order_goods.shop_price', 'order_goods.shop_number', 'order_goods.status', 'order_goods.id as order_goods_id') //order_goods_id
+        $query = Order::select('orders.*', 'goods.id as goods_id', 'order_goods.goods_name', 'goods.category_id',
+            'order_goods.goods_attributes', 'order_goods.shop_price', 'order_goods.shop_number', 'order_goods.status', 'order_goods.id as order_goods_id') //order_goods_id
+        ->addSelect(\DB::raw("GROUP_CONCAT( concat( goods_name,'', 'x' ,shop_number, ' ', goods_attributes)  SEPARATOR '<br>' )
+                                as order_info"))
         ->join('order_goods', 'order_goods.order_id', '=', 'orders.id')
             ->join('goods', 'order_goods.goods_id', '=', 'goods.id')
             ->where($where)->where([
                 ['category_id', 2], //2代表水果订单id
             ])
+            ->groupBy('order_id')
             ->whereNotNull('paid_at'); //已经支付过的订单
-
         return Datatables::of($query)
-            ->addColumn('all_info', function (Order $order){
-                $res = "$order->name $order->floor_name $order->number<br/>$order->phone";
-                $res .= "<br>";
-                $res .= $order->orderContent();
-                return $res;
-            })->rawColumns(['all_info', 'action'])
+            ->rawColumns(['order_info', 'action'])
              ->addColumn('action', 'admin.fruit_order.action')
             ->make(true);
     }

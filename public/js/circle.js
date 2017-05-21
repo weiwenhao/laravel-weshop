@@ -39270,8 +39270,6 @@ var that;
 //
 //
 //
-//
-//
 
 /*组件选项定义,包括data,methods,等*/
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -40390,7 +40388,7 @@ if(false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(14)();
-exports.push([module.i, "\n.weshop-center-block{width:60%;margin-top:10%;text-align:center;color:#bbb;margin-left: auto;margin-right: auto; margin-top: 30%;\n}\n.weshop-center-block i{font-size:8rem;\n}\n.weui-loadmore_line .weui-loadmore__tips {\n    background-color: #f5f5f5;\n}\n", ""]);
+exports.push([module.i, "\n.weshop-center-block{width:60%;text-align:center;color:#bbb;margin-left: auto;margin-right: auto; margin-top: 30%;\n}\n.weshop-center-block i{font-size:8rem;\n}\n.weui-loadmore_line .weui-loadmore__tips {\n    background-color: #f5f5f5;\n}\n", ""]);
 
 /***/ }),
 /* 71 */
@@ -40404,7 +40402,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(14)();
-exports.push([module.i, "\n.post-weshop-center-block {\n    width:60%;\n    margin-top:5%;\n    text-align:center;\n    color:#bbb;\n    margin-left: auto;\n    margin-right: auto;\n    background-color: whitesmoke\n}\n.post-weshop-center-block i{font-size:5rem;\n}\n", ""]);
+exports.push([module.i, "\n.post-weshop-center-block {\n    width:60%;\n    /*margin-bottom:25%;*/\n    text-align:center;\n    color:#bbb;\n    margin-left: auto;\n    margin-right: auto;\n    background-color: whitesmoke\n}\n.post-weshop-center-block i{font-size:5rem;\n}\n", ""]);
 
 /***/ }),
 /* 73 */
@@ -40934,11 +40932,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticStyle: {
       "display": "block"
     }
-  }, [_c('i', {
-    staticClass: "fa fa-comment-o fa-5x"
-  }), _vm._v(" "), _c('div', [_vm._v("暂时没有评论")]), _vm._v(" "), _c('div', [_vm._v("快来占个沙发吧")])]) : _vm._e(), _vm._v(" "), _c('div', {
+  }, [_c('div', [_vm._v("还没有评论，快来占个沙发吧")])]) : _vm._e(), _vm._v(" "), _c('div', {
     staticStyle: {
-      "height": "2rem"
+      "height": "3rem"
     }
   }), _vm._v(" "), (_vm.comment.is_show) ? _c('div', {
     staticClass: "critic-reply-frame"

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
     {{--ajaxtoken--}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>home</title>
+    <title>天哪来啦</title>
     <!-- 以下是公共css -->
     <link rel="stylesheet" href="/css/app.css">
     <link rel="stylesheet" href="/iconfont/iconfont.css"/>
@@ -26,6 +26,9 @@
 {{--公共js--}}
 <script src="/js/app.js"></script>
 <script src="/plugins/img_load_echo.min.js"></script> {{--图片懒加载--}}
+{{--jssdk--}}
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+{{--weui.js--}}
 <script type="text/javascript" src="https://res.wx.qq.com/open/libs/weuijs/1.1.1/weui.min.js"></script>
 <script src="/js/common.js"></script>
 <script>

@@ -8,7 +8,7 @@
 @section('content')
     <!--顶部-->
     <div class="me-header-top">
-        <div><a href="{{ session('addrs_previous_url', url()->previous())  }}"><span class="fa fa-chevron-left fa-lg"></span></a></div>
+        <div><a href="{{ request()->cookie('addrs_exit_url')?:url('me') }}"><span class="fa fa-chevron-left fa-lg"></span></a></div>
         <div>我的收货地址</div>
         <div></div>
     </div>
@@ -49,26 +49,37 @@
     <script>
         $('.del-addr').click(function (event) {
             event.preventDefault();
+
             let addr_id = $(this).attr('addr_id');
             if(!addr_id){
-                alert('系统错误,请联系客服');
+                weui.alert('系统错误,请联系客服');
                 return;
             }
-            if(confirm('你确定要删除该收获地址吗？')){
+            weui.confirm('你确定要删除该收获地址吗？',  () =>{
+                let loading = weui.loading('请稍等');
+                setTimeout(function () { //如果超过5秒钟没有响应则自动关闭loading框,并提示一个超时响应
+                    loading.hide(function() {
+                        weui.topTips('请求超时', 3000);
+                    });
+                }, 5000);
+
                 $.ajax({
-                	type: "DELETE",
-                	url: "/addrs/"+addr_id,
-                	success: function(msg){
-                	    toast('删除成功');
+                    type: "DELETE",
+                    url: "/addrs/"+addr_id,
+                    success: function(msg){
+                        loading.hide(function () {
+                            weui.toast('删除成功');
+                        })
                         location.reload()
-                	},
-                	error: function (error) { //200系列以外的状态码走这里
-                		if(error.status == 403){
-                		    alert('系统错误,请联系客服');
+                    },
+                    error: function (error) { //200系列以外的状态码走这里
+                        loading.hide();
+                        if(error.status == 403){
+                            alert('系统错误,请联系客服');
                         }
-                	}
+                    }
                 });
-            }
+            });
         });
     </script>
 @stop

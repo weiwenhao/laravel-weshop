@@ -1,7 +1,5 @@
 @extends('admin.layouts.layout')
 @section('css')
-    <!-- DataTables -->
-    <link rel="stylesheet" href="/plugins/datatables/dataTables.bootstrap.css">
     <style>
 
     </style>
@@ -45,37 +43,15 @@
     <!-- /.content -->
 @stop
 @section('js')
-    {{--datatables--}}
-    <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/plugins/datatables/dataTables.bootstrap.min.js"></script>
     <script>
         /**
          * datatables配置
          * @type {jQuery}
          */
         let table = $('#datatables').DataTable( {
+            "scrollX": false, //水平滚动条
             stateSave: false,//保存当前页面状态,再次刷新进来依旧显示当前状态,比如本页的排序规则,显示记录条数
-            language: {
-                "sProcessing": "处理中...",
-                "sLengthMenu": "每页显示 _MENU_ 条记录",
-                "sZeroRecords": "没有匹配结果",
-                "info": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 )",
-                "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
-                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
-                "sInfoPostFix": "",
-                "sSearch": "搜索:",
-                "sUrl": "",
-                "sEmptyTable": "表中数据为空",
-                "sLoadingRecords": "载入中...",
-                "sInfoThousands": ",",
-                "oPaginate": {
-                    "sFirst": "首页",
-                    "sPrevious": "上页",
-                    "sNext": "下页",
-                    "sLast": "末页"
-                },
-
-            }, //语言国际化
+            language: dt_language, //语言国际化
             "order": [[ 0, "desc" ]],
             "serverSide": true,//开启服务器模式
             processing: true,
@@ -116,29 +92,31 @@
 
         });
 
-        /**
-         * ajax删除
-         */
-        $.ajaxSetup({ //这段话的意思使用ajax,会将csrf加入请求头中
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+        //删除操作
         $('body').on('click', 'button.del', function() {
             var url = '/admin/types/{{ $type->id }}/attributes/'+$(this).val(); //this代表删除按钮的DOM对象
-            if( !confirm('删除该类型将删除该商品类型下的所有属性,你确定要删除该属性类型吗?')){
-                return false;
-            }
-            $.ajax({
-                type: "DELETE",
-                url: url,
-                success: function(data){
-                    if (data){
-                        //刷新dt
+            swal({
+                title: "你确定要删除该属性类型吗?",
+                text: "删除该类型后添加商品时将无法看到该类型下的商品属性",
+                /*type: "warning",*/
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                closeOnConfirm: true
+            }, function(){
+                //点击确定后回调
+                $.ajax({
+                    type: "DELETE",
+                    url: url,
+                    success: function(msg){ //后台返回的数据在这里直接返回
                         table.ajax.reload(null, false); //databales对象从新加载
-                        alert('删除成功');
+                        swal("删除成功", '', 'success')
+                    },
+                    error: function (error) { //200以外的状态码走这里
+                        swal("系统错误", '', "danger")
                     }
-                }
+                });
             });
         });
     </script>

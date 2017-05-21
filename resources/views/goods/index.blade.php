@@ -8,10 +8,10 @@
 @section('content')
     <!--**************** 搜索 ********************-->
     <div class="weui-search-bar" id="searchBar">
-        <form class="weui-search-bar__form">
+        <form class="weui-search-bar__form" method="get" action="{{ url('goods') }}">
             <div class="weui-search-bar__box">
                 <i class="weui-icon-search"></i>
-                <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
+                <input type="search" name="key" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
                 <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
             </div>
             <label class="weui-search-bar__label" id="searchText" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">
@@ -21,14 +21,14 @@
         </form>
         <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
     </div>
-    <div class="weui-cells searchbar-result" id="searchResult" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1); display: none;">
+    {{--<div class="weui-cells searchbar-result" id="searchResult" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1); display: none;">
         <div class="weui-cell weui-cell_access">
             <div class="weui-cell__bd weui-cell_primary">
                 <p>实时搜索文本</p>
             </div>
         </div>
 
-    </div>
+    </div>--}}
     <!--**************** 轮播 ********************-->
     <div class="swiper-container">
         <div class="swiper-wrapper">
@@ -102,7 +102,7 @@
             <div class="shopp-item">
                 <a class="me-on-a me-a"  href="{{ url('/goods/'.$goods->id) }}">
                     <!--添加name='off'出现下架-->
-                    <img class="img-responsive {{ $goods->is_on_sale?'':"off-sale" }}" data-img="{{ $goods->mid_image }}"/>
+                    <img class="img-responsive {{ $goods->is_sale?'':"off-sale" }}" data-img="{{ $goods->mid_image }}"/>
                     <p>{{ $goods->name }}</p>
                 </a>
                 <p>
@@ -120,7 +120,7 @@
     <script src="/plugins/swiper/swiper.min.js">/*这是轮播框架*/</script>
     <script src="/js/home.js"></script>
 <script>
-
+    weui.searchBar('#searchBar'); //搜索框
 
 </script>
 @stop

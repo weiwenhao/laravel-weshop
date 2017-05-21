@@ -9,7 +9,7 @@
 @section('content')
     <div class="me-header-top">
         {{--todo 这里点了返回之后,ajax清空一下session--}}
-        <div><a href="{{ session('confirm_previous_url') }}"><span class="fa fa-chevron-left fa-lg"></span></a></div>
+        <div><a href="{{ request()->cookie('confirm_exit_url')?:'/' }}"><span class="fa fa-chevron-left fa-lg"></span></a></div>
         <div>确认订单</div>
         <div></div>
     </div>
@@ -81,7 +81,7 @@
         <div class="weui-cell me-fff">
             <div class="weui-cell__hd">订单备注：</div>
             <div class="weui-cell__bd">
-                <input class="weui-input" type="text" name="remarks" placeholder="订单要求信息">
+                <input class="weui-input" type="text" name="remarks" placeholder="">
             </div>
         </div>
         <div class="height-4rem"></div>
@@ -111,6 +111,15 @@
     <script>
         $('#submit-order').click(function (event) {
             event.preventDefault();
+
+            //弹出等待框
+            let loading = weui.loading('库存检测中');
+            setTimeout(function () { //如果超过5秒钟没有响应则自动关闭loading框,并提示一个超时响应
+                loading.hide(function() {
+                    weui.topTips('请求超时', 3000);
+                });
+            }, 10000);
+
             $.ajax({
                 type: "POST",
                 url: "{{ url('/orders') }}",
@@ -118,6 +127,7 @@
                   'remarks': $('input[name=remarks]').val()
                 },
                 success: function(msg){
+                    loading.hide();
                     //使用微信浏览器自带的功能发起支付
                     WeixinJSBridge.invoke(
                         'getBrandWCPayRequest', msg.config,
@@ -136,10 +146,11 @@
                     );
                 },
                 error: function (error) { //200以外的状态码走这里
+                    loading.hide();
                     if(error.status == 422){
-                        alert('无法完成订单\n'+error.responseText);
+                        weui.alert(error.responseText, { title: '无法完成订单' });
                     }else {
-                        alert(error.responseText);
+                        weui.alert(error.responseText);
                     }
                 }
             });

@@ -31,7 +31,7 @@ class GoodsController extends Controller
         return Datatables::of(
             Goods::with('category')
             ->select('goods.id', 'goods.name', 'goods.price', 'goods.sort',
-                'goods.is_on_sale', 'goods.is_best', 'goods.buy_count', 'goods.sm_image', 'goods.created_at', 'category_id')
+                'goods.is_sale', 'goods.is_best', 'goods.buy_count', 'goods.sm_image', 'goods.created_at', 'category_id')
             ->where('is_deleted', 0)
         )->make(true);
     }
@@ -64,7 +64,7 @@ class GoodsController extends Controller
             'promote_start_at' => $request->get('promote_start_at'),
             'promote_stop_at' => $request->get('promote_stop_at'),
             'is_best' => $request->get('is_best'),
-            'is_on_sale' => $request->get('is_on_sale'),
+            'is_sale' => $request->get('is_sale'),
             'is_best' => $request->get('is_best'),
             'type_id' => (int)$request->get('type_id'),
             'category_id' => (int)$request->get('category_id'),
@@ -126,7 +126,7 @@ class GoodsController extends Controller
             'promote_start_at' => $request->get('promote_start_at'),
             'promote_stop_at' => $request->get('promote_stop_at'),
             'is_best' => $request->get('is_best'),
-            'is_on_sale' => $request->get('is_on_sale'),
+            'is_sale' => $request->get('is_sale'),
             'is_best' => $request->get('is_best'),
             'type_id' => (int)$request->get('type_id'),
             'category_id' => (int)$request->get('category_id'),
@@ -176,5 +176,15 @@ class GoodsController extends Controller
         // 删除属性的后进行购物车表含有该数据的属性的删除删除
         ShopCart::where('goods_attribute_ids', 'regexp', $regex)->delete();
         return $res;
+    }
+
+    public function updateIsSale(Request $request)
+    {
+        $is_sale = $request->get('is_sale');
+        $goods_ids = $request->get('goods_ids');
+        $count = Goods::whereIn('id', $goods_ids)->update([
+           'is_sale' => $is_sale
+        ]);
+        return $count;
     }
 }

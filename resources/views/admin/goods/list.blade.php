@@ -1,9 +1,6 @@
 @extends('admin.layouts.layout')
 @section('css')
-    <!-- DataTables -->
-    <link rel="stylesheet" href="/plugins/datatables/dataTables.bootstrap.css">
     <style>
-
     </style>
 @stop
 @section('content')
@@ -23,10 +20,18 @@
                 </div>
             </div>
             <div class="box-body">
-                <table id="datatables" class="table table-bordered table-striped">
+                批量操作：
+                <button class="btn btn-danger goods-down">下架</button>
+                <button class="btn btn-success  goods-up">上架</button>
+                {{--<button class="btn btn-danger handel-order" value="3">关闭</button>--}}
+                <div id="buttons">
+                </div>
+            </div>
+            <div class="box-body">
+                <table id="datatables" class="table table-bordered table-striped ">
                     <thead>
                     <tr>
-                        <th>ID</th>
+                        <td class="text-center"><input type="checkbox" class="checkall"/></td>
                         <th>商品名称</th>
                         <th>价格(元)</th>
                         <th>分类名称</th>
@@ -45,38 +50,16 @@
     <!-- /.content -->
 @stop
 @section('js')
-    {{--datatables--}}
-    <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/plugins/datatables/dataTables.bootstrap.min.js"></script>
     <script>
         /**
          * datatables配置
          * @type {jQuery}
          */
         var table = $('#datatables').DataTable( {
-            stateSave: false,//保存当前页面状态,再次刷新进来依旧显示当前状态,比如本页的排序规则,显示记录条数
-            language: {
-                "sProcessing": "处理中...",
-                "sLengthMenu": "每页显示 _MENU_ 条记录",
-                "sZeroRecords": "没有匹配结果",
-                "info": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 )",
-                "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
-                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
-                "sInfoPostFix": "",
-                "sSearch": "搜索:",
-                "sUrl": "",
-                "sEmptyTable": "表中数据为空",
-                "sLoadingRecords": "载入中...",
-                "sInfoThousands": ",",
-                "oPaginate": {
-                    "sFirst": "首页",
-                    "sPrevious": "上页",
-                    "sNext": "下页",
-                    "sLast": "末页"
-                },
-
-            }, //语言国际化
-            "order": [[ 0, "desc" ]],
+            "scrollX": false, //水平滚动条
+            stateSave: true,//保存当前页面状态,再次刷新进来依旧显示当前状态,比如本页的排序规则,显示记录条数
+            language: dt_language, //语言国际化
+            "order": [[ 6, "desc" ]],
             "serverSide": true,//开启服务器模式
             'processing': true,
             "searchDelay": 1000, //搜索框请求间隔
@@ -90,7 +73,14 @@
             },
             "columns": [
                 {
-                    'data':'id', //对应json中的字段,为取出
+                    "orderable" : false,
+                    searchable: false,
+                    "sClass": "text-center",
+                    "data": "id",
+                    "render": function (data, type, full, meta) {
+                        return '<input type="checkbox"  class="checkchild"  value="' + data + '" />';
+                    },
+                    "bSortable": false
                 },
                 {
                     width : '15%',
@@ -103,7 +93,7 @@
                     'data':'category.name',
                 },
                 {
-                    'data':'is_on_sale',
+                    'data':'is_sale',
                     searchable: false,
                     render : function (data, type, row, meta) {
                         // data : '0' or '1'
@@ -150,14 +140,104 @@
             ],
 
         });
+
+
+        /*
+        * 下架商品
+        * */
+        $('.goods-up').click(function () { //0代表下架商品  1代表上架商品
+
+            //长度判断
+            if ($(".checkchild:checked").length < 1){
+                swal("您还没有勾选商品呢!", '')
+                return;
+            };
+
+            swal({
+                title: "上架商品",
+                text: "你确定要上架勾选的商品吗?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                closeOnConfirm: true
+            },() => {
+                //得到被选中的商品的id
+                var goods_ids = [];
+                $(".checkchild:checked").each(function () {
+                    goods_ids.push(Number($(this).val()));
+                });
+                 axios.put('/admin/goods/is_sale', {
+                  	'is_sale' : 1,
+                     'goods_ids' : goods_ids
+                 })
+                 .then((response)=> {
+                     table.ajax.reload(null, false); //databales对象从新加载
+                     swal("上架成功", '您一共上架了'+response.data+'件商品', "success")
+                 })
+                 .catch(error=> {
+                 	console.log(error.response.data)
+                 });
+
+            });
+
+        });
+
+        /*
+        *
+        * 批量上架商品
+        * */
+        $('.goods-down').click(function () {
+
+            //长度判断
+            if ($(".checkchild:checked").length < 1){
+                swal("您还没有勾选商品呢!", '')
+                return;
+            };
+
+            swal({
+                title: "下架商品",
+                text: "你确定要下架勾选的商品吗?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                closeOnConfirm: true
+            },() => {
+                //得到被选中的商品的id
+                var goods_ids = [];
+                $(".checkchild:checked").each(function () {
+                    goods_ids.push(Number($(this).val()));
+                });
+                axios.put('/admin/goods/is_sale', {
+                    'is_sale' : 0,
+                    'goods_ids' : goods_ids
+                })
+                    .then((response)=> {
+                        table.ajax.reload(null, false); //databales对象从新加载
+                        swal("下架成功", '您一共下架了'+response.data+'件商品', "success")
+                    })
+                    .catch(error=> {
+                        console.log(error.response.data)
+                    });
+
+            });
+
+        });
+        /**
+         *
+         * 批量操作
+         */
+        $(".checkall").click(function () {
+            let check = $(this).prop("checked"); //prop是 checkbox的attribute属性
+            $(".checkchild").prop("checked", check);
+        });
+
         /**
          * ajax删除
          */
-        $.ajaxSetup({ //这段话的意思使用ajax,会将csrf加入请求头中
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
         $('body').on('click', 'button.del', function() {
             var url = '/admin/goods/'+$(this).val(); //this代表删除按钮的DOM对象
 
@@ -186,5 +266,37 @@
                 });
             });
         });
+
+        function downOrUpGoods(status) { //0代表下架商品  1代表上架商品
+            let text = '上架';
+            if(status === 0){
+                text = '下架';
+            }
+
+            //长度判断
+            if ($(".checkchild:checked").length < 1){
+                swal("您还没有勾选商品呢!", '', "warning")
+                return;
+            };
+
+            swal({
+                title: text+"商品",
+                text: "你确定要"+text+"勾选的商品吗?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                closeOnConfirm: true
+            },() => {
+                //得到被选中的商品的id
+                var goods_ids = [];
+                $(".checkchild:checked").each(function () {
+                    goods_ids.push(Number($(this).val()));
+                });
+                console.log(goods_ids);
+            });
+
+        }
     </script>
 @stop

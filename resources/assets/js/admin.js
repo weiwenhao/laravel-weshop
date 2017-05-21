@@ -41,7 +41,7 @@ const app = new Vue({
 */
 
 //初始化判断
-if(Number(sessionStorage.getItem('hide_left_nav'))){ //1
+/*if(Number(sessionStorage.getItem('hide_left_nav'))){ //1
     $('body').addClass('sidebar-collapse'); // 切换为隐藏(添加class) => hide_left_nav = 1
 }else {
     $('body').removeClass('sidebar-collapse'); //将状态切换为 1 隐藏
@@ -59,4 +59,4 @@ $('.sidebar-toggle').click(function() {
         //把0存储进去
         sessionStorage.setItem('hide_left_nav', 0);
     }
-});
+});*/

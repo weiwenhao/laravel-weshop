@@ -34,8 +34,12 @@ class Order extends Model
             $res .= '&nbsp; x'.$this->shop_number;
             $res .= '<br>';
             //得到商品可选属性搭配 格式 -> "厂商:小米,操作系统:安卓"
-            if($this->goods_attribute_ids){
+            /*if($this->goods_attribute_ids){
                 $res .= $this->getAttrNameValues($this->goods_attribute_ids);
+                $res .= '<br>';
+            }*/
+            if($this->goods_attributes){
+                $res .= $this->goods_attributes;
                 $res .= '<br>';
             }
             $res .= '单价:'.$this->shop_price;
@@ -140,8 +144,8 @@ class Order extends Model
             return  '系统错误，商品不存在！';
         }
         //软删除和下架检测
-        if($goods->is_on_sale == 0 || $goods->is_deleted == 1){
-            return str_limit($goods->name, 15, '').' 已下架！';
+        if($goods->is_sale == 0 || $goods->is_deleted == 1){
+            return str_limit($goods->name, 15, '').' 已下架';
         }
         //存在商品属性id时进行的判断
         if($goods_attribute_ids){ //字符串形式,并且已经排过序的,既在 sortOrImplode() 方法中运行过的
@@ -239,25 +243,32 @@ class Order extends Model
                 'shop_number' => $item->shop_number,
                 'shop_price' => $item->shop_price,
             ]);
-            //库存递减  购买量递增
+            //库存递减(该记录拥有排他锁)  购买量递增
             Number::where('goods_id', $item->goods_id)->where('goods_attribute_ids', $item->goods_attribute_ids)->decrement('number', $item->shop_number);
             Goods::where('id', $item->goods_id)->increment('buy_count', $item->shop_number);
+
             //删除购物车表中的这条记录
             ShopCart::where('goods_id', $item->goods_id)
                 ->where('goods_attribute_ids', $item->goods_attribute_ids)
                 ->where('user_id', \Auth::user()->id)
                 ->delete();
         }
+
         //删除session中的数据
         session()->forget('order_goods');
         session()->forget('order_addr_id');
-        //像微信客户端发起预付款id申请
+
+        //返回生成的订单
         return $order;
     }
 
+    /**
+     * 得到预付款信息,已经生成了订单模型才能调用该方法
+     * @return bool
+     */
     public function getPrepayId()
     {
-        $wechat = app('wechat'); //容器实例化
+        $wechat = app('wechat'); //容器实例化(模型不是laravel直接操作,所以不能进行依赖注入)
         $payment = $wechat->payment;
         //创建订单
         $attributes = [

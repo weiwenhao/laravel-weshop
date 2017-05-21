@@ -23,7 +23,7 @@
             <div class="weui-grid__icon">
                 <span class="fa fa-circle-o fa-2x "></span>
             </div>
-            <p class="weui-grid__label">消息管理</p>
+            <p class="weui-grid__label">足迹</p>
         </a>
         <a href="#" class="weui-grid">
             <div class="weui-grid__icon">

@@ -41439,7 +41439,7 @@ module.exports = __webpack_amd_options__;
 /* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function($) {window._ = __webpack_require__(35);
+window._ = __webpack_require__(35);
 
 window.Vue = __webpack_require__(36);
 window.axios = __webpack_require__(16);
@@ -41479,29 +41479,25 @@ const app = new Vue({
 */
 
 //初始化判断
-if (Number(sessionStorage.getItem('hide_left_nav'))) {
-    //1
+/*if(Number(sessionStorage.getItem('hide_left_nav'))){ //1
     $('body').addClass('sidebar-collapse'); // 切换为隐藏(添加class) => hide_left_nav = 1
-} else {
+}else {
     $('body').removeClass('sidebar-collapse'); //将状态切换为 1 隐藏
 }
-$('.sidebar-toggle').click(function () {
+$('.sidebar-toggle').click(function() {
     //当前的状态
-    var left_nav_status = Number(sessionStorage.getItem('hide_left_nav'));
-    if (!left_nav_status) {
-        //当前hide_left_nav = 0 显示
+    var left_nav_status =  Number(sessionStorage.getItem('hide_left_nav'));
+    if(!left_nav_status){ //当前hide_left_nav = 0 显示
         //  加上sidebar-collapse这个class就是隐藏
         $('body').addClass('sidebar-collapse'); // 切换为隐藏(添加class) => hide_left_nav = 1
         //把1存储进去
         sessionStorage.setItem('hide_left_nav', 1);
-    } else {
-        //hide_left_nav = 1 隐藏
+    }else{ //hide_left_nav = 1 隐藏
         $('body').removeClass('sidebar-collapse'); //将状态切换为 1 隐藏
         //把0存储进去
         sessionStorage.setItem('hide_left_nav', 0);
     }
-});
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+});*/
 
 /***/ }),
 /* 41 */,

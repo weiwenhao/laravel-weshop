@@ -1,11 +1,9 @@
 @extends('admin.layouts.layout')
 @section('css')
     <!-- DataTables -->
-    <link rel="stylesheet" href="/plugins/datatables/dataTables.bootstrap.css">
     <link rel="stylesheet" href="/plugins/datatables/extensions/Buttons/css/buttons.dataTables.css">
     <style>
-        th, td { white-space: nowrap; }
-        #shaixuan .form-group {
+        #shaixuan > div {
             margin-right: 15px;
         }
     </style>
@@ -90,7 +88,7 @@
                     </div>
             </div>
             <div class="box-body">
-                <table id="datatables" class="table table-bordered table-striped" cellspacing="0" width="100%">
+                <table id="datatables" class="table table-bordered table-striped">
                     <thead>
                         <tr class="text-center">
                             <td class="text-center"><input type="checkbox" class="checkall"/></td>
@@ -100,7 +98,7 @@
                             <th>是否支付</th>
                             <th>订单状态</th>
                             <th>商品名称</th>
-                            <th>创建时间</th>
+                            <th>付款时间</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -114,9 +112,7 @@
     <!-- /.content -->
 @stop
 @section('js')
-    {{--datatables--}}
-    <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/plugins/datatables/dataTables.bootstrap.min.js"></script>
+    {{--datatables plugis--}}
     <script src="/plugins/datatables/extensions/Buttons/js/dataTables.buttons.js"></script>
     <script src="/plugins/datatables/extensions/Buttons/js/buttons.print.js"></script>
     <script>
@@ -140,28 +136,8 @@
             }],
             "lengthMenu": [ 10, 25, 50, 100, 999 ],
             "scrollX": false, //水平滚动条
-            stateSave: false,//保存当前页面状态,再次刷新进来依旧显示当前状态,比如本页的排序规则,显示记录条数
-            language: {
-                "sProcessing": "处理中...",
-                "sLengthMenu": "每页显示 _MENU_ 条记录",
-                "sZeroRecords": "没有匹配结果",
-                "info": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 )",
-                "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
-                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
-                "sInfoPostFix": "",
-                "sSearch": "搜索:",
-                "sUrl": "",
-                "sEmptyTable": "表中数据为空",
-                "sLoadingRecords": "载入中...",
-                "sInfoThousands": ",",
-                "oPaginate": {
-                    "sFirst": "首页",
-                    "sPrevious": "上页",
-                    "sNext": "下页",
-                    "sLast": "末页"
-                },
-
-            }, //语言国际化
+            stateSave: true,//保存当前页面状态,再次刷新进来依旧显示当前状态,比如本页的排序规则,显示记录条数
+            language: dt_language, //语言国际化
             "order": [[ 7, "desc" ]],
             "serverSide": true,//开启服务器模式
             processing: true,
@@ -235,14 +211,32 @@
                     }
                 },
                 {
+                    'name' : 'order_goods.goods_name', //搜索或者排序时传递给数据库的字段
                     'data':'goods_name'
                 },
                 {
-                    'data': 'created_at'
+                    'name' : 'paid_at',
+                    'data': 'paid_at',
+
+                    render : function (data, type, row, meta) {
+                        // data : '0' or '1'
+                        if(!data){
+                            return '<i class="fa fa-close text-danger"></i>';
+                        }
+                        return data;
+                    }
                 },
-                /*{
-                    'data' : 'action'
-                }*/
+                //下面为隐藏列,仅供搜索
+                {
+                    "name" : 'orders.name', //用户真实姓名
+                    "data" : 'name',
+                    "visible": false
+                },
+                {
+                    "name" : 'orders.phone',
+                    "data" : 'phone',
+                    "visible": false
+                }
             ],
 
         });
@@ -310,32 +304,5 @@
                 });
         });
 
-
-        $.ajaxSetup({ //这段话的意思使用ajax,会将csrf加入请求头中
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        /**
-         * ajax删除
-         */
-       /*
-        $('body').on('click', 'button.del', function() {
-            var url = '/admin/orders/'+$(this).val(); //this代表删除按钮的DOM对象
-            if( !confirm('你确定要删除该分类吗?')){
-                return false;
-            }
-            $.ajax({
-                type: "DELETE",
-                url: url,
-                success: function(data){
-                    if (data){
-                        //刷新dt
-                        table.ajax.reload(null, false); //databales对象从新加载
-                        alert('删除成功');
-                    }
-                }
-            });
-        });*/
     </script>
 @stop
