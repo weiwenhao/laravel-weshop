@@ -7,10 +7,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>天哪来啦</title>
     <!-- 以下是公共css -->
-    <link rel="stylesheet" href="/css/app.css">
-    <link rel="stylesheet" href="/iconfont/iconfont.css"/>
     <link rel="stylesheet" href="/plugins/weui.css"/>
-    <link rel="stylesheet" href="/css/common.css"/>
+    <link rel="stylesheet" href="/css/app.css">
+    {{--<link rel="stylesheet" href="/css/common.css"/>--}}
 
     <script>
         window.Laravel = {!! json_encode([
@@ -23,14 +22,16 @@
 <div id="app">
     @yield('content')
 </div>
+
+
 {{--公共js--}}
 <script src="/js/app.js"></script>
-<script src="/plugins/img_load_echo.min.js"></script> {{--图片懒加载--}}
+{{--<script src="/plugins/img_load_echo.min.js"></script> --}}{{--图片懒加载--}}
 {{--jssdk--}}
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 {{--weui.js--}}
 <script type="text/javascript" src="https://res.wx.qq.com/open/libs/weuijs/1.1.1/weui.min.js"></script>
-<script src="/js/common.js"></script>
+{{--<script src="/js/common.js"></script>--}}
 <script>
     $.ajaxSetup({ //这段话的意思使用ajax,会将csrf加入请求头中
         headers: {
@@ -42,7 +43,7 @@
      * 商品列表页的收藏商品操作,仅收藏
      */
     $('.collect').click(function () {
-        toast('收藏成功');
+        weui.toast('收藏成功', 600);
         let goods_id = $(this).attr('goods_id');
         //ajax请求后台关注,并提示关注成功
         $.ajax({

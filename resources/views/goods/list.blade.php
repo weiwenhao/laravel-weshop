@@ -10,6 +10,7 @@
         text-align: center;
         background-color: #fff;
         line-height: 2rem;
+        font-size: 0.9rem;
     }
     .goods-list > .shaixuan > .active > a {
         color: #ff005c;
@@ -38,6 +39,9 @@
         text-align: center;
         line-height: 2.5rem;
     }
+    .goods-list i.sort {
+        font-size: 0.8rem
+    }
 </style>
 @stop
 @section('content')
@@ -46,7 +50,7 @@
         @if(isset($goods->category_name))
             <div class="weui-flex top-nav">
                 <div>
-                    <a href="/"><span class="fa fa-chevron-left fa-lg"></span></a>
+                    <a href="/"><span class="icon icon-back icon-lg"></span></a>
                 </div>
                 <div class="weui-flex__item text-center">
                     <div>
@@ -61,7 +65,7 @@
             <div class="weui-flex">
                 <div class="return">
                     <a href="/">
-                        <i class="fa fa-angle-left"></i>
+                        <i class="icon icon-back"></i>
                     </a>
                 </div>
                 <div class="weui-flex__item">
@@ -93,7 +97,7 @@
             </div>
             <div class="weui-flex__item {{ request('order') == 'price'?'active':'' }}">
                 <a href="?category_id={{ request('category_id') }}&key={{ request('key') }}&order=price&sort={{request('sort') == 'asc'?'desc':'asc'}}">
-                    价格排序 <span class="fa {{ request('sort')=='desc'?'fa-angle-down':'fa-angle-up' }}"></span>
+                    价格排序 <i class="sort icon {{ request('sort')=='desc'?'icon-downfill':'icon-upfill' }}"></i>
                 </a>
             </div>
         </div>
@@ -109,15 +113,15 @@
                     <p>
                         <span class="price-decimal-point">{{ $item->price }}</span>
                         <small>销量:{{ $item->buy_count }}</small>
-                        <a class=" fa fa-heart-o collect" goods_id="{{ $item->id }}"></a>
+                        <a class="icon icon-favor collect" goods_id="{{ $item->id }}"></a>
                     </p>
                 </div>
             @endforeach
         </div>
         {{--商品为空时--}}
         <div class="weshop-center-block no-goods" style="display:{{ $goods->total()?'none':'block' }}">
-            <span class="fa fa-circle-o fa-5x"></span>
-            <h4>暂时没有相关商品</h4>
+            <i class="icon icon-goods"></i>
+            <div class="title">暂时没有相关商品</div>
             {{--精品推荐--}}
         </div>
 

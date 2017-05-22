@@ -9,7 +9,7 @@
 @section('content')
     <div class="me-header-top">
         {{--todo 这里点了返回之后,ajax清空一下session--}}
-        <div><a href="{{ request()->cookie('confirm_exit_url')?:'/' }}"><span class="fa fa-chevron-left fa-lg"></span></a></div>
+        <div><a href="{{ request()->cookie('confirm_exit_url')?:'/' }}"><span class="icon icon-back icon-lg"></span></a></div>
         <div>确认订单</div>
         <div></div>
     </div>
@@ -21,14 +21,14 @@
                 <a href="{{ url('orders/confirm/addrs') }}">
                     <div class="row address">
                         <div class="col-xs-1">
-                            <i class="fa fa-map-marker"></i>
+                            <i class="icon icon-locationfill me-font-f90"></i>
                         </div>
                         <div class="col-xs-10">
                             <p>收货人:<b>{{ $addr->name }}</b> <tt>{{ $addr->phone }}</tt></p>
                             <p>惠州市技师学院,{{ $addr->floor_name }},{{ $addr->number }}</p>
                         </div>
                         <div class="col-xs-1">
-                            <i class="fa fa-angle-right"></i>
+                            <i class="icon icon-right"></i>
                         </div>
                     </div>
                 </a>
@@ -36,10 +36,10 @@
                 <a  href="{{ url('orders/confirm/addrs') }}">
                     <div class="row address">
                         <div class="col-xs-11 text-center">
-                            <div class="me-font-f90 address-new"><i class="fa fa-map-marker me-font-f90"></i>  点击选择收货地址</div>
+                            <div class="me-font-f90 address-new"><i class="icon icon-locationfill me-font-f90"></i>  点击选择收货地址</div>
                         </div>
                         <div class="col-xs-1">
-                            <i class="fa fa-angle-right"></i>
+                            <i class="icon icon-right"></i>
                         </div>
                     </div>
                 </a>
@@ -100,9 +100,9 @@
         </div>
     @else
         <div class="weshop-center-block no-goods" style="block;">
-            <span class="fa fa-lemon-o fa-5x"></span>
-            <h3>什么都没有呢</h3>
-            <p>去挑一些喜欢的商品吧</p>
+            <i class="icon icon-form"></i>
+            <div class="title">什么都没有呢</div>
+            <div>去挑一些喜欢的商品吧</div>
             <a href="{{ url('/') }}" class="weui-btn  weui-btn_primary" style="">再去逛逛</a>
         </div>
     @endif

@@ -7,7 +7,7 @@
 @stop
 @section('content')
     <div class="me-header-top">
-        <div><a href="{{ url('orders').'?is_pay='.request('is_pay') }}"><span class="fa fa-chevron-left fa-lg"></span></a></div>
+        <div><a href="{{ url('orders').'?is_pay='.request('is_pay') }}"><i class="icon icon-back icon-lg"></i></a></div>
         <div>订单详情</div>
         <div></div>
     </div>
@@ -16,13 +16,13 @@
     @if($order->paid_at)
         <div class="order-info-status">
             <div class="order-i-s-l ok">付款成功 （〜^㉨^)〜 </div>
-            <div class="order-i-s-r"><i class="fa fa-gift fa-4x"></i></div>
+            <div class="order-i-s-r"><i class="icon icon-present icon-4rem" style="color: #E91E63"></i></div>
         </div>
     @else
         @if($order->orderGoods[0]->status == 3)
             <div class="order-info-status">
                 <div class="order-i-s-l ok">订单已关闭</div>
-                <div class="order-i-s-r"><i class="fa fa-gift fa-4x"></i></div>
+                <div class="order-i-s-r"><i class="icon icon-roundclose icon-4rem" style="color: #f44336"></i></div>
             </div>
         @else
             <div class="order-info-status">
@@ -31,7 +31,7 @@
                     <p>2小时内自动关闭</p>
                 </div>
                 <div class="order-i-s-r">
-                    <i class="fa fa-credit-card fa-4x"></i>
+                    <i class="icon icon-pay icon-4rem" style="color: #f44336"></i>
                 </div>
             </div>
         @endif
@@ -41,7 +41,7 @@
     <div class="container me-address">
         <div class="row address">
             <div class="col-xs-1 me-a">
-                <i class="fa fa-map-marker fa-lg" style="color: orange"></i>
+                <i class="icon icon-locationfill icon-lg me-font-f90"></i>
             </div>
             <div class="col-xs-11" >
                 <p>收货人：<b>{{ $order->name }}</b> <tt>{{ $order->phone }}</tt></p>

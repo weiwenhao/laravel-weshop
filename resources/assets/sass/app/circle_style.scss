@@ -1,32 +1,34 @@
 html,body{margin:0;padding:0;width:100%;font-size:14px;overflow-x:hidden;background-color:whitesmoke;}body{height:100%;}
 @media screen and (min-width:360px){
-	html,body{font-size:16px;}
+  html,body{font-size:16px;}
 }
 @media screen and (min-width:400px){
-	html,body{font-size:18px;}
+  html,body{font-size:18px;}
 }
 
 /*****************附加样式****************/
 .icon {
-    line-height: 1rem;
+  line-height: 1rem;
 }
 .icon-lg{
-    font-size: 1.2rem;
+  font-size: 1.2rem;
 }
 .icon-sm{
-    font-size: 0.8rem;
+  font-size: 0.8rem;
 }
 .icon-4rem {
-    font-size: 4rem;
-    line-height: 4rem;
-    font-weight: lighter;
+  font-size: 4rem;
+  line-height: 4rem;
+  font-weight: lighter;
 }
 .icon-2rem {
-    font-size: 2rem;
-    line-height: 2rem;
-    font-weight: lighter;
-    color: #999;;
+  font-size: 2rem;
+  line-height: 2rem;
+  font-weight: lighter;
+  color: #999;;
 }
+
+
 /*↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓- 全局init -↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓*/
 a{color:#444;}
 ul{margin:0;padding:0}li{list-style:none;}
@@ -35,19 +37,19 @@ hr{margin:0 -1rem;height:1px;background-color:#eee;border:0;}
 .me-flex-1,.me-flex-2,.me-flex-3,.me-flex-4,.me-flex-5,.me-flex-6,.me-flex-7,.me-flex-8,.me-flex-9,.me-flex-10,.me-flex-11{float:left;min-height:1px;position:relative;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;
 }
 .new-info{position:absolute;/*右上角新消息数量*/
-    width:1em;height:1em; right:0; border-radius:50%;
-    line-height:1; top:-.5em;right:-.5em; padding:0.2em;
-    -webkit-transform:scale(0.5); transform:scale(0.5);
-    vertical-align:middle; text-align:center;
-    background:red; color:#fff;
-    font-size: 1.3rem;
+  width:1em;height:1em; right:0; border-radius:50%;
+  line-height:1; top:-.5em;right:-.5em; padding:0.2em;
+  -webkit-transform:scale(0.5); transform:scale(0.5);
+  vertical-align:middle; text-align:center;
+  background:red; color:#fff;
+  font-size: 1.3rem;
 }
 .me-img{width:100%;}
 .text-hid-3{overflow:hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;}
 .fade-in {/*图片淡入*/-webkit-animation:fade-in 1s;animation:fade-in 1s;}@-webkit-keyframes fade-in {0% {opacity: 0;}100% {opacity: 1;}}@keyframes fade-in {0% {opacity: 0;}100% {opacity: 1;}}
- a::selection{color:#f90;}
- .active{color:#f90;}
- .me-a:active{background:#fff;}
+a::selection{color:#f90;}
+.active{color:#f90;}
+.me-a:active{background:#fff;}
 /*↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑- 全局end -↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑*/
 /*↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓- 滑屏init -↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓*/
 #gallery{display: none;}
@@ -127,10 +129,10 @@ hr{margin:0 -1rem;height:1px;background-color:#eee;border:0;}
 /*发帖文本框*/
 .poster-text-body{width:100%;height:10rem;}
 .poster-text-body textarea{
-	display:block;border:0 none;width:96%;height:95%;font-size:1rem;outline:0;
-	padding:.5rem;
-	overflow:auto;resize:none;cursor:none;
-	word-break:break-all; 
+  display:block;border:0 none;width:96%;height:95%;font-size:1rem;outline:0;
+  padding:.5rem;
+  overflow:auto;resize:none;cursor:none;
+  word-break:break-all;
 }
 /*发帖类型*/
 .poster-body{padding:0 .5rem;background:#fff;overflow:hidden;}
@@ -163,7 +165,7 @@ hr{margin:0 -1rem;height:1px;background-color:#eee;border:0;}
 .critic-replys-info .me-flex-10 .circle-name>a{color:#2d64b3;font-weight:600}
 .critic-replys-info .me-flex-10 .floor{float:right;margin-right:.4rem;color:#777;font-size:.7rem;line-height:1.6rem}
 .critic-replys-info .me-flex-10 p{margin:.2rem 0;color:#444;}
-.critic-replys-info .on-reply{float:right;margin-right:.6rem;font-size:1rem;} 
+.critic-replys-info .on-reply{float:right;margin-right:.6rem;font-size:1rem;}
 .discuss-bottom{position: fixed;z-index: 10;bottom: 0;width: 100%;padding: .5rem 0;border-top: 1px solid #ccc;background: #fff;text-align:center;color:#777;font-size:1.1rem}
 .discuss-bottom .me-flex-4 a{display:block;border-left:1px solid #eee;border-right:1px solid #eee;}
 /*↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑- 帖子信息end  -↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑*/

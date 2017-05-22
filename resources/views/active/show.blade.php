@@ -9,7 +9,7 @@
 @stop
 @section('content')
     <div class="me-header-top">
-        <div><a href="/"><span class="fa fa-chevron-left fa-lg"></span></a></div>
+        <div><a href="/"><span class="icon icon-back icon-lg"></span></a></div>
         <div>{{ $active->name }}</div>
         <div></div>
     </div>

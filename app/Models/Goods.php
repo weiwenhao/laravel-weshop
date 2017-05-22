@@ -43,10 +43,10 @@ class Goods extends Model
 
     public function removeGoodsImage()
     {
-        @unlink(public_path($this->image));
-        @unlink(public_path($this->sm_image));
-        @unlink(public_path($this->mid_image));
-        @unlink(public_path($this->big_image));
+//        @unlink(public_path($this->image));
+        @unlink(public_path($this->sm_image));  //商品小图不删除, 因为订单表中需要使用
+//        @unlink(public_path($this->mid_image));
+//        @unlink(public_path($this->big_image));
     }
 
     /**

@@ -30,17 +30,17 @@
             <div class="box-body">
                 <table id="datatables" class="table table-bordered table-striped ">
                     <thead>
-                    <tr>
-                        <td class="text-center"><input type="checkbox" class="checkall"/></td>
-                        <th>商品名称</th>
-                        <th>价格(元)</th>
-                        <th>分类名称</th>
-                        <th>上架</th>
-                        <th>精品</th>
-                        <th>预览图</th>
-                        <th>创建时间</th>
-                        <th>操作</th>
-                    </tr>
+                        <tr>
+                            <td class="text-center"><input type="checkbox" class="checkall"/></td>
+                            <th>商品名称</th>
+                            <th>价格(元)</th>
+                            <th>分类名称</th>
+                            <th>上架</th>
+                            <th>精品</th>
+                            <th>预览图</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
                     </thead>
                 </table>
             </div>
@@ -56,7 +56,7 @@
          * @type {jQuery}
          */
         var table = $('#datatables').DataTable( {
-            "scrollX": false, //水平滚动条
+//            "scrollX": false, //水平滚动条
             stateSave: true,//保存当前页面状态,再次刷新进来依旧显示当前状态,比如本页的排序规则,显示记录条数
             language: dt_language, //语言国际化
             "order": [[ 6, "desc" ]],

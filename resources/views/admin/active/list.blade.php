@@ -23,15 +23,15 @@
             <div class="box-body">
                 <table id="datatables" class="table table-bordered table-striped">
                     <thead>
-                    <tr>
-                        <th>活动名称</th>
-                        <th>权重(前台从小到大)</th>
-                        <th>活动封面</th>
-                        <th>是否显示在主页</th>
-                        <th>是否存在活动详情</th>
-                        <th>创建时间</th>
-                        <th>操作</th>
-                    </tr>
+                        <tr>
+                            <th>活动名称</th>
+                            <th>权重(前台从小到大)</th>
+                            <th>活动封面</th>
+                            <th>是否显示在主页</th>
+                            <th>是否存在活动详情</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
                     </thead>
                 </table>
             </div>

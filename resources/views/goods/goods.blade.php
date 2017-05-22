@@ -8,7 +8,7 @@
 @section('content')
     <!--**************** 顶部 ********************-->
     <div class="me-header-top me-header-food-info">
-        <div><a href="{{ request()->cookie('goods_info_exit_url')?:'/' }}"><span class="fa fa-chevron-left "></span></a></div>
+        <div><a href="{{ request()->cookie('goods_info_exit_url')?:'/' }}"><span class="icon icon-back icon-lg"></span></a></div>
         <div></div>
         <div>{{--<a href="{{ url('shop_carts') }}"><span class="fa fa fa-shopping-cart"></span></a>--}}</div>
     </div>
@@ -21,8 +21,8 @@
         <div class="goods-info">
             <div class="goods-list goods-info-name"><p>{{ $goods->name }}</p></div>
             <div class="goods-list goods-info-price">
-                <span class="price-decimal-point"><i class="fa fa-rmb"></i>{{ $goods->price }} </span> {{--<del> <i class="fa fa-rmb"></i>2099</del>--}}
-                <small><i class="fa fa-line-chart"></i> 销量：{{ $goods->buy_count }}</small>
+                <span class="price-decimal-point"><i class="icon icon-money"></i>{{ $goods->price }} </span> {{--<del> <i class="fa fa-rmb"></i>2099</del>--}}
+                <small> 销量：{{ $goods->buy_count }}</small>
             </div>
             <div class="goods-list weui-cell">
                 <div class="weui-cell__hd">
@@ -33,7 +33,7 @@
                 <div class="weui-cell__ft">..</div>
             </div>
             <div class="goods-list goods-info-txt">
-                <h4>商品详情</h4>
+                <h5>商品详情</h5>
                 {!! $goods->description !!}
             </div>
         </div>
@@ -41,8 +41,8 @@
         <div calss="container" id="mai">
             <div class="row">
                 <div class="col-xs-4">
-                    <a href="{{ url('shop_carts') }}"><i class="fa fa-shopping-cart"></i><div>购物车</div></a>
-                    <a class="switch-collect"><i class="fa {{ $goods->is_collect?'fa-heart':'fa-heart-o' }} collect-icon"></i><div>收藏</div></a>
+                    <a href="{{ url('shop_carts') }}"><i class="icon icon-cart icon-lg"></i><div>购物车</div></a>
+                    <a class="switch-collect"><i class="icon icon-lg {{ $goods->is_collect?'icon-favorfill':'icon-favor' }} collect-icon"></i><div>收藏</div></a>
                 </div>
                 <div class="col-xs-4">
                     <a class="weui-btn weui-btn_warn showIOSActionSheet" ></i> 加入购物车</a>
@@ -58,8 +58,8 @@
             <div class="me-actionsheet-title">
                 <img class="img-rounded img-thumbnail" src="{{ $goods->sm_image }}" />
                 <div class="me-right">
-                    <span id="iosActionsheetCancel" class="fa fa-times-circle-o fa-lg"></span>
-                    <p class="price"><i class="fa fa-rmb"></i> <span id="goods_price">{{ $goods->price }}</span></p>
+                    <span id="iosActionsheetCancel" class="icon icon-roundclose icon-lg"></span>
+                    <p class="price">￥<span id="goods_price">{{ $goods->price }}</span></p>
                     <div>库存 <span id="goods_number">0</span> 件</div>
                     @if($goods->option_attrs)
                         <p class="class-ok">已选: <span class="attr-target"></span></p>
@@ -99,9 +99,9 @@
     @else
         {{--商品不存在或者被删除时显示给用户的视图--}}
         <div class="weshop-center-block no-goods" style="display:block;">
-            <span class="fa fa-remove fa-5x"></span>
-            <h3>什么都没有呢</h3>
-            <p>商品不存在或者已经被删除</p>
+            <i class="icon icon-goods"></i>
+            <div class="title">什么都没有呢</div>
+            <div>商品不存在或者已经被删除</div>
             <a href="{{ url('/') }}" class="weui-btn weui-btn_primary" style="">再去逛逛</a>
         </div>
     @endif
@@ -218,12 +218,12 @@
             $('.switch-collect').click(function () {
                  let icon = $(this).find('i.collect-icon');
                 //鉴于没有判断用户登陆的操作,所以直接进行状态改变,然后发送ajax信息
-                if(icon.hasClass('fa-heart-o')){
-                    icon.removeClass('fa-heart-o')
-                    icon.addClass('fa-heart')
+                if(icon.hasClass('icon-favor')){
+                    icon.removeClass('icon-favor')
+                    icon.addClass('icon-favorfill')
                 }else {
-                    icon.removeClass('fa-heart')
-                    icon.addClass('fa-heart-o')
+                    icon.removeClass('icon-favorfill')
+                    icon.addClass('icon-favor')
                 }
                 //发送ajax请求
                 $.ajax({

@@ -8,7 +8,7 @@
 @section('content')
     <!--顶部-->
     <div class="me-header-top">
-        <div><a href="{{ request()->cookie('addrs_exit_url')?:url('me') }}"><span class="fa fa-chevron-left fa-lg"></span></a></div>
+        <div><a href="{{ request()->cookie('addrs_exit_url')?:url('me') }}"><span class="icon icon-back icon-lg"></span></a></div>
         <div>我的收货地址</div>
         <div></div>
     </div>
@@ -22,7 +22,7 @@
                 @endif
                 <a href="" class="del-addr" addr_id="{{ $addr->id }}">
                     <div class="col-xs-1 me-a showIOSDialog1">
-                        <i class="fa fa-times-circle-o fa-lg"></i>
+                        <i class="icon icon-roundclose icon-lg"></i>
                     </div>
                 </a>
                 <a href="{{ url('addrs/'.$addr->id.'/edit') }}">
@@ -31,15 +31,15 @@
                         <p>惠州市技师学院，{{ $addr->floor_name }}，{{ $addr->number }}</p>
                     </div>
                     <div class="col-xs-1 me-a" name="addressGo">
-                        <i class="fa fa-angle-right"></i>
+                        <i class="icon icon-edit"></i>
                     </div>
                 </a>
             </div>
         </div>
     @endforeach
     <div class="weshop-center-block" style="display:{{ $addrs->toArray()?'none':'block' }}">
-        <span class="fa fa-map-marker fa-5x"></span>
-        <h3>╮(￣▽￣")╭</h3>
+        <i class="icon icon-locationfill"></i>
+        <div class="title">╮(￣▽￣")╭</div>
     </div>
 
     <a class="weui-btn weui-btn_primary new-address"  href="{{ url('addrs/create') }}">新增收货地址</a>

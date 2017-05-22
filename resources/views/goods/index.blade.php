@@ -92,7 +92,7 @@
     <!-- 商品列表-->
     <div class="weui-cell me-font-f90">
         <div class="weui-cell__bd">
-            <span><i class="fa fa-heart"></i> 精品推荐</span>
+            <span><i class="icon icon-likefill"></i> 精品推荐</span>
         </div>
         <div class="weui-cell__ft"></div>
     </div>
@@ -108,7 +108,7 @@
                 <p>
                     <span class="price-decimal-point">{{ $goods->price }}</span>
                     <small>销量:{{ $goods->buy_count }}</small>
-                    <a class=" fa fa-heart-o collect" goods_id="{{ $goods->id }}"></a>
+                    <a class="icon icon-favor collect" goods_id="{{ $goods->id }}"></a>
                 </p>
             </div>
         @endforeach

@@ -10,7 +10,7 @@
     <!--top-->
     <div class="me-header-top">
         <div>
-            <a id="previous_page"><span class="fa fa-chevron-left fa-lg"></span></a>
+            <a id="previous_page"><span class="icon icon-back icon-lg"></span></a>
         </div>
         <div>修改地址</div>
         <div></div>

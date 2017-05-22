@@ -1,8 +1,7 @@
 <?php
 
 Route::get('/test', function (){
-   $post = \App\Models\Post::find(35);
-   dd($post->postImages);
+
 });
 
 

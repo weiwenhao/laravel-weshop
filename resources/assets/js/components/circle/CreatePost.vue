@@ -12,8 +12,8 @@
             <hr>
             <div class="poster-top">
                 <div class="poster-top-left" id="selectType">
-                    <i class="fa fa-qrcode" data-val="0"></i>
-                    <i class="fa fa-photo" data-val="1"></i>
+                    <i class="icon icon-apps" data-val="0"></i>
+                    <i class="icon icon-pic" data-val="1"></i>
                     <!--i class="fa fa-smile-o" data-val="2"></i-->
                 </div>
                 <div class="poster-top-right">

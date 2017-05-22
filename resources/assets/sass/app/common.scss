@@ -1,38 +1,44 @@
-﻿@charset "utf-8";
+@charset "utf-8";
 html,body{z-index:-10;background-color:whitesmoke;font-size:14px ;overflow-x:hidden;}
 hr{margin:0 -.5rem;}
 @media screen and (min-width:360px){
-	html,body{font-size:16px;}
+  html,body{font-size:16px;}
 }
 @media screen and (min-width:400px){
-	html,body{font-size:18px;}
+  html,body{font-size:18px;}
 }
 
 /*****************附加样式****************/
 .icon {
-	line-height: 1rem;
+  line-height: 1rem;
 }
 .icon-lg{
-	font-size: 1.2rem;
+  font-size: 1.2rem;
 }
 .icon-sm{
-	font-size: 0.8rem;
+  font-size: 0.8rem;
 }
 .icon-4rem {
-	font-size: 4rem;
-	line-height: 4rem;
-	font-weight: lighter;
+  font-size: 4rem;
+  line-height: 4rem;
+  font-weight: lighter;
 }
 .icon-2rem {
-	font-size: 2rem;
-	line-height: 2rem;
-	font-weight: lighter;
-	color: #999;
+  font-size: 2rem;
+  line-height: 2rem;
+  font-weight: lighter;
+  color: #999;;
 }
+//下导航栏选中
+.weui-tabbar__icon i.active{
+  color: #f90;
+}
+//weui btn图标
 /*wetui图标样式*/
-.weui-btn_orgin {
-	background-color: #f90;
+.weui-btn_orange {
+  background-color: #f90;
 }
+
 
 /**************** 点击样式 ****************/
 a{color:#444 ;text-decoration:none !important;}
@@ -97,12 +103,19 @@ a:hover{color:#444 ;}
 
 /***************** 商品列表 ****************/
 .me-goods-List{position:relative; display:inline-block; width:100%; margin-top:.2rem;}
-.me-goods-List .shopp-item:nth-child(2n){float:right; } 
-.me-goods-List .shopp-item:nth-child(2n+1){float:left; } 
+.me-goods-List .shopp-item:nth-child(2n){float:right; }
+.me-goods-List .shopp-item:nth-child(2n+1){float:left; }
 .me-goods-List .shopp-item{width:49%; background:#fff; margin-bottom:.5rem}
 .me-goods-List .shopp-item .me-on-a{position:relative; display:block; width:100%;min-height:7rem;}
 .me-goods-List .shopp-item .me-on-a .off{position:absolute; width:100%; height:86%;background: rgba(0,0,0,.5);}
-.me-goods-List .shopp-item .me-on-a .off .icon{position: relative;margin:20% 0 0 20%;font-size:6.5rem;color:#fff;}
+.me-goods-List .shopp-item .me-on-a .off .icon{
+  position:absolute;
+  top: 0rem;
+  margin:20% 0 0 20%;
+  font-size:6.5rem;
+  line-height:100%;
+  color:#fff;
+}
 .me-goods-List .shopp-item .me-on-a p:focus{background:#ccc; color:red;}
 .me-goods-List .shopp-item img{padding:.3rem;width:100%;min-height:8rem;}
 .me-goods-List .shopp-item p{position:relative;text-align:left;padding:0 .3rem;line-height:1.5rem;overflow: hidden; /*自动隐藏文字*/text-overflow:ellipsis;/*文字隐藏后添加省略号*/white-space: nowrap;/*强制不换行*/vertical-align:bottom;}

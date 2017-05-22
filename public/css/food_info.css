@@ -2,7 +2,7 @@
 /*商品详情*/
 .me-header-food-info{background:rgba(0,0,0,0);}
 .me-header-food-info a{position:relative;display:inline-block;width:2.5rem;height:2.5rem;border-radius:2.5rem;margin:.4rem;background:#828282;opacity:.8;}
-.me-header-food-info a span{position:absolute; left:.6rem;top:.6rem;font-size: 1.4rem}
+.me-header-food-info a .icon{position:absolute; left:.45rem;top:.7rem;font-size: 1.4rem}
 
 .goods-info-img{position:fixed;top:0;z-index:0;width:100%;}
 .goods-info-img img{width:100%;}

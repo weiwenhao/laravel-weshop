@@ -9,7 +9,6 @@
     <!-- 以下是公共css -->
     <link rel="stylesheet" href="/plugins/weui.css"/>
     <link rel="stylesheet" href="/css/circle.css"/>
-    <link rel="stylesheet" href="/css/circle_style.css"/>
     <title>校园圈子</title>
     <script>
         window.Laravel = {!! json_encode([

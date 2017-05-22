@@ -64,10 +64,10 @@
                 </div>
         @endforeach
     </div>
-    <div class="weshop-center-block no-goods" style="display:{{ $shop_carts->toArray()?'none':'block' }}">
-        <span class="fa fa-shopping-cart fa-5x"></span>
-        <h3>您的购物车是空的</h3>
-        <p>去挑一些喜欢的商品吧</p>
+    <div class="weshop-center-block" style="display:{{ $shop_carts->toArray()?'none':'block' }}">
+        <i class="icon icon-cart" style=""></i>
+        <div class="title">您的购物车是空的</div>
+        <div>去挑一些喜欢的商品吧</div>
         <a href="{{ url('/') }}" class="weui-btn weui-btn_primary" style="">再去逛逛</a>
     </div>
     <div class="height-2rem"></div>
@@ -82,7 +82,7 @@
                     </label><b>全选</b>
                 </div>
                 <div class="col-xs-4">
-                    <span>合计: <i class="fa fa-rmb"></i><tt>0.00</tt></span>
+                    <span>合计: <tt>0.00</tt></span>
                 </div>
                 <div class="col-xs-4" name="num">
                     <a id="sub" class="weui-btn weui-btn_warn" href="javascript:void(0)" >结算(<span>0</span>)

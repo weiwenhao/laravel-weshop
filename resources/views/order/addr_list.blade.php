@@ -8,9 +8,9 @@
 @section('content')
     <!--顶部-->
     <div class="me-header-top">
-        <div><a href="{{ url('orders/confirm') }}"><span class="fa fa-chevron-left fa-lg"></span></a></div>
+        <div><a href="{{ url('orders/confirm') }}"><span class="icon icon-back icon-lg"></span></a></div>
         <div>请选择</div>
-        <div><a href="{{ url('addrs') }}">管理地址</a></div>
+        <div><a href="{{ url('addrs') }}">管理 <i class="icon icon-location"></i></a></div>
     </div>
     <!--收货-->
     <div class="height-2rem"></div>
@@ -30,10 +30,10 @@
                 </div>
         @endforeach
         <div class="weshop-center-block" style="display:{{ $addrs->toArray()?'none':'block' }}">
-            <span class="fa fa-map-marker fa-5x"></span>
-            <h3>你还没有收货地址</h3>
-            <p>快去添加一个吧!</p>
-            <a href="{{ url('addrs/create') }}" class="weui-btn  weui-btn_primary" style=""><i class="fa fa-plus"></i> 添加</a>
+            <i class="icon icon-locationfill"></i>
+            <div class="title">你还没有收货地址</div>
+            <div>快去添加一个吧!</div>
+            <a href="{{ url('addrs/create') }}" class="weui-btn  weui-btn_primary" style="">添加</a>
         </div>
 @stop
 @section('js')

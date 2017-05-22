@@ -6,7 +6,7 @@
 @stop
 @section('content')
     <div class="me-header-top">
-        <div><a href="{{ request()->cookie('orders_exit_url')?:url('me') }}"><span class="fa fa-chevron-left fa-lg"></span></a></div>
+        <div><a href="{{ request()->cookie('orders_exit_url')?:url('me') }}"><span class="icon icon-back icon-lg"></span></a></div>
         <div>我的订单</div>
         <div></div>
     </div>
@@ -75,9 +75,9 @@
                     <div class="price">共{{ count($order->orderGoods) }}件商品 <span class="pull-right">实付款: <b>￥{{ $order->total_price }}</b></span></div><hr/>
                     @if(!$order->paid_at && $order->orderGoods[0]->status !== 3)
                         <span class="p3">&nbsp;</span>
-                        <div class="del">
+                        <div class="del" style="line-height: 0.1rem">
                             <a href="javascript:void(0);" class="weui-btn weui-btn_mini weui-btn_default cancel-order" value="{{ $order->id }}">关闭订单</a>
-                            <a href="javascript:void(0);" class="weui-btn weui-btn_mini weui-btn_default pay-order" value="{{ $order->id }}">去付款</a>
+                            <a href="javascript:void(0);" class="weui-btn weui-btn_mini weui-btn_orange pay-order" value="{{ $order->id }}">去付款</a>
                         </div>
                     @endif
                 </div>
@@ -85,7 +85,7 @@
             <?php $_count++ ?>
         @endforeach
         <div class="weshop-center-block" style="display:{{ $_count != 0 ?'none':'block' }};">
-            <span class="fa fa-lemon-o fa-5x"></span>
+            <i class="icon icon-form"></i>
             <h3>您还没有相关订单</h3>
             <p>可以去看看有哪些想买的</p>
         </div>

@@ -5,7 +5,7 @@ $(function(){
         var price = $('.price-decimal-point');
         for(var i=0; i<price.length; i++){
             var s = price.eq(i).text().replace(/\.([\d\.]*)/,'<span style="font-size:.9rem;letter-spacing:-1px;">.'+'$1'+'</span>');
-            price.eq(i).html('<i class="fa fa-rmb"></i>'+s);
+            price.eq(i).html('<i class="icon icon-money"></i>'+s);
         }
         $('#historyPageGo').click(function(){
             window.history.go(-1);//返回上一页
