@@ -38,7 +38,7 @@ class ShopCart extends Model
      */
     public function getShopCarts()
     {
-        $data = $this->select('goods.name', 'goods.price as goods_price', 'goods.is_on_sale', 'goods.sm_image', 'shop_carts.*',
+        $data = $this->select('goods.name', 'goods.price as goods_price', 'goods.is_sale', 'goods.sm_image', 'shop_carts.*',
             'numbers.price', 'numbers.number')
             ->join('goods', function ($join){
                 $join->on('goods.id', '=', 'shop_carts.goods_id')
@@ -77,7 +77,7 @@ class ShopCart extends Model
             }
             $err_msg = $order->checkOneGoods($shop_cart->goods_id, $shop_cart->goods_attribute_ids, $shop_cart->shop_number);
             if($err_msg){
-                $err_msgs .= $err_msg."\n";
+                $err_msgs .= $err_msg."<br>";
             }
         }
         return $err_msgs;

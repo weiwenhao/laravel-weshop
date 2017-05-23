@@ -24,8 +24,7 @@ class PostController extends Controller
 
     public function dtData()
     {
-//        dd(Post::with('postCategory')->get()->toArray());
-        return Datatables::of(Post::with('post_category'))->make(true);
+        return Datatables::of(Post::with('postCategory', 'user'))->make(true);
     }
     /**
      * Remove the specified resource from storage.

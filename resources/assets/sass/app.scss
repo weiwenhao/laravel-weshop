@@ -4,7 +4,10 @@
 @import "variables";
 
 // Bootstrap
-@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "node_modules/bootstrap-sass/assets/stylesheets/app-bootstrap";
 
-//Font-awesome
-@import "node_modules/font-awesome/scss/font-awesome.scss";
+//阿里云图标
+@import "../iconfont/iconfont";
+
+//自定义样式
+@import "./app/common";

@@ -7,7 +7,7 @@
             <div class="circle-h-mid">
                 <span class="me-flex-3"></span>
                 <span class="me-flex-6">校园商城</span>
-                <span class="me-flex-3"><a href="/">进来逛逛 <i class="fa fa-angle-right"></i></a></span>
+                <span class="me-flex-3"><a href="/">进来逛逛 <i class="icon icon-right icon-sm"></i></a></span>
             </div>
         </div>
         <!--导航-->
@@ -63,11 +63,11 @@
                 <div class="critic-top"><!--评论数量和赞-->
                     <span class="critic-t-r">
                         <a @click.prevent="showComment(index ,post.id)">
-                            <i class="fa fa-comment-o"></i><span> {{ post.post_comments_count }}</span>
+                            <i class="icon icon-comment icon-lg"></i><span> {{ post.post_comments_count }}</span>
                         </a>
                         <a href="" @click.prevent="switchLike(post)">
-                           <i class="fa"
-                              :class="[post.is_like?'fa-thumbs-up':'fa-thumbs-o-up']"
+                           <i class="icon icon-lg"
+                              :class="[post.is_like?'icon-likefill':'icon-like']"
                            ></i>
                             <span>{{ post.user_likes_count }}</span>
                         </a>
@@ -101,10 +101,10 @@
                  style="display:block;"
                  v-if="posts.length == 0"
             >
-                <i class="fa fa-tencent-weibo fa-5x"></i>
-                <div v-if="params.type == null">暂时没有相关帖子~</div>
-                <div v-else-if="params.type == 1">暂时没有精品帖子哦~</div>
-                <div v-else-if="params.type == 2">你还没有发过帖子~</div>
+                <i class="icon icon-post"></i>
+                <div v-if="params.type == null" class="title">暂时没有相关帖子~</div>
+                <div v-else-if="params.type == 1" class="title">暂时没有精品帖子哦~</div>
+                <div v-else-if="params.type == 2" class="title">你还没有发过帖子~</div>
             </div>
             <!--帖子为空时end-->
 
@@ -141,7 +141,7 @@
             <div class="me-flex-4">&nbsp;</div>
             <div class="me-flex-4">
                 <a class="circle_send" id="fatie" href="/posts/create"><!---->
-                    <i class="fa fa-pencil-square-o" ></i>
+                    <i class="icon icon-write" ></i>
                     发帖子
                 </a>
             </div>
@@ -149,7 +149,7 @@
                 <a class="new-reply" href="/post_news">
                     <span class="new-info" v-if="user.is_news">{{ user.is_news }}<!--右上角新消息数量--></span>
 
-                    <i class="fa fa-user-circle-o"></i>
+                    <i class="icon icon-message icon-2rem"></i>
                 </a>
             </div>
         </div>
@@ -393,6 +393,7 @@
             delPostComment(index, post_comment, post_comments){
                 weui.confirm('你确定要删除这条评论吗？', () =>{
                     post_comments.splice(index, 1);
+                    //评论数量-1
                     //发送ajax请求
                     axios.delete('/api/post_comments/'+ post_comment.id, {
                         //key : value
@@ -451,8 +452,9 @@
     }
 </script>
 <style>
-    .weshop-center-block{width:60%;margin-top:10%;text-align:center;color:#bbb;margin-left: auto;margin-right: auto; margin-top: 30%;}
-    .weshop-center-block i{font-size:8rem;}
+    .weshop-center-block{width:60%;text-align:center;color:#bbb;margin-left: auto;margin-right: auto; margin-top: 40%;}
+    .weshop-center-block .icon{font-size:6rem;}
+    .weshop-center-block .title {font-size: 1.2rem;margin-top: 1.5rem}
     .weui-loadmore_line .weui-loadmore__tips {
         background-color: #f5f5f5;
     }

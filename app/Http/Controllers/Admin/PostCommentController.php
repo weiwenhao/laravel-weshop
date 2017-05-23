@@ -26,7 +26,7 @@ class PostCommentController extends Controller
 
     public function dtData($post_id)
     {
-        return Datatables::of(PostComment::where('post_id', $post_id))->make(true);
+        return Datatables::of(PostComment::with('user')->where('post_id', $post_id))->make(true);
     }
     /**
      * Remove the specified resource from storage.

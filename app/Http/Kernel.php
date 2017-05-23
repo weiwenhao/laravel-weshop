@@ -61,7 +61,11 @@ class Kernel extends HttpKernel
         'role' => \Zizaco\Entrust\Middleware\EntrustRole::class,
         'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
         'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class,
+        //检查是否登陆后台
         'check.admin' => \App\Http\Middleware\CheckAdminUser::class,
+        //wechat
         'wechat.oauth' => \Overtrue\LaravelWechat\Middleware\OAuthAuthenticate::class,
+        'exit_url_in' => \App\Http\Middleware\SaveThisUrl::class,
+
     ];
 }

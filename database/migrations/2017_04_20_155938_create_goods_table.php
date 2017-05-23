@@ -22,7 +22,7 @@ class CreateGoodsTable extends Migration
             $table->timestamp('promote_start_at')->nullable()->index()->comment('促销开始时间');
             $table->timestamp('promote_stop_at')->nullable()->index()->comment('促销结束时间');
             $table->unsignedTinyInteger('sort')->default(100)->index()->comment('权重,数字越小越靠前');
-            $table->unsignedTinyInteger('is_on_sale')->default(1)->index()->comment('是否上架');
+            $table->unsignedTinyInteger('is_sale')->default(1)->index()->comment('是否上架');
             $table->unsignedTinyInteger('is_best')->default(0)->index()->comment('是否精品');
             $table->unsignedInteger('buy_count')->default(0)->index()->comment('出售数量');
             $table->string('image')->comment('商品图片 原图');

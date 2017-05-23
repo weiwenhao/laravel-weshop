@@ -26,10 +26,14 @@ class CategoryRequest extends FormRequest
     {
         $rules =  [
             'name' => 'required|max:10|unique:categories,name',
+            'sort' => 'required|integer',
+            'is_show' => 'required|boolean',
+            'logo' => 'required|image'
         ];
         if (Request::isMethod('PATCH') || Request::isMethod('PUT')){
-            $id = Request::get('id');
+            $id = Request::route('category');
             $rules['name'] = 'required|max:10|unique:categories,name,'.$id;
+            $rules['logo'] = 'nullable|image';
         }
         return $rules;
     }
@@ -47,7 +51,8 @@ class CategoryRequest extends FormRequest
     public function attributes()
     {
         return [
-          'name' => '分类名称'
+            'name' => '分类名称',
+            'logo' => '封面',
         ];
     }
 }

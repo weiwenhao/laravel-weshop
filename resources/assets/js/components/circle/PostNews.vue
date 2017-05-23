@@ -2,7 +2,7 @@
 <div>
 
     <div class="me-header-top">
-        <div><a href="/posts"><span class="fa fa-chevron-left fa-lg"></span></a></div>
+        <div><a href="/posts"><span class="icon icon-back icon-lg"></span></a></div>
         <div>消息中心</div>
         <div></div>
     </div>
@@ -18,7 +18,7 @@
                 <div class="circle-name">
                     <b>{{ item.username }}</b>
                     <b v-if="item.type == 3">
-                        赞了我 <i class="fa fa-thumbs-o-up"></i>
+                        <i class="icon icon-like"></i> 赞了我
                     </b>
                 </div>
                 <span class="circle-time">{{ item.created_at_str }}</span>
@@ -61,8 +61,8 @@
              style="display:block;"
              v-if="post_news.length == 0"
         >
-            <i class="fa fa-bell-o fa-5x"></i>
-            <div>暂时没有收到消息~</div>
+            <i class="icon icon-message"></i>
+            <div class="title">暂时没有收到消息~</div>
         </div>
         <!--帖子为空时end-->
 

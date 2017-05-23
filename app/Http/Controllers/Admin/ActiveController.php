@@ -111,7 +111,7 @@ class ActiveController extends Controller
         $active = Active::find($id);
         if (!$active)
             return response('资源不存在',403);
-        $res = $active->delete(); //成功返回1?失败返回0?
+        $res = $active->delete();
         if($res){
             //删除图片
             $active->removeActiveImage();

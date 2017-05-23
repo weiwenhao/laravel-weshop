@@ -18,9 +18,6 @@ class ShopCartController extends Controller
      */
     public function index(ShopCart $shopCart)
     {
-        //session记录一下当前url方便存储 todo 待重构为cookie,或者中间件
-        session(['confirm_previous_url' => \request()->getUri()]);
-
         $shop_carts = $shopCart->getShopCarts();
         return view('shop_cart.list', compact('shop_carts'));
     }
@@ -68,52 +65,10 @@ class ShopCartController extends Controller
     {
         $shop_cart_ids = $request->get('shop_cart_ids');
         foreach ($shop_cart_ids as $shop_cart_id){
-            $res = ShopCart::where('id', $shop_cart_id)->where('user_id', \Auth::user()->id)->delete();
-            dd($res);
+            ShopCart::where('id', $shop_cart_id)->where('user_id', \Auth::user()->id)->delete();
         }
     }
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

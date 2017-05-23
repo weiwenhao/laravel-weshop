@@ -46,12 +46,12 @@ class OrderController extends Controller
             $where[] = ['category_id', \request('category_id')];
         }
 
-        $query = $query->select('orders.*', 'goods.id as goods_id', 'goods.name as goods_name', 'goods.category_id',
-            'order_goods.goods_attribute_ids', 'order_goods.shop_price', 'order_goods.shop_number', 'order_goods.status', 'order_goods.id as order_goods_id') //order_goods_id
+        $query = $query->select('orders.*', 'goods.id as goods_id', 'goods.category_id',
+            'order_goods.goods_attributes','order_goods.goods_name', 'order_goods.shop_price', 'order_goods.shop_number',
+            'order_goods.status', 'order_goods.id as order_goods_id', 'order_goods.created_at') //order_goods_id
             ->join('order_goods', 'order_goods.order_id', '=', 'orders.id')
             ->join('goods', 'order_goods.goods_id', '=', 'goods.id')
             ->where($where);
-
         return Datatables::of($query)
             ->addColumn('self_info', function (Order $order){
             //通过admin,处理出一段希望展示出来的roles字段,以行为单位

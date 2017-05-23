@@ -13,6 +13,12 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('exit_url_in:goods_info')->only(['show']);
+    }
+
+
     public function index()
     {
         $where = [];
@@ -34,7 +40,6 @@ class OrderController extends Controller
         $order = Order::where('id', $id)->where('user_id', \Auth::user()->id)->firstOrFail();
         return view('order.show', compact('order'));
     }
-
     /**
      * 确认订单页的提交订单操作
      * @param Request $request
@@ -49,48 +54,57 @@ class OrderController extends Controller
             'order_id' => 1,
             'config' => json_decode('{
            "appId":"wx2421b1c4370ec43b",
-           "timeStamp":"1395712654", 
-           "nonceStr":"e61463f8efa94090b1f366cccfbbb444",  
-           "package":"prepay_id=u802345jgfjsdfgsdg888",     
-           "signType":"MD5",   
+           "timeStamp":"1395712654",
+           "nonceStr":"e61463f8efa94090b1f366cccfbbb444",
+           "package":"prepay_id=u802345jgfjsdfgsdg888",
+           "signType":"MD5",
            "paySign":"70EA570631E4BB79628FBCA90534C63FF7FADD89"
         }'),
         ]);*/
 
         //confirm中的商品检测-> 如果confirm中存在shop_cart_id,其实就是根据shop_cart_id再进行一次购物车检测
         $order_goods = json_decode(session('order_goods'));
-        if(count($order_goods) == 0){
+        if(count($order_goods) == 0){ //如果session总不存在商品
             return response('订单异常，请重新下单', 404);
         }
         //开启事务
         \DB::beginTransaction();
-        //商品再次验证,使用checkOneGoods
+
+        //订单商品检测
+        $err_msg = '';
         foreach ($order_goods as $item) {
-            $err_msg = $order->checkOneGoods($item->goods_id, $item->goods_attribute_ids, $item->shop_number, true);
+            $err_msg .= $order->checkOneGoods($item->goods_id, $item->goods_attribute_ids, $item->shop_number, true);
             if($err_msg){
-                \DB::rollBack();
-                return response($err_msg, 422);
+                $err_msg .= '<br>';
             }
         }
-        //地址也进行一个检测
+        if($err_msg){
+            \DB::rollBack();
+            return response($err_msg, 422);
+        }
+
+        //地址检测
         $addr = Addr::where('id', session('order_addr_id'))->where('user_id', \Auth::user()->id)->first();
         if(!$addr){
             \DB::rollBack();
             return response('请选择收货地址', 422);
         }
+
         //生成订单模型
         $order = $order->ConfirmToOrders($order_goods, $addr);
         if(!$order->id){
             \DB::rollBack();
-            return response('系统错误,请联系客服', 500);
+            return response('无法生成订单，请联系客服', 500);
         }
+
         // 结束事务
         \DB::commit();
 
         $perpay_id = $order->getPrepayId();
-        if(!$perpay_id){
+        if(!$perpay_id){ //生成预付款id失败
             return response('系统错误,请联系客服', 500);
         }
+
         $payment = $wechat->payment;
         $config = $payment->configForPayment($perpay_id, false); //第二个参数为false表示生成数组形式
         return response()->json([
@@ -138,8 +152,8 @@ class OrderController extends Controller
         if(!$order){
             return response('订单不存在', 404);
         }
-        //商品再次验证， 下架商品必须做验证。原则上必须跳过库存验证,既用户即使已经抢到了该商品但是没有及时付款的话,后台下载该商品后依旧无法进行操作
-        foreach ($order->OrderGoods as $item) {//该方法的第四个和第五个参数分别代表验证库存时是否开启锁机制,以及是否需要验证库存.
+        //商品再次验证， 下架商品必须做验证。原则上必须跳过库存验证,既用户即使已经抢到了该商品但是没有及时付款的话,后台下架该商品后依旧无法进行操作
+        foreach ($order->OrderGoods as $item) {//该方法的第四个和第五个参数分别代表验证库存时是否开启锁机制,以及是否需要验证库存, 第五个参数决定着第四个参数
             $err_msg = $order->checkOneGoods($item->goods_id, $item->goods_attribute_ids, $item->shop_number, false, false);
             if($err_msg){
                 return response('订单中存在下架商品，请重新下单', 422);
@@ -151,6 +165,9 @@ class OrderController extends Controller
         }
         //重新申请下单
         $perpay_id = $order->getPrepayId();
+        if(!$perpay_id){ //生成预付款id失败
+            return response('系统错误,请联系客服', 500);
+        }
         $payment = $wechat->payment;
         $config = $payment->configForPayment($perpay_id, false); //第二个参数为false表示生成数组形式
         return response()->json([
@@ -163,10 +180,6 @@ class OrderController extends Controller
      */
     public function addrs()
     {
-        //todo  考虑加cookie中记录当前url, 以便进行返回. cookie不会使用,暂时使用session先
-//        dd($this->getRedirectUrl());得到上一页的url地址
-        session(['addrs_previous_url' => \request()->getUri()]);
-
         $addrs = Addr::where('user_id', \Auth::user()->id)->get();
         return view('order.addr_list', compact('addrs'));
     }

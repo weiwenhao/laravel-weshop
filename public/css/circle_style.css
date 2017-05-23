@@ -6,6 +6,27 @@ html,body{margin:0;padding:0;width:100%;font-size:14px;overflow-x:hidden;backgro
 	html,body{font-size:18px;}
 }
 
+/*****************附加样式****************/
+.icon {
+    line-height: 1rem;
+}
+.icon-lg{
+    font-size: 1.2rem;
+}
+.icon-sm{
+    font-size: 0.8rem;
+}
+.icon-4rem {
+    font-size: 4rem;
+    line-height: 4rem;
+    font-weight: lighter;
+}
+.icon-2rem {
+    font-size: 2rem;
+    line-height: 2rem;
+    font-weight: lighter;
+    color: #999;;
+}
 /*↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓- 全局init -↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓*/
 a{color:#444;}
 ul{margin:0;padding:0}li{list-style:none;}
@@ -19,6 +40,7 @@ hr{margin:0 -1rem;height:1px;background-color:#eee;border:0;}
     -webkit-transform:scale(0.5); transform:scale(0.5);
     vertical-align:middle; text-align:center;
     background:red; color:#fff;
+    font-size: 1.3rem;
 }
 .me-img{width:100%;}
 .text-hid-3{overflow:hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;}
@@ -31,7 +53,7 @@ hr{margin:0 -1rem;height:1px;background-color:#eee;border:0;}
 #gallery{display: none;}
 #tabPic{ overflow:hidden; position:relative;margin-top:20%}
 #tabPic .imgNum{width:100%;text-align:center;color:#fff;}
-#picList{ overflow:hidden;width:;}
+#picList{ overflow:hidden;width:0;}
 #picList li{float:left; width:20%;}
 #picList img{ width:100%; height:auto;}
 #galleryImgOut{position:absolute;z-index:5;right:0;color:#fff;margin:1rem;font-size:2rem;}
@@ -114,12 +136,12 @@ hr{margin:0 -1rem;height:1px;background-color:#eee;border:0;}
 .poster-body{padding:0 .5rem;background:#fff;overflow:hidden;}
 
 .poster-top{display:inline-block;padding-top:.4rem;width:100%;color:#aaa;line-height:2.2rem;}
-.poster-top-left{float:left;font-size:1.6rem}
+.poster-top-left .icon{float:left;font-size:1.6rem;margin-right: 0.5rem}
 .poster-top-left i:nth-of-type(1){color:#f90;}
 .poster-top-right{float:right;}
 .poster-top-sub{padding:.5rem;border-radius:5%;background:#1aad19;color:#fff;}
 
-.poster-bottom{padding:-top:.6rem;font-size:.9rem}
+.poster-bottom{padding-top:.6rem;font-size:.9rem}
 .poster-bottom > div{display:none}
 .poster-bottom > div:nth-of-type(1){display:block}
 .poster-bottom .panel:target{display:block;}

@@ -8,6 +8,32 @@ hr{margin:0 -.5rem;}
 	html,body{font-size:18px;}
 }
 
+/*****************附加样式****************/
+.icon {
+	line-height: 1rem;
+}
+.icon-lg{
+	font-size: 1.2rem;
+}
+.icon-sm{
+	font-size: 0.8rem;
+}
+.icon-4rem {
+	font-size: 4rem;
+	line-height: 4rem;
+	font-weight: lighter;
+}
+.icon-2rem {
+	font-size: 2rem;
+	line-height: 2rem;
+	font-weight: lighter;
+	color: #999;
+}
+/*wetui图标样式*/
+.weui-btn_orgin {
+	background-color: #f90;
+}
+
 /**************** 点击样式 ****************/
 a{color:#444 ;text-decoration:none !important;}
 a:link{text-decoration:none ;}
@@ -135,7 +161,7 @@ a:hover{color:#444 ;}
 .me-address .address .fa-times-circle-o{color:red;}
 .me-address .address tt{float:right;}
 .me-address .address p:nth-of-type(2){width:80%;float: left;font-size:.9rem;}
-.me-address .address .weui-btn{padding-left:.7rem;padding-right:.7rem; ;font-size:;float:right;}
+.me-address .address .weui-btn{padding-left:.7rem;padding-right:.7rem; ;font-size:0;float:right;}
 .me-address .col-xs-1 {display:block;z-index:10;padding-top:1rem;padding-bottom:1.2rem;height:100%;}
 .me-address .col-xs-1 .fa-times-circle-o{z-index:10;}
 .me-address .address .col-xs-10{padding:0 .2rem ;}
@@ -143,5 +169,7 @@ a:hover{color:#444 ;}
 .me-address .address-new{line-height:3.5rem;font-size: 1.2em;color: #999;}
 
 /*空购物车,空地址,空订单,空商品等*/
-.weshop-center-block{width:60%;margin-top:10%;text-align:center;color:#bbb;margin-left: auto;margin-right: auto; margin-top: 30%;}
-.weshop-center-block span{font-size:8rem;}
+.weshop-center-block{width:60%;text-align:center;color:#bbb;margin-left: auto;margin-right: auto; margin-top: 40%;}
+.weshop-center-block .icon{font-size:6rem;}
+.weshop-center-block .title {font-size: 1.5rem;margin-top: 1.5rem}
+.weshop-center-block .weui-btn {width: 50%;font-size: 1rem;margin-top: 1rem}

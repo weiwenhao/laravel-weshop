@@ -13,7 +13,7 @@
                     <span class="circle-block"> 板块：<tt>{{ post.post_category_name }}</tt></span>
                 </div>
                 <div class="me-flex-1">
-                    <a @click.prevent="delPost(post)" v-if="post.is_author">删除</a>
+                    <a @click.prevent="delPost(post)" v-if="post.is_author"><i class="icon icon-delete"></i></a>
                 </div>
             </div>
             <!--内容-->
@@ -72,7 +72,7 @@
                             </div>
 
                             <span class="circle-time">{{ post_comment.created_at_str }} </span>
-                            <i class="fa fa-mail-reply on-reply"
+                            <i class="icon icon-replyfill on-reply"
                                @click="showComment(post.id, post_comment.user_id, post_comment.username)"
                             ></i>
                         </div>
@@ -92,12 +92,10 @@
              style="display:block;"
              v-else-if="!post.post_comments || !post.post_comments[0]"
         >
-            <i class="fa fa-comment-o fa-5x"></i>
-            <div>暂时没有评论</div>
-            <div>快来占个沙发吧</div>
+            <div>还没有评论，快来占个沙发吧</div>
         </div>
 
-        <div style="height:2rem"></div>
+        <div style="height:3rem"></div>
 
         <!--回复文本框start-->
         <div class="critic-reply-frame"  v-if="comment.is_show">
@@ -120,17 +118,17 @@
         </div>
         <div class="discuss-bottom" v-else >
             <div class="me-flex-4" @click="skipPosts()">
-                <a href="javascript:void(0)"><i class="fa fa-circle-thin"></i></a>
+                <a href="javascript:void(0)"><i class="icon icon-back icon-lg"></i></a>
             </div>
             <div class="me-flex-4"  @click="showComment(post.id)">
                 <a href="javascript:void(0)">
-                    <i class="fa fa-comment-o"></i>
+                    <i class="icon icon-comment icon-lg"></i>
                 </a>
             </div>
             <div class="me-flex-4" @click="switchLike(post)">
                 <a href="javascript:void(0)" >
-                    <i class="fa fa-thumbs-o-up"
-                       :class="[post.is_like?'fa-thumbs-up':'fa-thumbs-o-up']"
+                    <i class="icon icon-lg"
+                       :class="[post.is_like?'icon-likefill':'icon-like']"
                     ></i>
                 </a>
             </div>
@@ -318,12 +316,11 @@
 <style>
     .post-weshop-center-block {
         width:60%;
-        margin-top:5%;
+        /*margin-bottom:25%;*/
         text-align:center;
         color:#bbb;
         margin-left: auto;
         margin-right: auto;
         background-color: whitesmoke
     }
-    .post-weshop-center-block i{font-size:5rem;}
 </style>

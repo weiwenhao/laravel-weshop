@@ -6,7 +6,7 @@
 @stop
 @section('content')
     <div class="me-header-top">
-        <div><a href="{{ request()->cookie('orders_previous_url')?:url('me') }}"><span class="fa fa-chevron-left fa-lg"></span></a></div>
+        <div><a href="{{ request()->cookie('orders_exit_url')?:url('me') }}"><span class="icon icon-back icon-lg"></span></a></div>
         <div>我的订单</div>
         <div></div>
     </div>
@@ -38,8 +38,8 @@
                     </span>
                 </div>
                 @foreach($order->orderGoods as $item)
-                    <div class="row">
-                        <a href="{{ url('orders/'.$order->id).'?is_pay='.request('is_pay') }}">
+                    <a href="{{ url('orders/'.$order->id).'?is_pay='.request('is_pay') }}">
+                        <div class="row">
                             <div class="col-xs-3">
                                 <img src="{{ $item->sm_image }}" class="img-responsive"/>
                             </div>
@@ -55,18 +55,18 @@
                                     ×{{ $item->shop_number }}
                                 </span>
                                 </div>
-                                @if($item->status == 0)
+                                @if($item->status == 0 && $order->paid_at)
                                     <span class="pull-right" style="color: orange">未处理</span>
-                                @elseif($item->status == 1)
+                                @elseif($item->status == 1 && $order->paid_at)
                                     <span class="pull-right" style="color: #2196f3">已处理</span>
-                                @elseif($item->status == 2)
+                                @elseif($item->status == 2 && $order->paid_at)
                                     <span class="pull-right" style="color: #57bb5b">已完成</span>
                                 @elseif($item->status == 3)
                                     <span class="pull-right" style="color: red">已关闭</span>
                                 @endif
                             </div>
-                        </a>
-                    </div>
+                        </div>
+                    </a>
                     @if(!$loop->last)
                         <hr>
                     @endif
@@ -75,9 +75,9 @@
                     <div class="price">共{{ count($order->orderGoods) }}件商品 <span class="pull-right">实付款: <b>￥{{ $order->total_price }}</b></span></div><hr/>
                     @if(!$order->paid_at && $order->orderGoods[0]->status !== 3)
                         <span class="p3">&nbsp;</span>
-                        <div class="del">
+                        <div class="del" style="line-height: 0.1rem">
                             <a href="javascript:void(0);" class="weui-btn weui-btn_mini weui-btn_default cancel-order" value="{{ $order->id }}">关闭订单</a>
-                            <a href="javascript:void(0);" class="weui-btn weui-btn_mini weui-btn_default pay-order" value="{{ $order->id }}">去付款</a>
+                            <a href="javascript:void(0);" class="weui-btn weui-btn_mini btn-orange-c pay-order" value="{{ $order->id }}">去付款</a>
                         </div>
                     @endif
                 </div>
@@ -85,7 +85,7 @@
             <?php $_count++ ?>
         @endforeach
         <div class="weshop-center-block" style="display:{{ $_count != 0 ?'none':'block' }};">
-            <span class="fa fa-lemon-o fa-5x"></span>
+            <i class="icon icon-dingdan"></i>
             <h3>您还没有相关订单</h3>
             <p>可以去看看有哪些想买的</p>
         </div>
@@ -96,28 +96,48 @@
 @section('js')
 <script>
     $('.cancel-order').click(function () {
-        if(confirm('你确定要关闭该订单吗？')){
+        weui.confirm('你确定要关闭该订单吗？', ()=> {
+            //等待框
+            let loading = weui.loading('请稍等');
+            setTimeout(function () { //如果超过5秒钟没有响应则自动关闭loading框,并提示一个超时响应
+                loading.hide(function() {
+                    weui.topTips('请求超时', 3000);
+                });
+            }, 5000);
+
             $.ajax({
-            	type: "DELETE",
-            	url: "orders/"+$(this).attr('value'),
-            	success: function(msg){
-            		toast('订单已关闭');
+                type: "DELETE",
+                url: "/orders/"+$(this).attr('value'),
+                success: function(msg){
+                    loading.hide(function () {
+                        weui.toast('订单已关闭');
+                    });
                     location.reload();
-            	},
-            	error: function (error) { //200以外的状态码走这里
-            		 console.log(error.responseJSON);
-            	}
+                },
+                error: function (error) { //200以外的状态码走这里
+                    loading.hide();
+                    console.log(error.responseJSON);
+                }
             });
-        }
+        });
     });
+
     /**
      * 重新下单
      */
     $('.pay-order').click(function () {
         if(!$(this).attr('value')){
-            alert('系统错误，请联系客服');
+            weui.alert('系统错误，请联系客服');
             return;
         }
+
+        let loading = weui.loading('订单检测中');
+        setTimeout(function () { //如果超过5秒钟没有响应则自动关闭loading框,并提示一个超时响应
+            loading.hide(function() {
+                weui.topTips('请求超时', 3000);
+            });
+        }, 10000);
+
         //根据order_id再次申请支付
         $.ajax({
             type: "POST",
@@ -126,6 +146,7 @@
               'order_id':$(this).attr('value')
             },
             success: function(msg){
+                loading.hide();
                 //使用微信浏览器自带的功能发起支付
                 WeixinJSBridge.invoke(
                     'getBrandWCPayRequest', msg.config,
@@ -141,11 +162,14 @@
                 );
             },
             error: function (error) { //200以外的状态码走这里
+                loading.hide();
                 if(error.status == 500){
-                    alert('系统错误,请联系客服');
+                    weui.alert('系统错误,请联系客服');
                     return
                 }
-                alert(error.responseText);
+                weui.alert(error.responseText);
+
+
             }
         });
     })

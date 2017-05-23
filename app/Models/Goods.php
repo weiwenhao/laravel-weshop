@@ -43,10 +43,10 @@ class Goods extends Model
 
     public function removeGoodsImage()
     {
-        @unlink(public_path($this->image));
-        @unlink(public_path($this->sm_image));
-        @unlink(public_path($this->mid_image));
-        @unlink(public_path($this->big_image));
+//        @unlink(public_path($this->image));
+        @unlink(public_path($this->sm_image));  //商品小图不删除, 因为订单表中需要使用
+//        @unlink(public_path($this->mid_image));
+//        @unlink(public_path($this->big_image));
     }
 
     /**
@@ -157,22 +157,18 @@ class Goods extends Model
     {
         //初始值
         $where = [];
-        $order = 'sort';
-        $sort = 'asc';
+
         //得到分类id
         if(request('category_id')){
             $where[] = ['category_id', request('category_id')]; // 根据请求url中的  ?category_id=x 进行分类
         }
-        if(request('order')){
-            $order = request('order');
-            if($order == 'buy_count'){
-                $sort = 'desc'; //销量只有降序排列
-            }
+        $sort = request('sort', 'asc');
+        $order = request('order', 'sort');
+        if($order == 'buy_count'){
+            $sort = 'desc'; //销量只有降序排列
         }
-        if(request('sort')){
-            $sort = request('sort');
-        }
-        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count', 'is_on_sale')
+
+        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count', 'is_sale')
             ->where($where)
             ->where('is_deleted', 0)
             ->orderBy($order, $sort)
@@ -186,28 +182,36 @@ class Goods extends Model
     public function getGoodsByKey()
     {
         //初始值
-        $order = 'id';
-        $sort = 'desc';
-        $key = request('key');
-        if(request('order')){
-            $order = request('order');
+        //初始值
+        $key = request('key', '');
+
+        $sort = request('sort', 'asc');
+        $order = request('order', 'sort');
+        if($order == 'buy_count'){
+            $sort = 'desc'; //销量只有降序排列
         }
-        if(request('sort')){
-            $sort = request('sort');
-        }
-        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count', 'is_on_sale')
-            ->where(['name', 'like', "%$key%"])
-            ->where('is_deleted', 0)
+
+
+
+        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count', 'is_sale')
+            ->where('is_deleted', 0) //不被删除的商品
+            ->where('name', 'like', "%$key%")
             ->orderBy($order, $sort)
             ->paginate(config('shop.goods_list_count'));
         $goods->key = request('key');
         return $goods;
     }
 
+    /**
+     * 首页精品商品 没有被删除,且没有下架的商品才在首页显示
+     * @param $limit
+     * @return mixed
+     */
     public function getBestGoods($limit){
-        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count', 'is_on_sale')
+        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count', 'is_sale')
             ->where('is_best', 1)
             ->where('is_deleted', 0)
+            ->where('is_sale', 1)
             ->orderBy('sort', 'asc')
             ->orderBy('created_at', 'desc')
             ->limit($limit)->get();

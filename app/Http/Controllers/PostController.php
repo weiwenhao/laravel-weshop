@@ -6,7 +6,6 @@ use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use App\Models\PostImage;
 use App\Models\PostNews;
-use EasyWeChat\Foundation\Application;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -14,14 +13,11 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Application $wechat
      * @return \Illuminate\Http\Response
      */
-    public function index(Application $wechat)
+    public function index()
     {
-        //jssdk
-        $js = $wechat->js;
-        return view('post.list', compact('js'));
+        return view('post.list');
     }
 
     /**
@@ -38,14 +34,11 @@ class PostController extends Controller
      * Display the specified resource.
      *
      * @param  int $post_id
-     * @param Application $wechat
      * @return \Illuminate\Http\Response
      */
-    public function show($post_id, Application $wechat)
+    public function show($post_id)
     {
-        //jssdk
-        $js = $wechat->js;
-        return view('post.show', compact('post_id', 'js'));
+        return view('post.show', compact('post_id'));
     }
 
 
@@ -81,9 +74,9 @@ class PostController extends Controller
 
         //进行图片的存储测试
         \Image::make($request->file('post_img'))
-            ->resize(600, null, function ($constraint) { //将图片的尺寸固定在了600
+            /*->resize(1000, null, function ($constraint) { //将图片的尺寸固定在了600
                 $constraint->aspectRatio();
-            })->save($path.$circle_img_name);
+            })*/->save($path.$circle_img_name);//原图存储, 考虑到前台已经进行了 0.8的质量压缩
         \Image::make($request->file('post_img'))->fit($size = config('shop.sm_circle_img_size'), $size)->save($path.'sm_'.$circle_img_name);
         $post_img = PostImage::create([
             'post_id' => $post_id,

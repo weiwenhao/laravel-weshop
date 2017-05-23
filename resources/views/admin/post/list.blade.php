@@ -1,7 +1,5 @@
 @extends('admin.layouts.layout')
 @section('css')
-    <!-- DataTables -->
-    <link rel="stylesheet" href="/plugins/datatables/dataTables.bootstrap.css">
     <style>
 
     </style>
@@ -24,10 +22,8 @@
                 <table id="datatables" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>内容</th>
-                        <th>点赞数</th>
-                        <th>用户名</th>
+                        <th>帖子内容</th>
+                        <th>发帖人</th>
                         <th>所属分类</th>
                         <th>创建时间</th>
                         <th>操作</th>
@@ -42,37 +38,15 @@
     <!-- /.content -->
 @stop
 @section('js')
-    {{--datatables--}}
-    <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/plugins/datatables/dataTables.bootstrap.min.js"></script>
     <script>
         /**
          * datatables配置
          * @type {jQuery}
          */
         let table = $('#datatables').DataTable( {
+            "scrollX": false, //水平滚动条
             stateSave: false,//保存当前页面状态,再次刷新进来依旧显示当前状态,比如本页的排序规则,显示记录条数
-            language: {
-                "sProcessing": "处理中...",
-                "sLengthMenu": "每页显示 _MENU_ 条记录",
-                "sZeroRecords": "没有匹配结果",
-                "info": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 )",
-                "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
-                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
-                "sInfoPostFix": "",
-                "sSearch": "搜索:",
-                "sUrl": "",
-                "sEmptyTable": "表中数据为空",
-                "sLoadingRecords": "载入中...",
-                "sInfoThousands": ",",
-                "oPaginate": {
-                    "sFirst": "首页",
-                    "sPrevious": "上页",
-                    "sNext": "下页",
-                    "sLast": "末页"
-                },
-
-            }, //语言国际化
+            language: dt_language, //语言国际化
             "order": [[ 0, "desc" ]],
             "serverSide": true,//开启服务器模式
             processing: true,
@@ -87,19 +61,14 @@
             },
             "columns": [
                 {
-                    'data':'id', //对应json中的字段
-                },
-                {
                     'width': '30%',
                     'data':'content',
                 },
                 {
-                    'data':'likes_count',
+                    'data': 'user.username',
                 },
                 {
-                    'data': 'user_id',
-                },
-                {
+                    'name' : 'postCategory.name',
                     'data': 'post_category.name'
                 },
                 {
@@ -122,16 +91,11 @@
         /**
          * ajax删除
          */
-        $.ajaxSetup({ //这段话的意思使用ajax,会将csrf加入请求头中
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
         $('body').on('click', 'button.del', function() {
             var url = '/admin/posts/'+$(this).val(); //this代表删除按钮的DOM对象
             swal({
-                title: "你确定要删除这条说说吗?",
-                text: "",
+                title: "你确定要删除这条帖子吗?",
+                text: "请谨慎操作",
                 /*type: "warning",*/
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
@@ -145,10 +109,10 @@
                     url: url,
                     success: function(msg){ //后台返回的数据在这里直接返回
                         table.ajax.reload(null, false); //databales对象从新加载
-                        swal("已删除", '', 'success')
+                        swal("删除成功", '', 'success')
                     },
                     error: function (error) { //200以外的状态码走这里
-                        swal("系统错误", '', "danger")
+                        swal("系统错误", '', "error")
                     }
                 });
             });

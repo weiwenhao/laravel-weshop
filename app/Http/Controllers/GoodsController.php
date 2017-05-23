@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Active;
+use App\Models\Category;
 use App\Models\Collect;
 use App\Models\Goods;
 use App\Models\Order;
@@ -23,11 +24,6 @@ class GoodsController extends Controller
      */
     public function index(Goods $goods, Active $active)
     {
-//        $user = User::find(session('wechat.oauth_user')->id);
-        //session记录一下当前url方便存储 todo 待重构为cookie,或者中间件
-        \Cookie::queue('goods_previous_url', \request()->getUri());
-        \Cookie::queue('orders_previous_url', \request()->getUri());
-
         $actives = $active->getActives(); //画布导航数据
         $best_goods = $goods->getBestGoods(8);
         return view('goods.index', compact('actives', 'best_goods'));
@@ -40,9 +36,6 @@ class GoodsController extends Controller
      */
     public function show($goods_id, Goods $goods)
     {
-        //确认订单的上一页进行记录 todo 待重构为中间件
-        session(['confirm_previous_url' => \request()->getUri()]);
-
         $goods = Goods::where('id', $goods_id)->where('is_deleted', 0)->first();
         if($goods){
             //添加一个收藏状态
@@ -61,18 +54,16 @@ class GoodsController extends Controller
      */
     public function list(Goods $model)
     {
-        //session记录一下当前url方便存储 todo 待重构为cookie,或者中间件
-        \Cookie::queue('goods_previous_url', \request()->getUri());
-
         if(request('category_id')){
             $goods = $model->getGoodsByCid();// todo 这里可以考虑从新return view
         }elseif(request('key')){
             $goods = $model->getGoodsByKey();
         }
+
         return view('goods.list', compact('goods'));
     }
 
-    public function GetPriceAndNumber(Request $request)
+    public function getPriceAndNumber(Request $request)
     {
         $goods_id = $request->get('goods_id');
         $number_price = Goods::select( 'goods.price as goods_price',
@@ -86,5 +77,11 @@ class GoodsController extends Controller
             return 'a'.str_replace(',', '_', $item->goods_attribute_ids);
         });
         return $number_price;
+    }
+
+    public function getCategories()
+    {
+        $categories = Category::where('is_show', 1)->orderBy('sort', 'asc')->get();
+        return view('goods.category_list', compact('categories'));
     }
 }

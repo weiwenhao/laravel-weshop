@@ -48,7 +48,7 @@ class PermissionsTableSeeder extends Seeder
             'description' => '删除商品',
         ]);
 
-        //库存管理, 特殊-> 4级和5级
+        //库存管理, 特殊-> 3级
         $number = Permission::create([
             'name' => 'goods_numbers.list',
             'display_name' => '库存列表列表',
@@ -56,7 +56,7 @@ class PermissionsTableSeeder extends Seeder
             'parent_id' => $goods->id,
             'description' => '库存列表列表',
         ]);
-        //五级
+        //4级
         Permission::create([
             'name' => 'goods_numbers.create',
             'display_name' => '添加库存列表',
@@ -131,14 +131,14 @@ class PermissionsTableSeeder extends Seeder
             'description' => '删除类型',
         ]);
 
-        //商品属性管理, 特殊=> 属于4级和5级
+        //商品属性管理, 特殊=> 3级
         $attr = Permission::create([
             'name' => 'attributes.list',
             'display_name' => '属性列表',
             'parent_id' => $type->id,
             'description' => '添加类型',
         ]);
-        //五级
+        //4级
         Permission::create([
             'name' => 'attributes.create',
             'display_name' => '添加属性',
@@ -158,11 +158,14 @@ class PermissionsTableSeeder extends Seeder
             'description' => '删除属性',
         ]);
 
-
-
-
-
-
+        //回收站
+        $huishouzhan = Permission::create([
+            'name' => 'goods.list',
+            'display_name' => '回收站',
+            'url' => 'deled_goods',
+            'parent_id' => $shop_admin->id,
+            'description' => '回收站',
+        ]);
 
         /**************************订单管理***************************************/
         //一级
@@ -236,19 +239,51 @@ class PermissionsTableSeeder extends Seeder
         ]);
         $post = Permission::create([
             'name' => 'posts.list',
-            'display_name' => '说说列表',
+            'display_name' => '帖子列表',
             'url' => 'posts',
             'parent_id' => $circle_admin->id,
-            'description' => '说说列表',
         ]);
         Permission::create([
             'name' => 'posts.destroy',
-            'display_name' => '删除说说',
+            'display_name' => '删除帖子',
             'parent_id' => $post->id,
-            'description' => '删除说说',
         ]);
 
+        //板块管理
+        $post_category = Permission::create([
+            'name' => 'post_categories.list',
+            'url' => 'post_categories',
+            'display_name' => '板块列表',
+            'parent_id' => $circle_admin->id,
+        ]);
+        Permission::create([
+            'name' => 'post_categories.create',
+            'display_name' => '添加板块',
+            'parent_id' => $post_category->id,
+        ]);
+        Permission::create([
+            'name' => 'post_categories.edit',
+            'display_name' => '修改板块',
+            'parent_id' => $post_category->id,
+        ]);
+        Permission::create([
+            'name' => 'post_categories.destroy',
+            'display_name' => '删除板块',
+            'parent_id' => $post_category->id,
+        ]);
 
+        //评论管理, 特殊=> 3级
+        $comment = Permission::create([
+            'name' => 'comments.list',
+            'display_name' => '评论列表',
+            'parent_id' => $post->id,
+        ]);
+        //4级
+        Permission::create([
+            'name' => 'comments.destroy',
+            'display_name' => '删除评论',
+            'parent_id' => $comment->id,
+        ]);
         /****************************活动管理**********************************************/
         $active_admin =  Permission::create([
             'name' => 'active_admin',
@@ -285,6 +320,7 @@ class PermissionsTableSeeder extends Seeder
             'parent_id' => $active->id,
             'description' => '删除活动',
         ]);
+        //四级五级
 
         /*****************************控制台************************************/
         //顶级

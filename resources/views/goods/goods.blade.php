@@ -8,21 +8,21 @@
 @section('content')
     <!--**************** 顶部 ********************-->
     <div class="me-header-top me-header-food-info">
-        <div><a href="{{ request()->cookie('goods_previous_url')?:url()->previous() }}"><span class="fa fa-chevron-left "></span></a></div>
+        <div><a href="{{ request()->cookie('goods_info_exit_url')?:'/' }}"><span class="icon icon-back icon-lg"></span></a></div>
         <div></div>
-        <div><a href="{{ url('shop_carts') }}"><span class="fa fa fa-shopping-cart"></span></a></div>
+        <div>{{--<a href="{{ url('shop_carts') }}"><span class="fa fa fa-shopping-cart"></span></a>--}}</div>
     </div>
     <!--**************** 详情 ********************-->
     @if($goods)
         <div class="goods-info-img">
             <img class="img-responsive" style="width: 100%" src="{{ $goods->big_image }}" />
         </div>
-        <div class="goods-info-img-empty" id="showAndroidActionSheet"></div>
+        <div class="goods-info-img-empty"></div>
         <div class="goods-info">
             <div class="goods-list goods-info-name"><p>{{ $goods->name }}</p></div>
             <div class="goods-list goods-info-price">
-                <span class="price-decimal-point"><i class="fa fa-rmb"></i>{{ $goods->price }} </span> {{--<del> <i class="fa fa-rmb"></i>2099</del>--}}
-                <small><i class="fa fa-line-chart"></i> 销量：{{ $goods->buy_count }}</small>
+                <span class="price-decimal-point"><i class="icon icon-money"></i>{{ $goods->price }} </span> {{--<del> <i class="fa fa-rmb"></i>2099</del>--}}
+                <small> 销量：{{ $goods->buy_count }}</small>
             </div>
             <div class="goods-list weui-cell">
                 <div class="weui-cell__hd">
@@ -33,32 +33,22 @@
                 <div class="weui-cell__ft">..</div>
             </div>
             <div class="goods-list goods-info-txt">
-                <h4>商品详情</h4>
+                <h5>商品详情</h5>
                 {!! $goods->description !!}
-            </div>
-        </div>
-        <!--点击图片查看大图-->
-        <div class="page actionsheet">
-            <div class="weui-skin_android" id="androidActionsheet" style="display:none">
-                <div class="weui-mask"></div>
-                <div class="weui-actionsheet">
-                    <img class="img-responsive" src="{{ $goods->big_image }}" />
-                    <span class="fa fa-times-circle-o fa-2x" id="outImg"></span>
-                </div>
             </div>
         </div>
         <!--**************** 加入购物车 立即购买 ********************-->
         <div calss="container" id="mai">
             <div class="row">
                 <div class="col-xs-4">
-                    <a href="{{ url('shop_carts') }}"><i class="fa fa-shopping-cart"></i><div>购物车</div></a>
-                    <a class="switch-collect"><i class="fa {{ $goods->is_collect?'fa-heart':'fa-heart-o' }} collect-icon"></i><div>收藏</div></a>
+                    <a href="{{ url('shop_carts') }}"><i class="icon icon-cart icon-lg"></i><div>购物车</div></a>
+                    <a class="switch-collect"><i class="icon icon-lg {{ $goods->is_collect?'icon-favorfill ':'icon-favor' }} collect-icon"></i><div>收藏</div></a>
                 </div>
                 <div class="col-xs-4">
-                    <a class="weui-btn weui-btn_warn showIOSActionSheet" ></i> 加入购物车</a>
+                    <a class="weui-btn  btn-orange-c showIOSActionSheet" ></i> 加入购物车</a>
                 </div>
-                <div class="col-xs-4  {{ $goods->is_on_sale?'':"off-sale" }}"><!--添加name='off'显示已下架-->
-                    <a class="weui-btn weui-btn_warn showIOSActionSheet"  >立即购买</a>
+                <div class="col-xs-4  {{ $goods->is_sale?'':"off-sale" }}"><!--添加name='off'显示已下架-->
+                    <a class="weui-btn  btn-red-c showIOSActionSheet"  >立即购买</a>
                 </div>
             </div>
         </div>
@@ -68,8 +58,8 @@
             <div class="me-actionsheet-title">
                 <img class="img-rounded img-thumbnail" src="{{ $goods->sm_image }}" />
                 <div class="me-right">
-                    <span id="iosActionsheetCancel" class="fa fa-times-circle-o fa-lg"></span>
-                    <p class="price"><i class="fa fa-rmb"></i> <span id="goods_price">{{ $goods->price }}</span></p>
+                    <span id="iosActionsheetCancel" class="icon icon-roundclose icon-lg"></span>
+                    <p class="price">￥<span id="goods_price">{{ $goods->price }}</span></p>
                     <div>库存 <span id="goods_number">0</span> 件</div>
                     @if($goods->option_attrs)
                         <p class="class-ok">已选: <span class="attr-target"></span></p>
@@ -102,24 +92,32 @@
                 </div>
             </div>
             <div class="me-actionsheet-bottom">
-                <a href="" class="weui-btn weui-btn_warn me-ok me-back-f90" id="addShopCart">加入购物车</a>
-                <a href="" class="weui-btn weui-btn_warn me-ok" id="lijiShop">立即购买</a>
+                <a href="" class="weui-btn btn-orange-c" id="addShopCart">加入购物车</a>
+                <a href="" class="weui-btn btn-red-c me-ok" id="lijiShop">立即购买</a>
             </div>
         </div>
     @else
         {{--商品不存在或者被删除时显示给用户的视图--}}
         <div class="weshop-center-block no-goods" style="display:block;">
-            <span class="fa fa-remove fa-5x"></span>
-            <h3>什么都没有呢</h3>
-            <p>商品不存在或者已经被删除</p>
+            <i class="icon icon-goods"></i>
+            <div class="title">什么都没有呢</div>
+            <div>商品不存在或者已经被删除</div>
             <a href="{{ url('/') }}" class="weui-btn weui-btn_primary" style="">再去逛逛</a>
         </div>
     @endif
 @stop
 @section('js')
     @if($goods)
-        <script type="text/javascript" src="/js/food.js"></script>
         <script>
+            wx.config({!! $js->config(['previewImage'], false) !!});
+            $('.goods-info-img-empty').click(function () {
+                wx.previewImage({
+                    current: 'http://' + location.hostname + '{{ $goods->big_image }}', // 当前显示图片的http链接
+                    urls: [
+                        'http://' + location.hostname + '{{ $goods->big_image }}',
+                    ] // 需要预览的图片http链接列表
+                });
+            });
             //去掉商品详情中图片的style的高,和宽100%
             $('.goods-info-txt').find('img').css('height', 'auto');
             $('.goods-info-txt').find('img').css('width', '100%');
@@ -127,6 +125,13 @@
             //加入购物车操作
             $('#addShopCart').click(function (event) {
                 event.preventDefault();
+                let loading = weui.loading('库存检测中');
+                setTimeout(function () { //如果超过5秒钟没有响应则自动关闭loading框,并提示一个超时响应
+                    loading.hide(function() {
+                        weui.topTips('请求超时', 3000);
+                    });
+                }, 8000);
+
                 //得到购买数量
                 let shop_number = $('[name=shop_number]').val();
                 //得到商品属性
@@ -143,8 +148,11 @@
                         'goods_attribute_ids' : goods_attribute_ids,
                     },
                     success: function(msg){
+                        loading.hide(function () {
+                            weui.toast('加入购物车成功',800);
+                        });
                         //弹出成功
-                        toast('加入购物车成功');
+
                         //关闭下拉框
                         $('#iosActionsheetCancel').trigger('click');
                         //清空number数量
@@ -152,9 +160,10 @@
 
                     },
                     error: function (error) { //200以外的状态码走这里
+                        loading.hide();
         //                error.responseText; //库存量不足
                          if(error.status == 422){
-                             alert(error.responseText)
+                             weui.alert(error.responseText)
                          }
                     }
                 });
@@ -162,7 +171,14 @@
             });
 
             //立即购买操作
-            $('#lijiShop').click(function () {
+            $('#lijiShop').click(function (event) {
+                event.preventDefault();
+                let loading = weui.loading('生成订单中');
+                setTimeout(function () { //如果超过5秒钟没有响应则自动关闭loading框,并提示一个超时响应
+                    loading.hide(function() {
+                        weui.topTips('请求超时', 3000);
+                    });
+                }, 8000);
                 //得到购买数量
                 let shop_number = $('[name=shop_number]').val();
                 //得到商品属性
@@ -182,9 +198,10 @@
                         location.href='{{ url('/orders/confirm') }}';
                     },
                     error: function (error) { //200以外的状态码走这里
+                        loading.hide();
         //                error.responseText; //库存量不足
                         if(error.status == 422){
-                            alert(error.responseText)
+                            weui.alert(error.responseText)
                         }
                     }
                 });
@@ -201,12 +218,12 @@
             $('.switch-collect').click(function () {
                  let icon = $(this).find('i.collect-icon');
                 //鉴于没有判断用户登陆的操作,所以直接进行状态改变,然后发送ajax信息
-                if(icon.hasClass('fa-heart-o')){
-                    icon.removeClass('fa-heart-o')
-                    icon.addClass('fa-heart')
+                if(icon.hasClass('icon-favor')){
+                    icon.removeClass('icon-favor')
+                    icon.addClass('icon-favorfill')
                 }else {
-                    icon.removeClass('fa-heart')
-                    icon.addClass('fa-heart-o')
+                    icon.removeClass('icon-favorfill')
+                    icon.addClass('icon-favor')
                 }
                 //发送ajax请求
                 $.ajax({

@@ -18,13 +18,11 @@ class PostsTableSeeder extends Seeder
             'name' => '校园趣事'
         ]);
         PostCategory::create([
-            'name' => '心情随笔'
+            'name' => '王者荣耀'
         ]);
         PostCategory::create([
-            'name' => '小道消息'
-        ]);
-        PostCategory::create([
-            'name' => '其他'
+            'name' => '其他',
+            'sort' => 999,
         ]);
         /*factory(\App\Models\Post::class, 50)->create([
             'post_category_id' => mt_rand(1, 4),
@@ -37,7 +35,6 @@ class PostsTableSeeder extends Seeder
                     'user_id' => 1
                 ]);
             }
-
             \App\Models\PostImage::create([
                 'image' => 'http://iph.href.lu/1000x800',
                 'sm_image' => 'http://iph.href.lu/80x80',
