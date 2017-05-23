@@ -42,13 +42,13 @@
             <div class="row">
                 <div class="col-xs-4">
                     <a href="{{ url('shop_carts') }}"><i class="icon icon-cart icon-lg"></i><div>购物车</div></a>
-                    <a class="switch-collect"><i class="icon icon-lg {{ $goods->is_collect?'icon-favorfill':'icon-favor' }} collect-icon"></i><div>收藏</div></a>
+                    <a class="switch-collect"><i class="icon icon-lg {{ $goods->is_collect?'icon-favorfill ':'icon-favor' }} collect-icon"></i><div>收藏</div></a>
                 </div>
                 <div class="col-xs-4">
-                    <a class="weui-btn weui-btn_warn showIOSActionSheet" ></i> 加入购物车</a>
+                    <a class="weui-btn  btn-orange-c showIOSActionSheet" ></i> 加入购物车</a>
                 </div>
                 <div class="col-xs-4  {{ $goods->is_sale?'':"off-sale" }}"><!--添加name='off'显示已下架-->
-                    <a class="weui-btn weui-btn_warn showIOSActionSheet"  >立即购买</a>
+                    <a class="weui-btn  btn-red-c showIOSActionSheet"  >立即购买</a>
                 </div>
             </div>
         </div>
@@ -92,8 +92,8 @@
                 </div>
             </div>
             <div class="me-actionsheet-bottom">
-                <a href="" class="weui-btn weui-btn_warn me-ok me-back-f90" id="addShopCart">加入购物车</a>
-                <a href="" class="weui-btn weui-btn_warn me-ok" id="lijiShop">立即购买</a>
+                <a href="" class="weui-btn btn-orange-c" id="addShopCart">加入购物车</a>
+                <a href="" class="weui-btn btn-red-c me-ok" id="lijiShop">立即购买</a>
             </div>
         </div>
     @else

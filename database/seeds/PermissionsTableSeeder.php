@@ -158,11 +158,14 @@ class PermissionsTableSeeder extends Seeder
             'description' => '删除属性',
         ]);
 
-
-
-
-
-
+        //回收站
+        $huishouzhan = Permission::create([
+            'name' => 'goods.list',
+            'display_name' => '回收站',
+            'url' => 'deled_goods',
+            'parent_id' => $shop_admin->id,
+            'description' => '回收站',
+        ]);
 
         /**************************订单管理***************************************/
         //一级
@@ -249,7 +252,7 @@ class PermissionsTableSeeder extends Seeder
         //板块管理
         $post_category = Permission::create([
             'name' => 'post_categories.list',
-            'url' => 'posts_categories',
+            'url' => 'post_categories',
             'display_name' => '板块列表',
             'parent_id' => $circle_admin->id,
         ]);

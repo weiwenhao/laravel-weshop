@@ -48,23 +48,23 @@
                                 <small>{{ $item->goods_attributes }}</small>
                             </div>
                             <div class="col-xs-2">
-                                    <div class=" pull-right">
-                                        <span class="">￥{{ $item->shop_price }}</span>
-                                        <br>
-                                        <span class="pull-right">
-                                        ×{{ $item->shop_number }}
-                                    </span>
-                                    </div>
-                                    @if($item->status == 0 && $order->paid_at)
-                                        <span class="pull-right" style="color: orange">未处理</span>
-                                    @elseif($item->status == 1 && $order->paid_at)
-                                        <span class="pull-right" style="color: #2196f3">已处理</span>
-                                    @elseif($item->status == 2 && $order->paid_at)
-                                        <span class="pull-right" style="color: #57bb5b">已完成</span>
-                                    @elseif($item->status == 3)
-                                        <span class="pull-right" style="color: red">已关闭</span>
-                                    @endif
+                                <div class=" pull-right">
+                                    <span class="">￥{{ $item->shop_price }}</span>
+                                    <br>
+                                    <span class="pull-right">
+                                    ×{{ $item->shop_number }}
+                                </span>
                                 </div>
+                                @if($item->status == 0 && $order->paid_at)
+                                    <span class="pull-right" style="color: orange">未处理</span>
+                                @elseif($item->status == 1 && $order->paid_at)
+                                    <span class="pull-right" style="color: #2196f3">已处理</span>
+                                @elseif($item->status == 2 && $order->paid_at)
+                                    <span class="pull-right" style="color: #57bb5b">已完成</span>
+                                @elseif($item->status == 3)
+                                    <span class="pull-right" style="color: red">已关闭</span>
+                                @endif
+                            </div>
                         </div>
                     </a>
                     @if(!$loop->last)
@@ -77,7 +77,7 @@
                         <span class="p3">&nbsp;</span>
                         <div class="del" style="line-height: 0.1rem">
                             <a href="javascript:void(0);" class="weui-btn weui-btn_mini weui-btn_default cancel-order" value="{{ $order->id }}">关闭订单</a>
-                            <a href="javascript:void(0);" class="weui-btn weui-btn_mini weui-btn_orange pay-order" value="{{ $order->id }}">去付款</a>
+                            <a href="javascript:void(0);" class="weui-btn weui-btn_mini btn-orange-c pay-order" value="{{ $order->id }}">去付款</a>
                         </div>
                     @endif
                 </div>
@@ -85,7 +85,7 @@
             <?php $_count++ ?>
         @endforeach
         <div class="weshop-center-block" style="display:{{ $_count != 0 ?'none':'block' }};">
-            <i class="icon icon-form"></i>
+            <i class="icon icon-dingdan"></i>
             <h3>您还没有相关订单</h3>
             <p>可以去看看有哪些想买的</p>
         </div>

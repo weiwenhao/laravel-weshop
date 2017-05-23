@@ -107,7 +107,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group{{ $errors->has('sort') ? ' has-error' : '' }}">
+                                <div class="form-group{{ $errors->has('image') ? ' has-error' : '' }}">
                                     <label for="sort" class="col-md-4 control-label">活动封面</label>
 
                                     <div class="col-md-4">

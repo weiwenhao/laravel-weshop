@@ -35,6 +35,37 @@ class GoodsController extends Controller
             ->where('is_deleted', 0)
         )->make(true);
     }
+
+    public function deledGoods()
+    {
+        return view('admin.goods.deled_goods_list');
+    }
+
+    /**
+     * 获得被删除的商品数据
+     * @return mixed
+     */
+    public function deledGoodsdtData()
+    {
+        return Datatables::of(
+            Goods::with('category')
+                ->select('goods.id', 'goods.name', 'goods.price', 'goods.sort',
+                    'goods.is_sale', 'goods.is_best', 'goods.buy_count', 'goods.sm_image', 'goods.created_at', 'category_id')
+                ->where('is_deleted', 1)
+        )->make(true);
+    }
+
+    public function refreshGoods($id)
+    {
+        $goods = Goods::find($id);
+        if (!$goods)
+            return response('还原商品，商品不存在',403);
+//        $goods->removeGoodsImage();
+        $goods->is_deleted = 0;
+        $goods->save();
+        return response('还原成功', 200);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

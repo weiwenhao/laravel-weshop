@@ -76,7 +76,7 @@ return [
      *
      * 当 enable_mock 为 true 则会启用模拟微信授权，用于开发时使用，开发完成请删除或者改为 false 即可
      */
-     'enable_mock' => env('WECHAT_ENABLE_MOCK', true),
+     'enable_mock' => env('WECHAT_ENABLE_MOCK', env('APP_DEBUG')),
      'mock_user' => [
          "openid" =>"ojRsVv5u3iizG1Qf7XyKKtajcDSA",
          // 以下字段为 scope 为 snsapi_userinfo 时需要

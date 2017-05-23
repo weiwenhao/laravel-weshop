@@ -74,9 +74,9 @@ class PostController extends Controller
 
         //进行图片的存储测试
         \Image::make($request->file('post_img'))
-            ->resize(1000, null, function ($constraint) { //将图片的尺寸固定在了600
+            /*->resize(1000, null, function ($constraint) { //将图片的尺寸固定在了600
                 $constraint->aspectRatio();
-            })->save($path.$circle_img_name);
+            })*/->save($path.$circle_img_name);//原图存储, 考虑到前台已经进行了 0.8的质量压缩
         \Image::make($request->file('post_img'))->fit($size = config('shop.sm_circle_img_size'), $size)->save($path.'sm_'.$circle_img_name);
         $post_img = PostImage::create([
             'post_id' => $post_id,

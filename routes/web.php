@@ -13,10 +13,12 @@ Route::get('/', function (){
 Route::post('orders/notify', 'OrderController@notify'); //支付结果通知
 Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
     //商品区
-    Route::get('index', 'GoodsController@index')->middleware(['exit_url_in:goods_info', 'exit_url_in:orders']);
+    Route::get('index', 'GoodsController@index')->middleware(['exit_url_in:goods_info', 'exit_url_in:orders', 'exit_url_in:goods']);
     Route::get('goods', 'GoodsController@list')->middleware(['exit_url_in:goods_info']);
-    Route::get('goods/number_price', 'GoodsController@GetPriceAndNumber');
+    Route::get('goods/categories', 'GoodsController@getCategories')->middleware(['exit_url_in:goods']);//商品分类
+    Route::get('goods/number_price', 'GoodsController@getPriceAndNumber'); //ajax
     Route::get('goods/{goods_id}', 'GoodsController@show')->middleware(['exit_url_in:confirm']);
+
     //活动详情
     Route::get('actives/{actives_id}', 'ActiveController@show');
     //收藏区
@@ -31,7 +33,6 @@ Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
     Route::post('shop_carts', 'ShopCartController@store');
     Route::put('shop_carts', 'ShopCartController@editShopNumbers');
     Route::delete('shop_carts', 'ShopCartController@delShopCarts');
-
 
     //地址管理
     Route::resource('addrs', 'AddrController');
@@ -98,6 +99,10 @@ Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.ad
 
     /******************************商品管理区************************************/
     //商品管理
+    Route::get('/deled_goods', 'GoodsController@deledGoods')->name('goods.index');
+    Route::get('/deled_goods/deled_goods_dt_data','GoodsController@deledGoodsdtData')->name('goods.index');
+    Route::put('/deled_goods/refresh/{id}', 'GoodsController@refreshGoods')->name('goods.edit');
+
     Route::get('/goods/dt_data','GoodsController@dtData')->name('goods.index'); //定义路由名称和resource的index一致,方便对权限进行判断
     Route::put('/goods/is_sale', 'GoodsController@updateIsSale')->name('goods.edit');
     Route::resource('goods', 'GoodsController');

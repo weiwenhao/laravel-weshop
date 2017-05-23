@@ -49,7 +49,7 @@
 
 .order-list .order-item .order-bottom{width:100%;line-height:2rem;}
 .order-list .order-item .order-bottom > a{display: inline-block}
-.order-list .order-item .order-bottom .price {text-align:left;}
+.order-list .order-item .order-bottom .price:nth-of-type(2) {text-align:right;}
 .order-list .order-item .order-bottom .price+hr{margin-bottom:.2rem}
 .order-list .order-item .order-bottom .price>span{color:#777;float:right}
 .order-list .order-item .order-bottom .price:nth-of-type(2) span{color:red;font-weight:600;font-size:1.2rem;}

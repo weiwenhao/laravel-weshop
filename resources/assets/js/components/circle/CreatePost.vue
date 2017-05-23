@@ -43,7 +43,7 @@
                                     <div class="weui-uploader__bd">
                                         <ul class="weui-uploader__files" id="uploaderFiles"></ul>
                                         <div class="weui-uploader__input-box">
-                                            <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/jpg, image/jpeg, image/png, image/gif" capture="camera" multiple="" />
+                                            <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/jpg, image/jpeg, image/png, image/gif" multiple />
                                         </div>
                                     </div>
                                 </div>
@@ -220,13 +220,16 @@
                             weui.confirm('确定删除该图片？', function(){
                                 --uploadCount;
                                 uploadCountDom.innerHTML = uploadCount;
+                                var index;
                                 for (var i = 0, len = that.uploadList.length; i < len; ++i) {
                                     var file = that.uploadList[i];
                                     if(file.id == id){
-                                        file.stop();
+                                        index = i;
                                         break;
                                     }
                                 }
+                                if(index !== undefined) that.uploadList.splice(index, 1);
+
                                 target.remove();
                                 gallery.hide();
                             });

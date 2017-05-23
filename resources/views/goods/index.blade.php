@@ -64,7 +64,7 @@
             </div>
             <p class="weui-grid__label">水果超市</p>
         </a>
-        <a href="#" class="weui-grid">
+        <a href="{{ url('goods/categories') }}" class="weui-grid">
             <div class="weui-grid__icon">
                 <img src="/images/icon3.png" alt="">
             </div>

@@ -7,7 +7,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>天哪-校园圈子</title>
     <!-- 以下是公共css -->
-    <link rel="stylesheet" href="/plugins/weui.css"/>
+    {{--<link rel="stylesheet" href="/plugins/weui.css"/>--}}
+    <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.0/weui.min.css">
     <link rel="stylesheet" href="/css/circle.css"/>
     <title>校园圈子</title>
     <script>
@@ -22,7 +23,7 @@
     @yield('content')
 </div>
 {{--wui.js--}}
-<script type="text/javascript" src="https://res.wx.qq.com/open/libs/weuijs/1.1.1/weui.min.js"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/libs/weuijs/1.1.1/weui.js"></script>
 {{--jssdk--}}
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script src="/js/circle.js"></script>

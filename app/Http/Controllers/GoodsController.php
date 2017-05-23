@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Active;
+use App\Models\Category;
 use App\Models\Collect;
 use App\Models\Goods;
 use App\Models\Order;
@@ -62,7 +63,7 @@ class GoodsController extends Controller
         return view('goods.list', compact('goods'));
     }
 
-    public function GetPriceAndNumber(Request $request)
+    public function getPriceAndNumber(Request $request)
     {
         $goods_id = $request->get('goods_id');
         $number_price = Goods::select( 'goods.price as goods_price',
@@ -76,5 +77,11 @@ class GoodsController extends Controller
             return 'a'.str_replace(',', '_', $item->goods_attribute_ids);
         });
         return $number_price;
+    }
+
+    public function getCategories()
+    {
+        $categories = Category::where('is_show', 1)->orderBy('sort', 'asc')->get();
+        return view('goods.category_list', compact('categories'));
     }
 }

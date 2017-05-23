@@ -298,7 +298,7 @@
                             swal("修改成功", msg+'条订单已经'+btn_text, "success")
                     	},
                     	error: function (error) { //200以外的状态码走这里
-                            swal("系统错误", '', "danger")
+                            swal("系统错误", '', "error")
                     	}
                     });
                 });

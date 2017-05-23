@@ -7,6 +7,11 @@ return [
     'mid_goods_img_size' => 200, //商品列表图
     'big_goods_img_size' => 400, //商品详情页图
 
+    //分类名称图片
+    'category_logo_path' => 'uploads/images/category/',
+    'category_logo_width' => 400,
+    'category_logo_height' => 200,
+
     //活动封片的尺寸 250 x 160
     'active_img_path'   => 'uploads/images/active/',
     'active_img_width' => 380,

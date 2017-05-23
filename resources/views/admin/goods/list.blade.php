@@ -261,7 +261,7 @@
                         swal("删除成功", '', 'success')
                     },
                     error : function (errors) {
-                        swal(errors.responseText, '', "danger")
+                        swal(errors.responseText, '', "error")
                     }
                 });
             });

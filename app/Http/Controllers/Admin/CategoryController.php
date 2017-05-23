@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
+use App\Models\Goods;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Intervention\Image\Facades\Image;
@@ -42,10 +43,13 @@ class CategoryController extends Controller
      * @param CategoryRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryRequest $request)
+    public function store(CategoryRequest $request, Category $category)
     {
-        //得到保存路径
-        $category = Category::create($request->all());
+        //保存logo
+        $data = $request->all();
+        if($logo = $request->hasFile('logo'))
+            $data = array_merge($data, $category->saveCategoryLogo());
+        $category = Category::create($data);
         if(!$category)//withInput代表的是用户原先的输入,会操作old中的值
             return redirect('/admin/categories/create')->withInput()->with('error', '系统错误，添加失败');
         return redirect('/admin/categories')->withSuccess('添加成功');
@@ -84,9 +88,15 @@ class CategoryController extends Controller
     public function update(CategoryRequest $request, $id)
     {
         $category = Category::findOrFail($id);
-        //判断用户是否选择了图片
-        $res = $category->update($request->all());
-       if(!$res )
+        $data = $request->all();
+        //保存logo
+        if($logo = $request->hasFile('logo')){
+            $category->removeCategoryLogo();
+            $data = array_merge($data, $category->saveCategoryLogo());
+        }
+
+        $res = $category->update($data);
+        if(!$res )
            return redirect('/admin/categories/edit/'.$id)->withInput()->with('error', '系统错误，修改失败');
         return redirect('/admin/categories')->withSuccess('修改成功');
     }
@@ -100,9 +110,16 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::find($id);
+        //如果该分类下存在商品则不允许删除
+        $goods_count = Goods::where('category_id', $category->id)->count();
+        if($goods_count > 0)
+            return response('该分类下存在商品,不允许删除', 403);
         if (!$category)
-            return response('删除失败',403);
-        $res = $category->delete(); //成功返回1?失败返回0?
+            return response('资源不存在', 404);
+        $res = $category->delete();
+        if($res)
+            $category->removeCategoryLogo();
+
         return (string) $res;
     }
 }

@@ -16,7 +16,8 @@
         color: #ff005c;
     }
     .goods-list > .top-nav {
-        background-color: #f90;
+        background: -webkit-linear-gradient(left, #FECA00 , #FE9500) ;
+        background: linear-gradient(to right, #FECA00 , #FE9500) ;
         line-height: 2.2rem;
         color: #fff;
     }
@@ -25,19 +26,6 @@
     }
     .goods-list {
         margin-bottom: 2.3rem;
-    }
-    .goods-list .weui-search-bar{
-        position: static;
-    }
-    .goods-list .return {
-        background-color: #efeff4
-    }
-    .goods-list .return >a {
-        font-size: 1.6rem;
-        width: 2rem;
-        display: block;
-        text-align: center;
-        line-height: 2.5rem;
     }
     .goods-list i.sort {
         font-size: 0.8rem
@@ -50,7 +38,7 @@
         @if(isset($goods->category_name))
             <div class="weui-flex top-nav">
                 <div>
-                    <a href="/"><span class="icon icon-back icon-lg"></span></a>
+                    <a href="{{ request()->cookie('goods_exit_url')?:url('/') }}"><span class="icon icon-back icon-lg"></span></a>
                 </div>
                 <div class="weui-flex__item text-center">
                     <div>
@@ -62,9 +50,9 @@
                 </div>
             </div>
         @elseif(request('key'))
-            <div class="weui-flex">
+            <div class="weui-flex search-top">
                 <div class="return">
-                    <a href="/">
+                    <a href="{{ request()->cookie('goods_exit_url')?:url('/') }}">
                         <i class="icon icon-back"></i>
                     </a>
                 </div>

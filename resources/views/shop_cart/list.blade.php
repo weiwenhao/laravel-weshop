@@ -85,7 +85,7 @@
                     <span>合计: <tt>0.00</tt></span>
                 </div>
                 <div class="col-xs-4" name="num">
-                    <a id="sub" class="weui-btn weui-btn_warn" href="javascript:void(0)" >结算(<span>0</span>)
+                    <a id="sub" class="weui-btn" href="javascript:void(0)" >结算(<span>0</span>)
                     </a>
                 </div>
                 <div class="col-xs-4" >

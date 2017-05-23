@@ -16,7 +16,7 @@
                     {{--todo--}}
                 </div>
             </div>
-            <form class="form-horizontal" role="form" method="POST" action="/admin/categories/{{ $category->id }}">
+            <form class="form-horizontal" role="form" method="POST" action="/admin/categories/{{ $category->id }}" enctype="multipart/form-data">
                 <div class="box-body">
                     <div class="col-md-10 col-md-offset-1">
                         <input type="hidden" name="id" value="{{ $category->id }}">
@@ -32,6 +32,60 @@
                                     <span class="help-block">
                                     <strong>{{ $errors->first('name') }}</strong>
                                 </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('sort') ? ' has-error' : '' }}">
+                            <label for="sort" class="col-md-4 control-label">权重(升序)</label>
+
+                            <div class="col-md-4">
+                                <input name="sort" type="number" class="form-control" value="{{ old('sort', $category->sort) }}" id="" placeholder="">
+                                @if ($errors->has('sort'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('sort') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('is_show') ? ' has-error' : '' }}">
+                            <label for="is_show" class="col-md-4 control-label">前台是否显示</label>
+
+                            <div class="col-md-4">
+                                <label class="radio-inline">
+                                    <input type="radio" name="is_show" value="1" {{ old('is_show', $category->is_show) == 1?'checked':'' }}> 是
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="is_show"  value="0" {{ old('is_show', $category->is_show) == 0?'checked':'' }}> 否
+                                </label>
+                                @if ($errors->has('is_show'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('is_show') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('logo') ? ' has-error' : '' }}">
+                            <label for="sort" class="col-md-4 control-label">活动封面</label>
+
+                            <div class="col-md-4">
+                                <img src="{{ $category->logo }}" alt="">
+                            </div>
+                        </div>
+                        <div class="form-group{{ $errors->has('logo') ? ' has-error' : '' }}">
+                            <label for="logo" class="col-md-4 control-label"></label>
+                            <div class="col-md-4">
+                                <div class="control-label"><input type="file" name="logo" value="" class=""></div>
+                                @if ($errors->has('logo'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('logo') }}</strong>
+                                    </span>
+                                @else
+                                    <span class="help-block">
+                                        <strong>若不更换封面,请勿选择任何图片</strong>
+                                    </span>
                                 @endif
                             </div>
                         </div>

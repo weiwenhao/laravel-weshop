@@ -120,7 +120,7 @@
                             swal("地址已删除", '', 'success')
                         },
                         error: function (error) { //200以外的状态码走这里
-                            swal("系统错误", '', "danger")
+                            swal("系统错误", '', "error")
                         }
                     });
                 });

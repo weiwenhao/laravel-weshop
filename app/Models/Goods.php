@@ -202,10 +202,16 @@ class Goods extends Model
         return $goods;
     }
 
+    /**
+     * 首页精品商品 没有被删除,且没有下架的商品才在首页显示
+     * @param $limit
+     * @return mixed
+     */
     public function getBestGoods($limit){
         $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count', 'is_sale')
             ->where('is_best', 1)
             ->where('is_deleted', 0)
+            ->where('is_sale', 1)
             ->orderBy('sort', 'asc')
             ->orderBy('created_at', 'desc')
             ->limit($limit)->get();
