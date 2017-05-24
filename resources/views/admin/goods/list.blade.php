@@ -132,6 +132,7 @@
                     'width' : '15%',
                     render: function(data, type, row, meta) {
                         return "<a href='/admin/goods/"+row.id+"/numbers' class='btn btn-primary'><i class='fa fa-hourglass-end'></i></a>  " +
+                            "<a href='/admin/goods/"+row.id+"/goods_comments' class='btn btn-success'><i class='fa fa-comments'></i></a> <br><br>" +
                             "<a href='/admin/goods/"+row.id+"/edit' class='btn btn-info edit'><i class='fa fa-edit'></i></a>  " +
                             "<button value="+row.id+" class='btn btn-danger del'><i class='fa fa-trash'></i></button>";
                     }

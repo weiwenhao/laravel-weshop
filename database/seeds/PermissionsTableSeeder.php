@@ -50,31 +50,26 @@ class PermissionsTableSeeder extends Seeder
 
         //库存管理, 特殊-> 3级
         $number = Permission::create([
-            'name' => 'goods_numbers.list',
-            'display_name' => '库存列表列表',
-            'url' => 'goods_numbers',
+            'name' => 'numbers.list',
+            'display_name' => '库存列表',
             'parent_id' => $goods->id,
-            'description' => '库存列表列表',
         ]);
-        //4级
-        Permission::create([
-            'name' => 'goods_numbers.create',
-            'display_name' => '添加库存列表',
-            'parent_id' => $number->id,
-            'description' => '添加库存列表',
-        ]);
-        Permission::create([
-            'name' => 'goods_numbers.edit',
-            'display_name' => '修改库存列表',
-            'parent_id' => $number->id,
-            'description' => '修改库存列表',
+
+
+        //商品评论管理->上级是商品列表
+        $goods_comment = Permission::create([
+            'name' => 'goods_comments.list',
+            'display_name' => '商品评论列表',
+            'parent_id' => $goods->id,
         ]);
         Permission::create([
-            'name' => 'goods_numbers.destroy',
-            'display_name' => '删除库存列表',
-            'parent_id' => $number->id,
-            'description' => '删除库存列表',
+            'name' => 'goods_comments.destroy',
+            'display_name' => '删除商品评论',
+            'parent_id' => $goods_comment->id,
+            'description' => '删除商品评论',
         ]);
+
+
         //二级
         $category = Permission::create([
             'name' => 'categories.list',

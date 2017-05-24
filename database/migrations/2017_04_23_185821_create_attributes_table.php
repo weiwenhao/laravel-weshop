@@ -18,7 +18,7 @@ class CreateAttributesTable extends Migration
             $table->string('name', '10')->comment('商品属性名称');
             $table->enum('type', ['唯一', '可选'])->index()->comment('商品属性类型');
             $table->string('option_values', 255)->default('')->comment('商品属性可选值');
-            $table->unsignedTinyInteger('type_id')->comment('商品对应类型id');
+            $table->unsignedTinyInteger('type_id')->index()->comment('商品对应类型id');
             $table->timestamps();
         });
     }

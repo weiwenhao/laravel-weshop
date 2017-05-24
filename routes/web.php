@@ -106,6 +106,8 @@ Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.ad
     Route::get('/goods/dt_data','GoodsController@dtData')->name('goods.index'); //定义路由名称和resource的index一致,方便对权限进行判断
     Route::put('/goods/is_sale', 'GoodsController@updateIsSale')->name('goods.edit');
     Route::resource('goods', 'GoodsController');
+        //商品评价
+
 
     Route::get('/types/ajax_types','TypeController@ajaxTypes')->name('goods.create');
     Route::get('/types/{type_id}/attributes/ajax_attributes','AttributeController@ajaxAttributes')->name('goods.create');
@@ -124,8 +126,11 @@ Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.ad
 
     //商品库存管理
     Route::get('/goods/{goods_id}/numbers', 'NumberController@index')->name('numbers.index');
-    Route::post('/goods/{goods_id}/numbers', 'NumberController@store')->name('numbers.edit');
-
+    Route::post('/goods/{goods_id}/numbers', 'NumberController@store')->name('numbers.index');
+    //商品
+    Route::get('/goods/{goods_id}/goods_comments', 'GoodsCommentController@index')->name('goods_comments.index');
+    Route::get('/goods/{goods_id}/goods_comments/dt_data', 'GoodsCommentController@dtData')->name('goods_comments.index');
+    Route::delete('/goods/{goods_id}/goods_comments/{id}', 'GoodsCommentController@destroy')->name('goods_comments.destroy');
 
     /******************************订单管理区************************************/
     //所有订单列表

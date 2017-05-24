@@ -20,8 +20,8 @@ class CreateAddrsTable extends Migration
 //            $table->char('garden_name', 3)->comment('园地名称');
             $table->char('floor_name', 3)->comment('宿舍楼名称');
             $table->char('number', 3)->comment('门牌号');
-            $table->unsignedInteger('user_id')->comment('用户id');
-            $table->unsignedTinyInteger('is_default')->default(0)->comment('是否为默认地址');
+            $table->unsignedInteger('user_id')->index()->comment('用户id');
+            $table->unsignedTinyInteger('is_default')->index()->default(0)->comment('是否为默认地址');
             $table->timestamps();
         });
     }

@@ -6,6 +6,9 @@ return [
     'sm_goods_img_size' => 100, //购物车图
     'mid_goods_img_size' => 200, //商品列表图
     'big_goods_img_size' => 400, //商品详情页图
+    //商品评论图片
+    'goods_comment_path' => 'uploads/images/goods_comment/',
+    'sm_goods_comment_img_size' => 100, //略缩图边长 px
 
     //分类名称图片
     'category_logo_path' => 'uploads/images/category/',
@@ -24,6 +27,6 @@ return [
     'collects_count' => 8, //收藏列表显示的记录数
 
     //圈子图片保存路径
-    'circle_img_path' =>  'uploads/images/circle/', //默认在public目录下
-    'sm_circle_img_size' => 170, //购物车图
+    'post_img_path' =>  'uploads/images/post/', //默认在public目录下
+    'sm_post_img_size' => 170,
 ];

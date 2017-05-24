@@ -31,7 +31,7 @@
                     <p>2小时内自动关闭</p>
                 </div>
                 <div class="order-i-s-r">
-                    <i class="icon icon-pay icon-4rem" style="color: #f44336"></i>
+                    <i class="icon icon-pay icon-4rem" style="color: #9e9e9e"></i>
                 </div>
             </div>
         @endif

@@ -14,14 +14,15 @@
     <!--**********   个人 *************-->
     <div class="me-order-top">
         <div class="order-item">
-            <a href="{{ url('orders') }}?is_pay=0" class="{{ request('is_pay') === '0'?'active':'' }}">待付款</a>
+            <a  href="{{ url('orders') }}" class="{{ request('is_pay') === null?'active':'' }}">全部</a>
         </div>
         <div class="order-item">
             <a href="{{ url('orders') }}?is_pay=1" class="{{ request('is_pay') === '1'?'active':'' }}">已支付</a>
         </div>
         <div class="order-item">
-            <a  href="{{ url('orders') }}" class="{{ request('is_pay') === null?'active':'' }}">全部</a>
+            <a href="{{ url('orders') }}?is_pay=0" class="{{ request('is_pay') === '0'?'active':'' }}">待付款</a>
         </div>
+
     </div>
 
     <!--全部订单-->

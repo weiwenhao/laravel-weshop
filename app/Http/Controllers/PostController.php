@@ -64,8 +64,8 @@ class PostController extends Controller
     {
         $post_id = $request->get('post_id');
         //图片存储
-        $path = config('shop.circle_img_path').date('Ymd').'/';
-        $circle_img_name =  md5(time().str_random(4)).'.jpg'; //当前时间精确到秒+4位随机数的MD5加密
+        $path = config('shop.post_img_path').date('Ymd').'/';
+        $post_img_name =  md5(time().str_random(4)).'.jpg'; //当前时间精确到秒+4位随机数的MD5加密
         if(!is_dir(public_path($path))){
             mkdir(public_path($path), 0777, true); //第三个参数代表递归创建
         }
@@ -76,12 +76,12 @@ class PostController extends Controller
         \Image::make($request->file('post_img'))
             /*->resize(1000, null, function ($constraint) { //将图片的尺寸固定在了600
                 $constraint->aspectRatio();
-            })*/->save($path.$circle_img_name);//原图存储, 考虑到前台已经进行了 0.8的质量压缩
-        \Image::make($request->file('post_img'))->fit($size = config('shop.sm_circle_img_size'), $size)->save($path.'sm_'.$circle_img_name);
+            })*/->save($path.$post_img_name);//原图存储, 考虑到前台已经进行了 0.8的质量压缩
+        \Image::make($request->file('post_img'))->fit($size = config('shop.sm_post_img_size'), $size)->save($path.'sm_'.$post_img_name);
         $post_img = PostImage::create([
             'post_id' => $post_id,
-            'image' =>   '/'.$path.$circle_img_name,
-            'sm_image' => '/'.$path.'sm_'.$circle_img_name,
+            'image' =>   '/'.$path.$post_img_name,
+            'sm_image' => '/'.$path.'sm_'.$post_img_name,
         ]);
         return $post_img;
     }
