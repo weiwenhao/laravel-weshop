@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Http\ViewComposers\AdminComposer;
 use App\Http\ViewComposers\JssdkComposer;
+use App\Http\ViewComposers\LikeGoodsComposer;
 use EasyWeChat\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,7 +21,10 @@ class ComposerServiceProvider extends ServiceProvider
         \View::composer('admin.*', AdminComposer::class);
 
         //绑定jssdk
-        \View::composer(['post.*', 'goods.goods'], JssdkComposer::class);
+        \View::composer(['post.*', 'goods.goods', 'goods_comment.list'], JssdkComposer::class);
+
+        //前台猜你喜欢数据
+        \View::composer(['me.index'], LikeGoodsComposer::class);
     }
 
     /**

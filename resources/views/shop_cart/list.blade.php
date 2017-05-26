@@ -71,7 +71,6 @@
         <a href="{{ url('/') }}" class="weui-btn weui-btn_primary" style="">再去逛逛</a>
     </div>
     <div class="height-2rem"></div>
-    <div class="height-4rem"></div>
     <!--****************  结算  ********************-->
     <div calss="container" id="bill">
             <div class="row ">

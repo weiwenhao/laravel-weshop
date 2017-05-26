@@ -179,6 +179,10 @@ class Goods extends Model
         return $goods;
     }
 
+    /**
+     * 根据用户的搜索得到商品数据
+     * @return mixed
+     */
     public function getGoodsByKey()
     {
         //初始值
@@ -215,6 +219,38 @@ class Goods extends Model
             ->orderBy('sort', 'asc')
             ->orderBy('created_at', 'desc')
             ->limit($limit)->get();
+        return $goods;
+    }
+
+    /**
+     * 商品详情页的显示的评论
+     * @return mixed
+     */
+    public function getFirstComment()
+    {
+        $goods_comment = GoodsComment::select('goods_comments.*', 'users.username', 'users.logo')
+            ->join('users', 'users.id', '=', 'goods_comments.user_id')
+            ->where('goods_id', $this->id)
+            ->orderBy('goods_comments.created_at', 'desc')
+            ->first();
+        return $goods_comment;
+    }
+
+    /**
+     * 页面下半部分的 猜你喜欢模块
+     * @param $limit
+     * @return
+     */
+    public function getLikeGoods($limit)
+    {
+        $goods = $this->select('id', 'name', 'mid_image', 'price', 'buy_count', 'is_sale')
+            ->where('is_best', 1)
+            ->where('is_deleted', 0)
+            ->where('is_sale', 1)
+            ->orderBy('sort', 'asc')
+            ->orderBy('created_at', 'desc')
+            ->limit($limit)
+            ->get();
         return $goods;
     }
 }

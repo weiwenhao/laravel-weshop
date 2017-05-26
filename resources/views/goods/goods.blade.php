@@ -7,7 +7,7 @@
 @stop
 @section('content')
     <!--**************** 顶部 ********************-->
-    <div class="me-header-top me-header-food-info">
+    <div class="me-header-top me-header-food-info-nobg">
         <div><a href="{{ request()->cookie('goods_info_exit_url')?:'/' }}"><span class="icon icon-back icon-lg"></span></a></div>
         <div></div>
         <div>{{--<a href="{{ url('shop_carts') }}"><span class="fa fa fa-shopping-cart"></span></a>--}}</div>
@@ -24,19 +24,41 @@
                 <span class="price-decimal-point"><i class="icon icon-money"></i>{{ $goods->price }} </span> {{--<del> <i class="fa fa-rmb"></i>2099</del>--}}
                 <small> 销量：{{ $goods->buy_count }}</small>
             </div>
-            <div class="goods-list weui-cell">
-                <div class="weui-cell__hd">
-                </div>
+            <div class="weui-loadmore weui-loadmore_line">
+                <span class="weui-loadmore__tips your-like"><i class="icon icon-mark"></i> 评价</span>
+            </div>
+            <div class="circle-home-content food-assess">
+                @if($goods_comment_count > 0)
+                    <p>宝贝评价({{ $goods_comment_count }})</p>
+                    <div class="circle-top"><!--头像,名称,日期,板块-->
+                        <div class="me-flex-1">
+                            <img class="me-img lazy" data-img="{{ $goods_comment->logo }}">
+                        </div>
+                        <div class="me-flex-9">
+                            <div class="circle-name"><b>{{ $goods_comment->username }}</b><span class="lv"></span></div>
+                        </div>
+                    </div>
+                    <!--内容显示三行,点击显示全部-->
+                    <div class="circle-content">
+                        <div>{{ $goods_comment->content }}</div>
+                    </div>
+                    <small class="font-small">{{ $goods_comment->created_at->toDateString() }} {{ $goods_comment->goods_attributes }}</small>
+                    <div class="look-all">
+                        <a class=" me-btn me-a" href="{{ url('goods_comments/'.$goods->id) }}">查看全部评价</a>
+                    </div>
+                @else
+                    <div>暂无评价(0)</div>
+                @endif
+            </div>
+            <a class="weui-cell weui-cell_access "  href="{{ url('goods/'.$goods->id.'/desc') }}">
+                <div class="weui-cell__hd"><span class="fa fa-database"></span></div>
                 <div class="weui-cell__bd">
-                    ..
+                    <p>商品详情</p>
                 </div>
-                <div class="weui-cell__ft">..</div>
-            </div>
-            <div class="goods-list goods-info-txt">
-                <h5>商品详情</h5>
-                {!! $goods->description !!}
-            </div>
+                <div class="weui-cell__ft"></div>
+            </a>
         </div>
+        <div class="height-4rem"></div>
         <!--**************** 加入购物车 立即购买 ********************-->
         <div calss="container" id="mai">
             <div class="row">
@@ -118,10 +140,6 @@
                     ] // 需要预览的图片http链接列表
                 });
             });
-            //去掉商品详情中图片的style的高,和宽100%
-            $('.goods-info-txt').find('img').css('height', 'auto');
-            $('.goods-info-txt').find('img').css('width', '100%');
-
             //加入购物车操作
             $('#addShopCart').click(function (event) {
                 event.preventDefault();
@@ -169,7 +187,6 @@
                 });
 
             });
-
             //立即购买操作
             $('#lijiShop').click(function (event) {
                 event.preventDefault();
@@ -210,7 +227,6 @@
             $('.attr-value').click(getNumberAndPrice);
             //点击立即购买和加入购物车时分别计算一次属性和库存
             $('.showIOSActionSheet').click(getNumberAndPrice);
-
 
             /**
              * 收藏与取消收藏

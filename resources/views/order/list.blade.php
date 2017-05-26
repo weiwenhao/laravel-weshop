@@ -17,12 +17,14 @@
             <a  href="{{ url('orders') }}" class="{{ request('is_pay') === null?'active':'' }}">全部</a>
         </div>
         <div class="order-item">
-            <a href="{{ url('orders') }}?is_pay=1" class="{{ request('is_pay') === '1'?'active':'' }}">已支付</a>
-        </div>
-        <div class="order-item">
             <a href="{{ url('orders') }}?is_pay=0" class="{{ request('is_pay') === '0'?'active':'' }}">待付款</a>
         </div>
-
+        <div class="order-item">
+            <a href="{{ url('orders') }}?is_pay=1" class="{{ request('is_pay') === '1'&& request('is_comment') === null?'active':'' }}">已支付</a>
+        </div>
+        <div class="order-item">
+            <a href="{{ url('orders/no_comment') }}" class="">待评价</a>
+        </div>
     </div>
 
     <!--全部订单-->

@@ -1,4 +1,4 @@
-/*window._ = require('lodash');
+window._ = require('lodash');
 
 window.Vue = require('vue');
 window.axios = require('axios');
@@ -6,7 +6,7 @@ window.axios = require('axios');
 window.axios.defaults.headers.common = {
     'X-CSRF-TOKEN': window.Laravel.csrfToken,
     'X-Requested-With': 'XMLHttpRequest'
-};*/
+};
 
 window.$ = window.jQuery = require('jquery');
 
@@ -36,11 +36,6 @@ function echo() {
 }
 echo();
 
-// require('bootstrap-sass');
-
-/*const app = new Vue({
- el: '#app',
- });*/
 
 
 //价钱小数点之后字体变小
@@ -119,3 +114,9 @@ var yixiajia = '<div class="off"><!--已下架-->\
                     <i class="icon icon-yixiajia"><!--已下架--></i>\
                 </div>';
 $('.off-sale').before(yixiajia);
+
+Vue.component('GoodsComments', require('./components/goods/GoodsComments.vue'));
+
+/*const app = new Vue({
+    el: '#app',
+});*/

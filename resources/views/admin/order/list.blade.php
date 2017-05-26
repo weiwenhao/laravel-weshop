@@ -183,10 +183,10 @@
                 {
                     "orderable" : false,
                     searchable: false,
-                    'data':'is_pay',
+                    'data':'paid_at',
                     render : function (data, type, row, meta) {
                         // data : '0' or '1'
-                        if(Number(data)){
+                        if(data){
                             return '<i class="fa fa-check text-success"></i>';
                         }
                         return '<i class="fa fa-close text-danger"></i>';

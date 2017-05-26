@@ -8,10 +8,28 @@
 #garden{width:50%;margin-top:0;float:left;}
 #garden+a{margin-top:0;}
 /*个人信息*/
-.me-info{width:25%;}
+/*.me-info{width:25%;}
 .me-info img{width:100%;}
 .me-info .me-name{text-align:center;}
-.fa-2x{color:#999;}
+*/
+/********* 头像用户名 ***********/
+.me-info{width:25%;position: relative;z-index:2;}
+.me-info img{width:100%;}
+.me-info .me-name{text-align:center;}
+.me-info-back{ position: relative;padding-top: 3rem;z-index:1;}
+.me-info-back .me-name {color:#fff;padding:.4rem 0;font-weight:600;}
+.me-info-back .round {
+    position: absolute;z-index:1;  border-radius: 100%;
+    background: orange;  background: linear-gradient(to right, #FECA00 , #FE9500) ;
+    transform: rotate(30deg);/*旋转一下*/
+}/*圆圈 上下左右你可以改*/
+.me-info-back .r-1{width:1rem;height:1rem; left:2%;top:20%;}
+.me-info-back .r-2{width:2rem;height:2rem; left:10%;top:50%;}
+.me-info-back .r-3{width:3rem;height:3rem; left:20%;top:20%;}
+.me-info-back .r-4{width:4rem;height:4rem; left:40%;top:55%;}
+.me-info-back .r-5{width:5rem;height:5rem; left:70%;top:20%;}
+
+
 /***************** 图标导航 九宫格 ****************/
 .weui-grids{background:#fff}
 .weui-grids .weui-grid{padding:.4rem .2rem}
@@ -26,12 +44,12 @@
 
 /***************** 我的订单 ****************/
 .me-order-top{display:inline-block;width: 100%;line-height:2rem;background:#fff; text-align:center;}
-.me-order-top .order-item{width:33%;float:left;}
+.me-order-top .order-item{width:25%;float:left;}
 .me-order-top .order-item a{padding:.3rem;}
 .me-order-top .order-item .active{border-bottom:.3rem solid #f90;}
 /*订单列表*/
 .order-list{padding:0;}
-.order-list .order-item{padding:0 .6rem; margin-bottom:.4rem; border-bottom:;border-top:; background:#fff;}
+.order-list .order-item{padding:0 .6rem; margin-bottom:.4rem; background:#fff;}
 .order-list .row{background:rgb(251,251,251);padding:.4rem 0;}
 .order-list .row .col-xs-3{padding-left:1rem;padding-right:.4rem;}
 .order-list .row .col-xs-2{padding-left:.1rem;}
@@ -57,7 +75,7 @@
 .order-list .order-item .order-bottom .del{display:inline-block;float:right;}
 #dialogs .weui-dialog__btn:nth-of-type(1){color:red;}
 /*订单详情*/
-.order-info-status{position:relative;padding:.5rem 1rem;width:100%;min-height:5rem;background:#fff;color:#444;text-align:center;font-weight:600;margin-bottom:.3rem;background:;}
+.order-info-status{position:relative;padding:.5rem 1rem;width:100%;min-height:5rem;background:#fff;color:#444;text-align:center;font-weight:600;margin-bottom:.3rem;}
 .order-info-status > div{width:50%;color:#aaa;}
 .order-info-status > div.ok{line-height:4rem;}
 .order-info-status .order-i-s-l{float:left;text-align:left;color:#444;}

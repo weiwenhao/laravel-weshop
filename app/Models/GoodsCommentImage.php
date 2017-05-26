@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class GoodsCommentImage extends Model
 {
-    //
+    protected $guarded = [];
 }

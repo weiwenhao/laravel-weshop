@@ -2,6 +2,7 @@
 @section('css')
     <link rel="stylesheet" href="/plugins/swiper/swiper.min.css"/> <!--轮播-->
     {{--<link rel="stylesheet" href="/css/home.css"/> --}}{{--首页css--}}
+    <style id="frames"></style>
 <style>
 </style>
 @stop
@@ -21,14 +22,6 @@
         </form>
         <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
     </div>
-    {{--<div class="weui-cells searchbar-result" id="searchResult" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1); display: none;">
-        <div class="weui-cell weui-cell_access">
-            <div class="weui-cell__bd weui-cell_primary">
-                <p>实时搜索文本</p>
-            </div>
-        </div>
-
-    </div>--}}
     <!--**************** 轮播 ********************-->
     <div class="swiper-container">
         <div class="swiper-wrapper">
@@ -43,9 +36,8 @@
         </div>
         <div class="swiper-pagination"><!-- 分页器 --></div>
     </div>
-    <style id="frames"></style>
     <div class="font-move">
-        <span>公告:天呐 天呐 天呐来啦 （〜^㉨^)〜</span>
+        <span>公告:天呐 天呐 天哪来啦 （〜^㉨^)〜</span>
     </div>
     <!--**************** 九宫格 ********************-->
     <div class="weui-grids" style="background:#fff">
@@ -56,37 +48,38 @@
                 <img src="/images/icon1.png" alt="">
             </div>
             <!-- 标签文字 -->
-            <p class="weui-grid__label">校园外卖</p>
+            <div class="weui-grid__label">校园外卖</div>
         </a>
         <a href="/goods?category_id=2" class="weui-grid">
             <div class="weui-grid__icon">
                 <img src="/images/icon2.png" alt="">
             </div>
-            <p class="weui-grid__label">水果超市</p>
+            <div class="weui-grid__label">水果超市</div>
         </a>
         <a href="{{ url('goods/categories') }}" class="weui-grid">
             <div class="weui-grid__icon">
                 <img src="/images/icon3.png" alt="">
             </div>
-            <p class="weui-grid__label">校园商城</p>
+            <div class="weui-grid__label">商品分类</div>
         </a>
         <a href="{{ url('posts') }}" class="weui-grid">
             <div class="weui-grid__icon">
                 <img src="/images/icon4.png" alt="">
             </div>
-            <p class="weui-grid__label">校园圈子</p>
+            <div class="weui-grid__label">校园圈子</div>
+        </a>
+
+        <a href="#" class="weui-grid">
+            <div class="weui-grid__icon">
+                <img src="/images/icon5.png" alt="">
+            </div>
+            <div class="weui-grid__label">消息中心</div>
         </a>
         <a href="{{ url('orders') }}" class="weui-grid">
             <div class="weui-grid__icon">
                 <img src="/images/icon6.png" alt="">
             </div>
-            <p class="weui-grid__label">订单管理</p>
-        </a>
-        <a href="#" class="weui-grid">
-            <div class="weui-grid__icon">
-                <img src="/images/icon5.png" alt="">
-            </div>
-            <p class="weui-grid__label">消息中心</p>
+            <div class="weui-grid__label">订单管理</div>
         </a>
     </div>
     <!-- 商品列表-->
@@ -121,6 +114,5 @@
     <script src="/js/home.js"></script>
 <script>
     weui.searchBar('#searchBar'); //搜索框
-
 </script>
 @stop

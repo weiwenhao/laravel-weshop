@@ -6,16 +6,27 @@
 </style>
 @stop
 @section('content')
-    <div class="me-header-top">
+    {{--<div class="me-header-top" style="position: static;z-index: 1000">
         <div></div>
-        <div>个人中心</div>
+        <div></div>
         <div><span class="icon icon-message icon-lg"></span></div>
-    </div>
-    <div class="height-4rem"></div>
+    </div>--}}
+    {{--<div class="height-2rem"></div>--}}
     <!--**********   个人 *************-->
-    <div class="me-info center-block" >
+    {{--<div class="me-info center-block" >
         <img class="img-circle img-thumbnail" src="{{ Auth::user()->logo }}">
         <div class="me-name"><h5>{{ Auth::user()->username }}</h5></div>
+    </div>--}}
+    <div class="btn-orange-c me-info-back ">
+        <div class="round r-1"></div>
+        <div class="round r-2"></div>
+        <div class="round r-3"></div>
+        <div class="round r-4"></div>
+        <div class="round r-5"></div>
+        <div class="me-info center-block " >
+            <img class="img-circle img-thumbnail" src="{{ Auth::user()->logo }}">
+            <div class="me-name">{{ Auth::user()->username }}</div>
+        </div>
     </div>
     <!--**********   余额，优惠，积分 *************-->
     <div class="weui-grids">
@@ -70,6 +81,7 @@
             <div class="weui-cell__ft"></div>
         </a>
     </div>
+    @include('layouts.your_like')
     @include('layouts.bottom_nav')
 @stop
 @section('js')

@@ -140,6 +140,18 @@ class OrderController extends Controller
         return response('订单已经关闭', 200);
     }
 
+
+    /**
+     *得到该用户未评价的订单
+     * @param OrderGoods $order_goods
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function noComment(OrderGoods $order_goods)
+    {
+        $order_goods = $order_goods->getNoCommentGoods();
+        return view('order.no_comment_list', compact('order_goods'));
+    }
+
     /**
      * 从新下单操作, 保库存但是不保证下架。
      * @param Application $wechat

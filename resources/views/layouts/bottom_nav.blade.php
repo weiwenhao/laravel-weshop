@@ -1,4 +1,4 @@
-<div class="height-4rem"></div>
+<div style="height: 3.5rem"></div>
 <div class="weui-tabbar">
     <a class="weui-tabbar__item" href="{{ url('/') }}">
         <i class="weui-tabbar__icon"><i class="icon {{ request()->is('index*')?'icon-homefill active':'icon-home' }}"></i></i>

@@ -6,6 +6,7 @@ use App\Models\Active;
 use App\Models\Category;
 use App\Models\Collect;
 use App\Models\Goods;
+use App\Models\GoodsComment;
 use App\Models\Order;
 use Illuminate\Http\Request;
 
@@ -44,9 +45,19 @@ class GoodsController extends Controller
             //添加可选属性
             $goods->option_attrs = $goods->getOptionGoodsAttr($goods->id);
         }
-        return view('goods.goods', compact('goods'));
+        $goods_comment_count = GoodsComment::where('goods_id', $goods->id)->count();
+        $goods_comment = null;
+        if($goods_comment_count > 0){
+            $goods_comment = $goods->getFirstComment();
+        }
+        return view('goods.goods', compact('goods', 'goods_comment_count', 'goods_comment'));
     }
 
+    public function goodsDesc($goods_id)
+    {
+        $goods = Goods::select('id', 'description', 'price')->where('id', $goods_id)->first();
+        return view('goods.desc', compact('goods'));
+    }
 
     /**
      * @param Goods $model

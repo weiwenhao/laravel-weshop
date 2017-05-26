@@ -18,6 +18,7 @@ Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
     Route::get('goods/categories', 'GoodsController@getCategories')->middleware(['exit_url_in:goods']);//商品分类
     Route::get('goods/number_price', 'GoodsController@getPriceAndNumber'); //ajax
     Route::get('goods/{goods_id}', 'GoodsController@show')->middleware(['exit_url_in:confirm']);
+    Route::get('goods/{goods_id}/desc', 'GoodsController@goodsDesc');
 
     //活动详情
     Route::get('actives/{actives_id}', 'ActiveController@show');
@@ -45,7 +46,16 @@ Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
     Route::get('orders/confirm', 'OrderController@confirm'); //确认订单
     //已经有订单id.根据改id再次付款
     Route::post('orders/repay', 'OrderController@repay');
-    Route::resource('orders', 'OrderController');\
+    //待评价订单
+    Route::get('orders/no_comment', 'OrderController@noComment');
+    //订单资源
+    Route::resource('orders', 'OrderController');
+    //创建商品评价表单
+    Route::get('/goods_comments/{goods_id}', 'GoodsCommentController@index');
+    Route::get('/api/goods_comments/{goods_id}', 'GoodsCommentController@ajaxGoodsComments');
+    Route::get('/goods_comments/create/{order_goods_id}', 'GoodsCommentController@create');
+    Route::post('/goods_comments/upload', 'GoodsCommentController@upload');
+    Route::post('/goods_comments/{order_goods_id}', 'GoodsCommentController@store');
 
     //个人中心
     Route::get('me', 'MeController@index')->middleware(['exit_url_in:addrs', 'exit_url_in:orders']); //个人中心主页
@@ -141,7 +151,6 @@ Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.ad
     //水果订单列表(手机专享)
     Route::get('/fruit_orders/dt_data','FruitOrderController@dtData')->name('fruit_orders.index');
     Route::resource('/fruit_orders', 'FruitOrderController');
-
 
     //地址列表
     Route::get('/addrs/dt_data','AddrController@dtData')->name('addrs.index');

@@ -16,6 +16,7 @@ class CreateGoodsCommentsTable extends Migration
         Schema::create('goods_comments', function (Blueprint $table) {
             $table->increments('id');
             $table->string('content', 300)->comment('评价详情');
+            $table->unsignedInteger('user_id')->comment('评论用户id');
             $table->unsignedInteger('goods_id')->index()->comment('商品id');
             $table->string('goods_attributes', '100')->comment('商品属性信息聚合');
             $table->unsignedTinyInteger('level')->comment('评论等级');

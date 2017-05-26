@@ -1,8 +1,48 @@
 @charset "utf-8";
+.me-flex-1{width:8%;}.me-flex-2{width:16.6%;}.me-flex-3{width:25%;}.me-flex-4{width:33.3%;}.me-flex-5{width:41.6%}.me-flex-6{width:50%;}.me-flex-7{width:58%;}.me-flex-8{width:66.6%}.me-flex-9{width:75%;}.me-flex-10{width:83%;}.me-flex-11{width:91.6%}
+.me-flex-1,.me-flex-2,.me-flex-3,.me-flex-4,.me-flex-5,.me-flex-6,.me-flex-7,.me-flex-8,.me-flex-9,.me-flex-10,.me-flex-11{float:left;min-height:1px;position:relative;  }
+* {-webkit-box-sizing: border-box;  -moz-box-sizing: border-box;  box-sizing: border-box;  }
+/*↓↓↓↓↓↓↓↓↓↓ -- 评论内容 --↓↓↓↓↓↓↓↓↓↓*/
+.circle-home-content{position:relative;overflow:hidden;width:100%;padding:.6rem;margin-bottom:.5rem;background:#fff;}
+.circle-top,.circle-content,.circle-content-img{position:relative;}
+/*头像 名称 日期 板块*/
+.circle-home-content .circle-top{overflow:hidden;padding:.2rem 0;font-size:.8rem;color:#777;}
+.circle-home-content .circle-top img{width:80%;display:block;border-radius:50%;margin:0 auto;}
+.circle-home-content .circle-top .me-flex-9{padding-left:.5rem;}
+.circle-home-content .circle-top .circle-name{font-size:1rem;color:#444}
+.circle-home-content .circle-top .circle-time{margin-right:.2rem}
+.circle-home-content .circle-top .circle-block>tt{padding:0 .2rem;border-radius:.2rem;background:#ff6;color:#f90;}
+.circle-content{overflow:hidden;width:100%;min-height:1rem;padding:0.2rem 0 0.6rem 0;}
+.circle-content div{width:100%;white-space:normal;word-break: break-all;word-wrap: break-word;color:#444;}
+.circle-content .on-all{float:right;}
+.circle-content-img{overflow:hidden;width:100%;}
+.circle-content-img .me-flex-4 img{width:96%;}
+.circle-content textarea{border:0 none;width:98%;outline:0;resize:none;overflow-y:hidden;line-height:1rem}
+/*晒单评价  */
+/*发帖文本框*/
+.poster-text-body{width:100%;height:8rem;}
+.poster-text-body textarea{  display:block;border:0 none;width:100%;height:95%;font-size:1rem;outline:0;  padding:.5rem;  overflow:auto;resize:none;cursor:none;  word-break:break-all;  }
+.poster-body{padding:0 .5rem;background:#fff;overflow:hidden;}
+/*上传图片*/
+p.weui-uploader__title{margin-bottom:0;}
+.weui-uploader__hd{padding-bottom: 0; }
+
+
+/*圆角图标头部*/
+.me-header-food-info-nobg{background:rgba(0,0,0,0);}
+.me-header-food-info-nobg a{position:relative;display:inline-block;width:2.5rem;height:2.5rem;border-radius:2.5rem;margin:.4rem;background:#828282;opacity:.8;}
+.me-header-food-info-nobg a .icon{position:absolute; left:.45rem;top:.7rem;font-size: 1.4rem}
 /*商品详情*/
-.me-header-food-info{background:rgba(0,0,0,0);}
-.me-header-food-info a{position:relative;display:inline-block;width:2.5rem;height:2.5rem;border-radius:2.5rem;margin:.4rem;background:#828282;opacity:.8;}
-.me-header-food-info a .icon{position:absolute; left:.45rem;top:.7rem;font-size: 1.4rem}
+.me-header-food-info div:nth-of-type(1){width:20%;}
+.me-header-food-info div:nth-of-type(2){width:60%;}
+.me-header-food-info div:nth-of-type(3){width:20%;}
+.me-header-top a {
+    color: #fff;
+    display: inline-block;
+    width: 2.5rem;
+}
+.food-info-nav a.active{border-bottom: 3px solid #fff}
+.food-info-nav a:active{background:#f90;border-bottom: 3px solid #f90}
 
 .goods-info-img{position:fixed;top:0;z-index:0;width:100%;}
 .goods-info-img img{width:100%;}
@@ -10,17 +50,12 @@
 .goods-info{position:relative;z-index:1;width:100%;background:whitesmoke}
 .goods-info .goods-list{padding:.2rem .7rem;background:#fff}
 .goods-info del{color:#aaa;}
-.goods-info-name{}
-.goods-info-price{}
 .goods-info-price span{color:red;font-size:1.8rem;}
 .goods-info-price i{font-size:1rem;}
 .goods-info-price del i{font-size:.7rem;}
 .goods-info-price small{float:right;margin-top:1rem}
-.goods-info-txt{margin:.3rem 0 2rem 0;}
+.goods-info-txt{margin:0rem 0 0rem 0;background-color: #fff;}
 .goods-info-txt img{ max-width:100%; height: auto;width: 100%}
-/*点击查看大图*/
-.weui-skin_android .weui-actionsheet {width:100%;}
-.weui-skin_android .weui-actionsheet span{position:absolute;right:0;top:0;}
 
 /***************** 加入购物车立即购买 ****************/
 #mai{position:fixed;width:100%;z-index:5;bottom:-0.2rem;}
@@ -38,3 +73,42 @@
 
 #mai .weui-btn:after{border: 0px}
 .me-out-nav .weui-btn:after{border: 0px}
+
+/*商品详情 */
+/*食物评价*/
+.food-assess .circle-content{font-size:1rem}
+.font-small{color:#aaa}
+
+
+
+/*查看全部评价*/
+.food-assess .look-all{text-align:center;margin: 1rem 0;}
+.food-assess .look-all .me-btn {
+    display: inline-block;  padding: 0rem .5rem 0 .5rem;
+    border-radius: .9rem;  border: 1px solid #f90;
+    font-size:.9rem;  color: #f90;
+}
+.food-assess .look-all .me-btn:active{ background-color: #eee;}
+/*查看评价 */
+.circle-home-content{width:100%;margin-bottom: .6rem;;}
+.circle-content-img img{width:96%;}
+
+/*评价表单*/
+.assess-star{padding: 10px 10px;}
+.assess-img>img{width:80%}
+.assess-star .star h4{font-size:1.2rem;margin:.5rem 0;}
+.sub-assess{position:fixed;width:100%;bottom:0; border-radius:0;font-size:1rem;}
+.assess-star .star{margin-top:-1rem; margin-left:0;}
+.assess-star .star .icon{font-size:1.5rem;color:#f90;margin-right:.4rem;}
+
+/*去除图片上传的上边框*/
+.poster-body .weui-cells{
+     margin-top: 0px;
+}
+
+/*去掉weui-cell奇怪的上边框*/
+.goods-info .weui-cell {
+    position: static;
+}
+/*weui*/
+.weui-btn:active{opacity:.8;}

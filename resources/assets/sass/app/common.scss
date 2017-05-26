@@ -47,11 +47,20 @@ btn_orange {
   background: -webkit-linear-gradient(left, #FC7900 , #FE4A00) ;
   background: linear-gradient(to right, #FC7900 , #FE4A00) ;
 }
+//.weui-loadmore
+.weui-loadmore {
+  margin: 1rem auto 0 auto;
+  height: 1rem;
+}
+.weui-loadmore_line .weui-loadmore__tips {
+  background-color: whitesmoke;
+}
 
 /**************** 点击样式 ****************/
 a{color:#444 ;text-decoration:none !important;}
 a:link{text-decoration:none ;}
 a:hover{color:#444 ;}
+a.weui-btn:hover{color: #fff}
 .me-font-f90{color:#f90;}
 .me-back-f90{background:#f90}
 .me-a{display: block;}
@@ -100,8 +109,12 @@ a:hover{color:#444 ;}
 .font-move span{-webkit-animation:animations 7s linear 0s infinite forwards;-moz-animation:animations 7s linear 0s infinite forwards;animation:animations 7s linear 0s infinite forwards;}
 /** 图标导航 九宫格 **/
 .weui-grids{background:#fff}
-.weui-grids .weui-grid{padding:.4rem .2rem}
+//.weui-grids .weui-grid{padding:.4rem .2rem}
 .weui-grid__icon{width:2.2rem;height:2.2rem;}
+weui-grid__icon img {
+  width:100%
+}
+
 .weui-cell{background:#fff;margin-top:.3rem}
 .weui-cell p{margin-bottom:0}
 /*精品推荐*/
