@@ -28,8 +28,8 @@
                 <span class="weui-loadmore__tips your-like"><i class="icon icon-mark"></i> 评价</span>
             </div>
             <div class="circle-home-content food-assess">
-                @if($goods_comment_count > 0)
-                    <p>宝贝评价({{ $goods_comment_count }})</p>
+                @if($goods_comment)
+                    <p>宝贝评价({{ $goods_comment->count }})</p>
                     <div class="circle-top"><!--头像,名称,日期,板块-->
                         <div class="me-flex-1">
                             <img class="me-img lazy" data-img="{{ $goods_comment->logo }}">

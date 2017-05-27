@@ -114,7 +114,7 @@ a:hover{color:#444 ;}
 /***************** 结算 ****************/
 #bill .row{position:fixed;z-index:10; width:100%; bottom:46px; margin:0;background:#fff}
 #bill .row .col-xs-4{padding:0;}
-#bill .row .col-xs-4:nth-of-type(1){padding:.4rem;}
+#bill .row .col-xs-4:nth-of-type(1){padding:0;}
 #bill .row .col-xs-4:nth-of-type(2){font-size:.9rem;}
 #bill .row .col-xs-4:nth-of-type(2) tt{color:#f90;font-size:1rem;font-weight:600;}
 #bill .row .col-xs-4:nth-of-type(4){display:none;}
@@ -125,6 +125,21 @@ a:hover{color:#444 ;}
 
 #bill .row .weui-btn{border-radius:0;font-size:1.1rem;}
 #bill .row p{margin-bottom:0;}
+/*全选按钮*/
+.select-all strong{vertical-align:-3px;}
+.select-all{
+	display:inline-block; line-height:2.5; margin-bottom:0;
+	width: 100%; height:100%;
+	position: relative; border:0;
+	border-radius:0; text-align:center;
+}
+.select-all .garden,.select-all .select-all-i{position:absolute; top: 50%;margin-top:-.7rem;}
+.select-all .garden{
+	min-width:1.5rem; height:1.5rem;
+	border-radius:50%; border:1px solid #ccc; left:10px;
+}
+.select-all:active{background:#eee}
+.select-all .select-all-i{left:6px;}
 
 /***************** 弹出菜单 ****************/
 .me-out-nav{padding:.6rem .6rem 0 .6rem}

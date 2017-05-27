@@ -25,7 +25,7 @@
 .poster-body{padding:0 .5rem;background:#fff;overflow:hidden;}
 /*上传图片*/
 p.weui-uploader__title{margin-bottom:0;}
-.weui-uploader__hd{padding-bottom: 0; }
+/*.weui-uploader__hd{padding-bottom: 0; }*/
 
 
 /*圆角图标头部*/
@@ -97,7 +97,7 @@ p.weui-uploader__title{margin-bottom:0;}
 .assess-star{padding: 10px 10px;}
 .assess-img>img{width:80%}
 .assess-star .star h4{font-size:1.2rem;margin:.5rem 0;}
-.sub-assess{position:fixed;width:100%;bottom:0; border-radius:0;font-size:1rem;}
+.sub-assess{position:fixed;width:100%;bottom:0; border-radius:0;font-size:1rem;z-index: 10;}
 .assess-star .star{margin-top:-1rem; margin-left:0;}
 .assess-star .star .icon{font-size:1.5rem;color:#f90;margin-right:.4rem;}
 

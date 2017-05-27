@@ -23,7 +23,7 @@ return [
 
     'goods_list_count' => 8, //商品列表页 每页显示的商品数量
     'default_goods_number' => 9999, //默认商品库存量
-    'like_goods_count' => 8,
+    'like_goods_count' => 6,
     'collects_count' => 8, //收藏列表显示的记录数
 
     //圈子图片保存路径

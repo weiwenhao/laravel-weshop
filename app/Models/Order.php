@@ -273,7 +273,7 @@ class Order extends Model
         //创建订单
         $attributes = [
             'trade_type'       => 'JSAPI', // JSAPI(公众号支付)，NATIVE，APP...
-            'body'             => '惠州市一公里网络科技有限公司-校园商城',
+            'body'             => '校园商城',
             'detail'           => '天哪来啦-校园商城',
             'out_trade_no'     => $this->order_id,
             'total_fee'        => $this->total_price * 100, // 单位：分

@@ -44,13 +44,11 @@ class GoodsController extends Controller
             $collect?$goods->is_collect=true:$goods->is_collect=false;
             //添加可选属性
             $goods->option_attrs = $goods->getOptionGoodsAttr($goods->id);
-        }
-        $goods_comment_count = GoodsComment::where('goods_id', $goods->id)->count();
-        $goods_comment = null;
-        if($goods_comment_count > 0){
+
+            //该商品总评价数量
             $goods_comment = $goods->getFirstComment();
         }
-        return view('goods.goods', compact('goods', 'goods_comment_count', 'goods_comment'));
+        return view('goods.goods', compact('goods', 'goods_comment'));
     }
 
     public function goodsDesc($goods_id)

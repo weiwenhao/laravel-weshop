@@ -54,7 +54,8 @@
             </div>
         </div>
     </div>
-
+    {{--占位--}}
+    <div class="height-4rem"></div>
     <a class="weui-btn weui-btn_primary sub-assess btn-green-c" href="javascript:void(0)">提交</a>
 @stop
 @section('js')
@@ -103,6 +104,8 @@
                 location.href = '{{ url('orders') }}';
         	},
         	error: function (error) { //200以外的状态码走这里
+                //关闭弹出层
+                loading.hide();
                 if(error.status == 404){
                     weui.alert(error.responseText);
                 }
@@ -121,7 +124,7 @@
         compress: {
             width: 1600,
             height: 1600,
-            quality: .7
+            quality: .6
         },
         onBeforeQueued: function(files) {
             if(["image/jpg", "image/jpeg", "image/png", "image/gif"].indexOf(this.type) < 0){

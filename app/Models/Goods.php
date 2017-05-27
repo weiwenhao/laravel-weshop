@@ -228,11 +228,15 @@ class Goods extends Model
      */
     public function getFirstComment()
     {
-        $goods_comment = GoodsComment::select('goods_comments.*', 'users.username', 'users.logo')
+        $query = GoodsComment::select('goods_comments.*', 'users.username', 'users.logo')
             ->join('users', 'users.id', '=', 'goods_comments.user_id')
             ->where('goods_id', $this->id)
-            ->orderBy('goods_comments.created_at', 'desc')
-            ->first();
+            ->orderBy('goods_comments.created_at', 'desc');
+        $goods_comment = $query->first();
+
+        if($goods_comment){
+            $goods_comment->count = $query->count();
+        }
         return $goods_comment;
     }
 

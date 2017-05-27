@@ -18,50 +18,51 @@
     <div class="container shopping-hoem" id="shoppingList">
         @foreach($shop_carts as $shop_cart)
             <div class="row">
-                    <!--添加name='off'出现下架-->
-                    <div class="col-xs-1 {{ $shop_cart->is_sale?($shop_cart->number == 0?'off-number':''):'off-sale' }} "><!--选项-->
-                        <label for='{{ $loop->index }}' class="me-checkbox-icon">
-                            <input id="{{ $loop->index }}" class="shop_cart" type="checkbox" name="select"
-                                   {{--如果购买数量小于或者等于库存量(常见情况),则不需要修改数据库,所以传递一个空到后台,否则把仅剩的库存量传递到后台,修改购物车中的库存量--}}
-                                   shop_number="{{ $shop_cart->shop_number <= $shop_cart->number?'':$shop_cart->number }}"
-                                   value="{{ $shop_cart->id }}"
-                            />
-                            <i class="weui-icon-success"></i>
-                        </label>
+
+                <div class="col-xs-1 {{ $shop_cart->is_sale?($shop_cart->number == 0?'off-number':''):'off-sale' }} "><!--选项-->
+                    <label for='{{ $loop->index }}' class="me-checkbox-icon" >
+                        <span class="garden"></span>
+                        <input id="{{ $loop->index }}" class="shop_cart" type="checkbox" name="select"
+                               {{--如果购买数量小于或者等于库存量(常见情况),则不需要修改数据库,所以传递一个空到后台,否则把仅剩的库存量传递到后台,修改购物车中的库存量--}}
+                               shop_number="{{ $shop_cart->shop_number <= $shop_cart->number?'':$shop_cart->number }}"
+                               value="{{ $shop_cart->id }}"
+                        />
+                        <i class="weui-icon-success"></i>
+                    </label>
+                </div>
+                <a href="{{ url('goods/'.$shop_cart->goods_id) }}">
+                    <div class="col-xs-3">
+                        <div class="wrap-img">
+                            <img src="{{ $shop_cart->sm_image }}" class="img-responsive"/>
+                            @if($shop_cart->number<=5 && $shop_cart->number > 0)
+                                <span class="rest">仅剩{{ $shop_cart->number }}件</span>
+                            @endif
+                        </div>
                     </div>
+                </a>
+                <div class="col-xs-6">
                     <a href="{{ url('goods/'.$shop_cart->goods_id) }}">
-                        <div class="col-xs-3">
-                            <div class="wrap-img">
-                                <img src="{{ $shop_cart->sm_image }}" class="img-responsive"/>
-                                @if($shop_cart->number<=5 && $shop_cart->number > 0)
-                                    <span class="rest">仅剩{{ $shop_cart->number }}件</span>
-                                @endif
-                            </div>
-                        </div>
+                        <p>{{ $shop_cart->name }}</p>
                     </a>
-                    <div class="col-xs-6">
-                        <a href="{{ url('goods/'.$shop_cart->goods_id) }}">
-                            <p>{{ $shop_cart->name }}</p>
-                        </a>
-                        <small>{{ $shop_cart->attr_name_values }}</small>
-                        </div>
-                    <div class="col-xs-2">
-                        <div class="RMBnum">
-                            <span class="price-decimal-point">{{ $shop_cart->price?:$shop_cart->goods_price }}</span>
-                            <br>x<tt>{{ $shop_cart->shop_number <= $shop_cart->number?$shop_cart->shop_number:$shop_cart->number }}</tt>
-                        </div>
+                    <small>{{ $shop_cart->attr_name_values }}</small>
                     </div>
-                    <div class="me-edit">
-                        <button class="edit-min">-</button><input
-                                type="text"
-                                name="shop_number"
-                                value="{{ $shop_cart->shop_number <= $shop_cart->number?$shop_cart->shop_number:$shop_cart->number }}"
-                                shop_cart_id="{{ $shop_cart->id }}"
-                                data-max="{{ $shop_cart->number }}"
-                                readonly="readonly"
-                        /><button class="edit-add">+</button>
+                <div class="col-xs-2">
+                    <div class="RMBnum">
+                        <span class="price-decimal-point">{{ $shop_cart->price?:$shop_cart->goods_price }}</span>
+                        <br>x<tt>{{ $shop_cart->shop_number <= $shop_cart->number?$shop_cart->shop_number:$shop_cart->number }}</tt>
                     </div>
                 </div>
+                <div class="me-edit">
+                    <button class="edit-min">-</button><input
+                            type="text"
+                            name="shop_number"
+                            value="{{ $shop_cart->shop_number <= $shop_cart->number?$shop_cart->shop_number:$shop_cart->number }}"
+                            shop_cart_id="{{ $shop_cart->id }}"
+                            data-max="{{ $shop_cart->number }}"
+                            readonly="readonly"
+                    /><button class="edit-add">+</button>
+                </div>
+            </div>
         @endforeach
     </div>
     <div class="weshop-center-block" style="display:{{ $shop_carts->toArray()?'none':'block' }}">
@@ -75,10 +76,12 @@
     <div calss="container" id="bill">
             <div class="row ">
                 <div class="col-xs-4">
-                    <label for='all' class="me-checkbox-icon">
-                        <input id="all" type="checkbox" name="selectAll" />
-                        <i class="weui-icon-success"></i>
-                    </label><b>全选</b>
+                    <label for='all' class="me-checkbox-icon select-all">
+                        <span class="garden"></span>
+                        <input id="all" type="checkbox" name="selectAll"  />
+                        <i class="weui-icon-success select-all-i"></i>
+                        <strong>全选</strong>
+                    </label>
                 </div>
                 <div class="col-xs-4">
                     <span>合计: <tt>0.00</tt></span>
