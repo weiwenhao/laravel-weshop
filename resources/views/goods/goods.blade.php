@@ -195,7 +195,7 @@
                     loading.hide(function() {
                         weui.topTips('请求超时', 3000);
                     });
-                }, 8000);
+                }, 10000);
                 //得到购买数量
                 let shop_number = $('[name=shop_number]').val();
                 //得到商品属性
@@ -212,6 +212,7 @@
                         'goods_attribute_ids' : goods_attribute_ids,
                     },
                     success: function(msg){
+                        loading.hide();
                         location.href='{{ url('/orders/confirm') }}';
                     },
                     error: function (error) { //200以外的状态码走这里

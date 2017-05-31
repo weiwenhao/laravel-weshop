@@ -27,7 +27,7 @@
                 <div id="buttons">
                 </div>
             </div>
-            <div class="box-body">
+            <div class="box-body table-responsive">
                 <table id="datatables" class="table table-bordered table-striped ">
                     <thead>
                         <tr>
