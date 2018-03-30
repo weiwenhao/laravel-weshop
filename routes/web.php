@@ -1,18 +1,16 @@
 <?php
 
-Route::get('/test', function (){
+//Route::get('/test', function (){
+//
+//});
 
-});
 
 
-
-Route::get('/', function (){
-    return redirect('/index');
-});
 
 Route::post('orders/notify', 'OrderController@notify'); //支付结果通知
 Route::group(['middleware'=>['wechat.oauth:snsapi_userinfo'] ], function () {
     //商品区
+    Route::get('/', 'GoodsController@index')->middleware(['exit_url_in:goods_info', 'exit_url_in:orders', 'exit_url_in:goods']);
     Route::get('index', 'GoodsController@index')->middleware(['exit_url_in:goods_info', 'exit_url_in:orders', 'exit_url_in:goods']);
     Route::get('goods', 'GoodsController@list')->middleware(['exit_url_in:goods_info']);
     Route::get('goods/categories', 'GoodsController@getCategories')->middleware(['exit_url_in:goods']);//商品分类
@@ -98,9 +96,7 @@ Route::group(['prefix' => 'admin', 'namespace'=>'Admin'], function () {
 
 
 Route::group(['prefix' => 'admin', 'namespace'=>'Admin', 'middleware'=>['auth.admin','check.admin', /*'wechat.oauth:snsapi_userinfo'*/] ], function () {
-    Route::get('/',function (){
-        return redirect('/admin/compute');
-    });
+    Route::get('/', 'ComputeController@compute');
     /******************************控制台*********************************/
     //主页
 //    Route::get('/index', 'IndexController@index');

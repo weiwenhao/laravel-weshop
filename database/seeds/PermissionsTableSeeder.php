@@ -326,13 +326,13 @@ class PermissionsTableSeeder extends Seeder
             'sort' => 50,
         ]);
         //二级
-        Permission::create([
-            'name' => 'index',
-            'display_name' => '主页',
-            'url' => 'index',
-            'parent_id' => $dash->id,
-            'description' => '后台首页,主控制台',
-        ]);
+//        Permission::create([
+//            'name' => 'index',
+//            'display_name' => '主页',
+//            'url' => 'index',
+//            'parent_id' => $dash->id,
+//            'description' => '后台首页,主控制台',
+//        ]);
 
         //二级
         Permission::create([

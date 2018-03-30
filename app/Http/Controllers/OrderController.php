@@ -50,18 +50,6 @@ class OrderController extends Controller
      */
     public function store(Request $request, ShopCart $shopCart, Order $order, Application $wechat)
     {
-      /* return response()->json([
-            'order_id' => 1,
-            'config' => json_decode('{
-           "appId":"wx2421b1c4370ec43b",
-           "timeStamp":"1395712654",
-           "nonceStr":"e61463f8efa94090b1f366cccfbbb444",
-           "package":"prepay_id=u802345jgfjsdfgsdg888",
-           "signType":"MD5",
-           "paySign":"70EA570631E4BB79628FBCA90534C63FF7FADD89"
-        }'),
-        ]);*/
-
         //confirm中的商品检测-> 如果confirm中存在shop_cart_id,其实就是根据shop_cart_id再进行一次购物车检测
         $order_goods = json_decode(session('order_goods'));
         if(count($order_goods) == 0){ //如果session总不存在商品
@@ -275,6 +263,7 @@ class OrderController extends Controller
      * 接收微信支付的结果, 并做相应的处理
      * @param Application $wechat
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \EasyWeChat\Core\Exceptions\FaultException
      */
     public function notify(Application $wechat)
     {
@@ -294,9 +283,8 @@ class OrderController extends Controller
                //将支付时间更新为当前时间
                $order->paid_at = date('Y-m-d H:i:s'); // 更新支付时间为当前时间
                $order->save(); // 保存订单
-           } /*else { // 用户支付失败
-               $order->status = 'paid_fail';
-           }*/
+           }
+
            return true; // 返回处理完成
        });
        return $response;

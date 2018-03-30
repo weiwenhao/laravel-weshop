@@ -17,8 +17,8 @@ return [
 
     //活动封片的尺寸 250 x 160
     'active_img_path'   => 'uploads/images/active/',
-    'active_img_width' => 380,
-    'active_img_height' => 235,
+    'active_img_width' => 720,
+    'active_img_height' => 445,
     'active_img_count' => 3, //前台活动封面显示个数
 
     'goods_list_count' => 8, //商品列表页 每页显示的商品数量
