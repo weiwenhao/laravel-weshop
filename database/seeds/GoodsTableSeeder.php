@@ -12,7 +12,7 @@ class GoodsTableSeeder extends Seeder
      */
     public function run()
     {
-        /*$ceshi1 = Goods::create([
+        $ceshi1 = Goods::create([
             'name' => '红烧鸡排',
             'price' => 99.99,
             'image' => '/uploads/images/goods/20170425/wKFXxfMQ6YroOwL1.jpg',
@@ -31,6 +31,6 @@ class GoodsTableSeeder extends Seeder
             'mid_image' => '/uploads/images/goods/20170425/mid_h72IjfZ1BahqZBn8.jpg',
             'big_image' => '/uploads/images/goods/20170425/big_h72IjfZ1BahqZBn8.jpg',
             'category_id' => 1,
-        ]);*/
+        ]);
     }
 }

@@ -17,7 +17,7 @@ class CreateAddrsTable extends Migration
             $table->increments('id');
             $table->string('name', 5)->comment('真实姓名');
             $table->char('phone', 11)->comment('手机号码');
-//            $table->char('garden_name', 3)->comment('园地名称');
+           $table->char('garden_name', 3)->comment('园地名称');
             $table->char('floor_name', 3)->comment('宿舍楼名称');
             $table->char('number', 3)->comment('门牌号');
             $table->unsignedInteger('user_id')->index()->comment('用户id');

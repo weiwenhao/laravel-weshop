@@ -24,7 +24,7 @@ class PostsTableSeeder extends Seeder
             'name' => '其他',
             'sort' => 999,
         ]);
-        /*factory(\App\Models\Post::class, 50)->create([
+        factory(\App\Models\Post::class, 50)->create([
             'post_category_id' => mt_rand(1, 4),
 
         ])->each(function ($item) use ($faker) {
@@ -40,6 +40,6 @@ class PostsTableSeeder extends Seeder
                 'sm_image' => 'http://iph.href.lu/80x80',
                 'post_id' => $item->id
             ]);
-        });*/
+        });
     }
 }

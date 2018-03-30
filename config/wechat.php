@@ -85,7 +85,7 @@ return [
          "province" =>"广东",
          "city" =>"惠州",
          "country" =>"中国",
-         "headimgurl" => "http://wx.qlogo.cn/mmopen/C2rEUskXQiblFYMUl9O0G05Q6pKibg7V1WpHX6CIQaic824apriabJw4r6EWxziaSt5BATrlbx1GVzwW2qjUCqtYpDvIJLjKgP1ug/0",
+         "headimgurl" => "https://laravel-china.org/users/10960/edit_avatar",
      ],
     /*'mock_user' => [
         "openid" =>"ojRsVvyIdzMpnpSdqZbEzp744Irc",

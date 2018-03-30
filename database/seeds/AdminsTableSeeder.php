@@ -13,9 +13,9 @@ class AdminsTableSeeder extends Seeder
     {
         //
         $weiwenhao = \App\Models\Admin::create([
-            'name' => 'weiwenhao',
-            'email' => '1101140857@qq.com',
-            'password' => '123456',
+            'name' => 'admin',
+            'email' => 'admin@mail.com',
+            'password' => 'admin',
         ]);
         //分配角色
         $admin = \App\Models\Role::where('name','admin')->first();

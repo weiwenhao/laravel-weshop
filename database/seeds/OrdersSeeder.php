@@ -13,7 +13,7 @@ class OrdersSeeder extends Seeder
      */
     public function run()
     {
-        /*//填充一条地址
+        //填充一条地址
         $addr = \App\Models\Addr::create([
             'name' => '魏文豪',
             'phone' => '13168065609',
@@ -48,10 +48,13 @@ class OrdersSeeder extends Seeder
             'total_price' => 89,
         ]);
 
+
         //填充订单商品2条
         $ceshi1 = Goods::where('id',1)->first();
+
         $anzhuo = DB::table('goods_attributes')->where('attribute_value', '安卓')->first();
         $ios = DB::table('goods_attributes')->where('attribute_value', 'ios')->first();
+
         \App\Models\OrderGoods::create([
             'order_id' => $order1->id,
             'goods_id' => $ceshi1->id,
@@ -81,7 +84,7 @@ class OrdersSeeder extends Seeder
             'goods_id' => $ceshi2->id,
             'shop_number' => '2',
             'shop_price' => $ceshi2->price,
-        ]);*/
+        ]);
 
     }
 }

@@ -4,7 +4,7 @@
         <i class="weui-tabbar__icon"><i class="icon {{ request()->is('index*')?'icon-homefill active':'icon-home' }}"></i></i>
         <p class="weui-tabbar__label">首页</p>
     </a>
-    <a class="weui-tabbar__item" name="wait">
+    <a class="weui-tabbar__item" href="{{ url('posts') }}">
         <i class="weui-tabbar__icon"><i class="icon {{ request()->is('news*')?'icon-discoverfill active':'icon-discover' }}"></i></i>
         <p class="weui-tabbar__label">逛一逛</p>
     </a>

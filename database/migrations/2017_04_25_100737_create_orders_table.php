@@ -22,7 +22,7 @@ class CreateOrdersTable extends Migration
             //地址用户信息
             $table->string('name', 5)->comment('真实姓名');
             $table->char('phone', 11)->comment('手机号码');
-//            $table->char('garden_name', 3)->comment('园地名称');
+           $table->char('garden_name', 3)->comment('园地名称');
             $table->char('floor_name', 3)->index()->comment('宿舍楼名称');
             $table->char('number', 3)->comment('门牌号');
 //            $table->unsignedTinyInteger('is_pay')->default(0)->index()->comment('是否支付');

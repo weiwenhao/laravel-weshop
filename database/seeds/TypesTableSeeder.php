@@ -66,5 +66,25 @@ class TypesTableSeeder extends Seeder
             'option_values' => '700ml,900ml,1200ml',
             'type_id' => $yinpin->id,
         ]);
+
+          $ceshi1 = Goods::where('id',1)->first();
+        //goods_attribute表填充
+        $goods_attr1 = \Illuminate\Support\Facades\DB::table('goods_attributes')->insert([
+            'goods_id' => $ceshi1->id,
+            'attribute_id' => $changshang->id,
+            'attribute_value' => '小米'
+        ]);
+
+        \Illuminate\Support\Facades\DB::table('goods_attributes')->insert([
+            'goods_id' => $ceshi1->id,
+            'attribute_id' => $caozuo->id,
+            'attribute_value' => 'ios'
+        ]);
+
+        \Illuminate\Support\Facades\DB::table('goods_attributes')->insert([
+            'goods_id' => $ceshi1->id,
+            'attribute_id' => $caozuo->id,
+            'attribute_value' => '安卓'
+        ]);
     }
 }
