@@ -75,6 +75,11 @@ class GoodsController extends Controller
     public function getPriceAndNumber(Request $request)
     {
         $goods_id = $request->get('goods_id');
+
+        if (!$goods_id) {
+            return [];
+        }
+
         $number_price = Goods::select( 'goods.price as goods_price',
             'numbers.goods_attribute_ids', 'numbers.number', 'numbers.price')
             ->Join('numbers', 'goods.id', '=', 'numbers.goods_id')
