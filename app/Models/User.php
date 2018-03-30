@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'id', 'open_id', 'username', 'logo', 'sex'
     ];
 
     /**
@@ -24,6 +24,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'open_id'
     ];
+
+    public function postLikes()
+    {
+        return $this->belongsToMany(Post::class, 'post_likes', 'user_id', 'post_id');
+    }
 }

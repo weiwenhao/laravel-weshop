@@ -73,7 +73,7 @@
                             </div>
                         </div>
                         <div class="form-group {{ $errors->has('sort')?'has-error':'' }}">
-                            <label class="col-md-3 control-label" for="inputError">权重</label>
+                            <label class="col-md-3 control-label" for="inputError">权重(从小到大)</label>
                             <div class="col-md-6">
                                 <input type="text" name="sort" value="{{ old('sort',100) }}" class="form-control" id="inputError" placeholder="数值越小越靠前">
                                 @if($errors->has('sort'))
@@ -120,7 +120,7 @@
                             </div>
                         </div>
                         <div class="form-group {{ $errors->has('sort')?'has-error':'' }}">
-                            <label class="col-md-3 control-label" for="inputError">权重</label>
+                            <label class="col-md-3 control-label" for="inputError">权重(从小到大)</label>
                             <div class="col-md-6">
                                 <input type="text" name="sort" value="{{ old('sort',100) }}" class="form-control" id="inputError" placeholder="数值越小越靠前">
                                 @if($errors->has('sort'))
@@ -138,7 +138,7 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="level[2]"> {{--三级权限--}}
+                    <div v-if="level[2] || level[3]"> {{--三级权限--}}
                         <div class="form-group {{ $errors->has('display_name')?'has-error':'' }}">
                             <label class="col-md-3 control-label" for="inputError">权限名称</label>
                             <div class="col-md-6">
@@ -191,7 +191,7 @@
     var app = new Vue({
         el: '#app',
         data : {
-            level : [true,false,false]
+            level : [true,false,false, false]
         },
         created(){
 
@@ -199,7 +199,6 @@
 
         methods : {
             changeForm(){
-                 console.log(123);
                  var level = $('#select option:selected').attr('level')*1 + 1;
                  this.level[0] = false;
                  for (let i=0;i < this.level.length; i++){

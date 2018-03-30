@@ -64,7 +64,7 @@ class LoginController extends Controller
     public function logout(Request $request) //what???为什么 \Request 和 Illuminate\Http\Request; 不一样??
     {
 
-        $this->guard()->logout(); //调用退出登录的方法
+        \Auth::guard('admin')->logout(); //调用退出登录的方法
 
         $request->session()->flush(); //清空session
 

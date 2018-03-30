@@ -77,7 +77,7 @@
                                 </div>
                             </div>
                             <div class="form-group {{ $errors->has('sort')?'has-error':'' }}">
-                                <label class="col-md-3 control-label" for="inputError">权重</label>
+                                <label class="col-md-3 control-label" for="inputError">权重(从小到大)</label>
                                 <div class="col-md-6">
                                     <input type="text" name="sort" value="{{ old('sort', $perm->sort) }}" class="form-control" id="inputError" placeholder="数字越小,越靠前">
                                     @if($errors->has('sort'))
@@ -124,7 +124,7 @@
                                 </div>
                             </div>
                             <div class="form-group {{ $errors->has('sort')?'has-error':'' }}">
-                                <label class="col-md-3 control-label" for="inputError">权重</label>
+                                <label class="col-md-3 control-label" for="inputError">权重(从小到大)</label>
                                 <div class="col-md-6">
                                     <input type="text" name="sort" value="{{ old('sort', $perm->sort) }}" class="form-control" id="inputError" placeholder="数字越小越靠前">
                                     @if($errors->has('sort'))
@@ -142,7 +142,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div v-if="level[2]"> {{--三级权限,其基础是展示数据,因此其建立在list列表的基础上--}}
+                        <div v-if="level[2] || level[3]"> {{--三级权限,其基础是展示数据,因此其建立在list列表的基础上--}}
                             <div class="form-group {{ $errors->has('display_name')?'has-error':'' }}">
                                 <label class="col-md-3 control-label" for="inputError">权限名称</label>
                                 <div class="col-md-6">
@@ -195,7 +195,7 @@
         var app = new Vue({
             el: '#app',
             data : {
-                level : [true,false,false]
+                level : [true,false,false,false]
             },
             created(){
                 this.changeForm(); //实例渲染完毕

@@ -18,7 +18,7 @@ return [
      */
     'app_id'  => env('WECHAT_APPID', 'your-app-id'),         // AppID
     'secret'  => env('WECHAT_SECRET', 'your-app-secret'),     // AppSecret
-    'token'   => env('WECHAT_TOKEN', 'your-token'),          // Token
+//    'token'   => env('WECHAT_TOKEN', 'your-token'),          // Token
     'aes_key' => env('WECHAT_AES_KEY', ''),                    // EncodingAESKey
 
     /**
@@ -59,31 +59,43 @@ return [
     /*
      * 微信支付
      */
-    // 'payment' => [
-    //     'merchant_id'        => env('WECHAT_PAYMENT_MERCHANT_ID', 'your-mch-id'),
-    //     'key'                => env('WECHAT_PAYMENT_KEY', 'key-for-signature'),
-    //     'cert_path'          => env('WECHAT_PAYMENT_CERT_PATH', 'path/to/your/cert.pem'), // XXX: 绝对路径！！！！
-    //     'key_path'           => env('WECHAT_PAYMENT_KEY_PATH', 'path/to/your/key'),      // XXX: 绝对路径！！！！
-    //     // 'device_info'     => env('WECHAT_PAYMENT_DEVICE_INFO', ''),
-    //     // 'sub_app_id'      => env('WECHAT_PAYMENT_SUB_APP_ID', ''),
-    //     // 'sub_merchant_id' => env('WECHAT_PAYMENT_SUB_MERCHANT_ID', ''),
-    //     // ...
-    // ],
+     'payment' => [
+         'merchant_id'        => env('WECHAT_PAYMENT_MERCHANT_ID', 'your-mch-id'), //商户id
+         'key'                => env('WECHAT_PAYMENT_KEY', 'key-for-signature'),  //api接口安全
+         'cert_path'          => env('WECHAT_PAYMENT_CERT_PATH', 'path/to/your/cert.pem'), //证书pem格式 XXX: 绝对路径！！！！
+         'key_path'           => env('WECHAT_PAYMENT_KEY_PATH', 'path/to/your/key'),      //证书密钥pem格式 XXX: 绝对路径！！！！
+         'notify_url'         => env('APP_URL').'/orders/notify',       // 你也可以在下单时单独设置来想覆盖它
+         // 'device_info'     => env('WECHAT_PAYMENT_DEVICE_INFO', ''),
+         // 'sub_app_id'      => env('WECHAT_PAYMENT_SUB_APP_ID', ''),
+         // 'sub_merchant_id' => env('WECHAT_PAYMENT_SUB_MERCHANT_ID', ''),
+         // ...
+     ],
 
     /*
      * 开发模式下的免授权模拟授权用户资料
      *
      * 当 enable_mock 为 true 则会启用模拟微信授权，用于开发时使用，开发完成请删除或者改为 false 即可
      */
-    // 'enable_mock' => env('WECHAT_ENABLE_MOCK', true),
-    // 'mock_user' => [
-    //     "openid" =>"odh7zsgI75iT8FRh0fGlSojc9PWM",
-    //     // 以下字段为 scope 为 snsapi_userinfo 时需要
-    //     "nickname" => "overtrue",
-    //     "sex" =>"1",
-    //     "province" =>"北京",
-    //     "city" =>"北京",
-    //     "country" =>"中国",
-    //     "headimgurl" => "http://wx.qlogo.cn/mmopen/C2rEUskXQiblFYMUl9O0G05Q6pKibg7V1WpHX6CIQaic824apriabJw4r6EWxziaSt5BATrlbx1GVzwW2qjUCqtYpDvIJLjKgP1ug/0",
-    // ],
+     'enable_mock' => env('WECHAT_ENABLE_MOCK', env('APP_DEBUG')),
+     'mock_user' => [
+         "openid" =>"oFN5ow0SkBLS_jRRc6Frr95ahlm8",
+         // 以下字段为 scope 为 snsapi_userinfo 时需要
+         "nickname" => "wei~",
+         "sex" =>"1",
+         "province" =>"广东",
+         "city" =>"惠州",
+         "country" =>"中国",
+         "headimgurl" => "http://wx.qlogo.cn/mmopen/C2rEUskXQiblFYMUl9O0G05Q6pKibg7V1WpHX6CIQaic824apriabJw4r6EWxziaSt5BATrlbx1GVzwW2qjUCqtYpDvIJLjKgP1ug/0",
+     ],
+    /*'mock_user' => [
+        "openid" =>"ojRsVvyIdzMpnpSdqZbEzp744Irc",
+        // 以下字段为 scope 为 snsapi_userinfo 时需要
+        "nickname" => "Hannah",
+        "sex" =>"1",
+        "province" =>"广东",
+        "city" =>"惠州",
+        "country" =>"中国",
+        "headimgurl" => "https://avatars1.githubusercontent.com/u/2395166?v=3&s=40",
+    ],*/
+
 ];

@@ -6,9 +6,9 @@
 /storage/*.key
 /vendor
 /.idea
+.env
 Homestead.json
 Homestead.yaml
-.env
 _ide_helper.php
 _ide_helper_models.php
 .phpstorm.meta.php
