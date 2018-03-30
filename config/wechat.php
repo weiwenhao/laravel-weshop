@@ -78,14 +78,14 @@ return [
      */
      'enable_mock' => env('WECHAT_ENABLE_MOCK', env('APP_DEBUG')),
      'mock_user' => [
-         "openid" =>"oFN5ow0SkBLS_jRRc6Frr95ahlm8",
+         "openid" =>"ojRsVv5u3iizG1Qf7XyKKtajcDSA",
          // 以下字段为 scope 为 snsapi_userinfo 时需要
          "nickname" => "wei~",
          "sex" =>"1",
          "province" =>"广东",
          "city" =>"惠州",
          "country" =>"中国",
-         "headimgurl" => "https://laravel-china.org/users/10960/edit_avatar",
+         "headimgurl" => "http://thirdwx.qlogo.cn/mmopen/vi_32/HnqXlFYA7ic5NedicSdGfQly8czwrvvJ1QWibtPYfjbQkYF9ibe7GhuibVyQ6GBZ7YdGA4KrUkjViakd4bT12ZFv8Y3w/132",
      ],
     /*'mock_user' => [
         "openid" =>"ojRsVvyIdzMpnpSdqZbEzp744Irc",

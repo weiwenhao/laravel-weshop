@@ -18,5 +18,5 @@
 
 ### .env配置
 
-6.  `WECHAT_ENABLE_MOCK=true` 表示是否开启模拟登陆
+6.  `WECHAT_ENABLE_MOCK=true` 表示是否开启模拟登陆,若没有设置WECHAT_ENABLE_MOCK 则会读取`APP_DEBUG`的值来判断是否开启模拟登陆
 7. `WECHAT_APPID` ,`WECHAT_SECRET` 为公众号appid和secret

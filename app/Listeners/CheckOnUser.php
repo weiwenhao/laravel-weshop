@@ -31,7 +31,7 @@ class CheckOnUser
 //        dd($event->user->original['sex']);
         /*$event->user; // 同 session('wechat.oauth_user') 一样
         $event->isNewSession*/ // 是不是新的会话（第一次创建 session 时为 true）
-        if(env('APP_DEBUG')){
+        if(env('WECHAT_ENABLE_MOCK', env('APP_DEBUG'))) {
                 //第一次进入的时候进行查找判断
                 $user = User::where('open_id', $event->user->id)->first();
                 if(!$user){
