@@ -4,9 +4,10 @@
 
 > 后台模板adminlet
 
-### demo
+### Demo
 
 前台: [http://123.207.65.111/](http://123.207.65.111/)
+
 后台: [http://123.207.65.111/admin](http://123.207.65.111/admin)   账号 admin@admin.com 密码 admin
 
 ### 安装步骤
