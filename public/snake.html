@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>贪吃蛇</title>
+    <style>
+        body {
+            margin: 0px;
+        }
+    </style>
+    <script>
+        //绘制地图
+        function Map() {
+
+            var w = 800;
+            var h = 400;
+            //创建绘制地图的方法
+            this.showmap = function () {
+                //创建div节点
+                var ditu = document.createElement('div');
+                //为节点设置宽和高，及背景图片
+                ditu.style.width = w+'px';
+                ditu.style.height = h+'px';
+                ditu.style.backgroundColor = 'pink';
+                ditu.style.backgroundImage = 'url(./images/bg.jpg)';
+                //把div节点追加进body
+                document.body.appendChild(ditu);
+            }
+
+        }
+        //绘制food食物
+        function Food() {
+            //定义私有变量
+            var len = 20;//食物的边长为20
+            this.fooddiv = null;//存储食物div节点
+            //创建两个属性,用来存储食物的权重,以便后面的判断
+            this.foodX = 0;
+            this.foodY = 0;
+            //定义绘制食物方法
+            this.showfood = function () {
+                //如果没有创建食物div则开始创建,目的是从始至终只有一个食物div,而不是每次调用showfood方法就创建一个div
+                if(this.fooddiv === null){
+                    this.fooddiv = document.createElement('div');
+                    this.fooddiv.style.width = len+'px';
+                    this.fooddiv.style.height = len+'px';
+                    this.fooddiv.style.backgroundColor = 'green';
+                    this.fooddiv.style.position = 'absolute';//为shiwu节点添加绝对定位
+                    document.body.appendChild(this.fooddiv);//将节点追加进body
+                }
+                //每次调用绘制食物方法时都随机定义一个位置
+                this.foodX = Math.floor(Math.random()*40);
+                this.foodY = Math.floor(Math.random()*20);
+                this.fooddiv.style.left = this.foodX*len+'px';//定义div的左边界
+                this.fooddiv.style.top = this.foodY*len+'px';//定义div的右边界
+            }
+        }
+        //绘制小蛇（包括小蛇的移动）
+        function Snake() {
+            /*分析
+            1.小蛇有4个div块组成,3个身体,一个头部,每个div都有一个x坐标和y坐标
+            2.小蛇的初始位置在屏幕的左上角,用数组的形式存储蛇体div,每个div应该包括的属性有
+                相对于屏幕的left和top坐标(权重),div背景颜色,已经一个判断是否存在div的属性.
+            3.让蛇头置于数组的尾部
+
+           */
+            var len = 20;//蛇体每个div的边长
+            var foodcount = 0; //记录当前迟到的食物数量
+            this.fangxiang = 'right';
+            var snakebody = [   [0,1,'green',null], //tip:js语言并没有字符串自动转义,改设置成number型的绝对不能设置为string
+                                [1,1,'green',null],
+                                [2,1,'green',null],
+                                [3,1,'orange',null]
+                            ];
+            //绘制小蛇方法
+            this.showsnake = function () {
+                //使用for循环创建div
+                for(var i=0;i<snakebody.length;i++){
+                    //创建div,为了不让每次调用该方法都重复创建div,因此将div信息保存在数组的第4个属性处,创建div的时候进行一个判断
+                    if(snakebody[i][3] == null){
+                        snakebody[i][3] = document.createElement('div');
+                        snakebody[i][3].style.backgroundColor = snakebody[i][2];
+                        snakebody[i][3].style.position = 'absolute';//设置绝对定位
+                        //设置长和宽
+                        snakebody[i][3].style.width = len+'px';
+                        snakebody[i][3].style.height = len+'px';
+                        document.body.appendChild(snakebody[i][3]);//追加节点
+                    }
+                    //定位必须写在if判断的外面,因为如果放在里面,根据判断一旦创建了div节点,则位置就固定了
+                    snakebody[i][3].style.left = snakebody[i][0]*len+'px';//设置位置
+                    snakebody[i][3].style.top = snakebody[i][1]*len+'px';
+                }
+            }
+
+            //让小蛇移动方法
+            /*分析
+            让小蛇的从尾部开始重新定位,即尾部最后一个的权重变成前一个的权重,以此类推
+            而头部的权重则先不设置,由移动方向决定,因此首先初始化一个移动方向,定义对象的成员,以便根据键盘指向进行更改
+            */
+            this.movesnake = function () {
+                //通过for循环对身体部分进行重新定位(tip:只对身体部分)
+                for(var n=0;n<snakebody.length-1;n++){
+                    snakebody[n][0] =  snakebody[n+1][0]; //让第一个元素的left坐标变成其下一个元素的横坐标(因为数组是倒着排的)
+                    snakebody[n][1] =  snakebody[n+1][1]; //top坐标
+                }
+                //对头部进行重新定位,首先判断移动方向
+                if(this.fangxiang == "right"){
+                    snakebody[snakebody.length-1][0] += 1; //头部的横坐标+1
+                }
+                if(this.fangxiang == "left"){
+                    snakebody[snakebody.length-1][0] -= 1; //头部的横坐标+1
+                }
+                if(this.fangxiang == "up"){
+                    snakebody[snakebody.length-1][1] -= 1; //头部的纵坐标-1
+                }
+                if(this.fangxiang == "down"){
+                    snakebody[snakebody.length-1][1] += 1; //头部的纵坐标+1
+                }
+                //从新绘制小蛇前,对小蛇是否吃到食物进行一个判断,判断条件是蛇头坐标 = 食物坐标
+                //从数组得到的蛇头的权重
+                var snakeX = snakebody[snakebody.length-1][0];
+                var snakeY = snakebody[snakebody.length-1][1];
+                //得到当前食物的权重
+                var foodX = food.foodX;
+                var foodY = food.foodY;
+                //进行触碰食物判断
+                if(snakeX == foodX && snakeY == foodY){//如果蛇头触碰到食物
+                    //在蛇节的尾部增加一节,坐标为最后一节的旧坐标(因为此时旧坐标已经向前拱了一位),即数组的第一个元素为蛇节尾部
+                    var newSnake = [snakebody[0][0],snakebody[0][1],'green',null];//创建一个蛇节
+                    snakebody.unshift(newSnake);//把蛇节追加到数组的头部 arrobj.unshift()把参数添加到arrayobject的头部,并将已经存在的值像后移动
+                    //记录迟到的食物数
+                    foodcount++;
+                    //从新刷新食物坐标
+                    food.showfood();
+                }
+                //如果头部坐标超过了地图坐标则终止游戏
+                if(snakeX > 39 ||snakeY > 19 || snakeX < 0 || snakeY < 0 ){
+                    //提示游戏结束
+                    alert('游戏结束,你的得分为'+foodcount);
+                    //清空计数器
+                    clearInterval(mytime);
+                    //终止后续程序执行
+                    return false;
+                }
+                //如果蛇头坐标和蛇身体坐标重合则则终止游戏
+                for(var k=0;k<snakebody.length-1;k++){//遍历蛇身体坐标和蛇头坐标进行配对
+                    if(snakebody[k][0] == snakeX && snakebody[k][1] == snakeY){
+                        //提示游戏结束
+                        alert('你自残了,游戏结束!你的得分为'+foodcount);
+                        //清空计时器
+                        clearInterval(mytime);
+                        //终止后续程序执行
+                        return false;
+                    }
+                }
+
+                //进行食物数量的判断以刷新计时器
+                var time = 400-( Math.floor(foodcount/1)*20 )//得到新的时间变量
+                clearInterval(mytime);//清空原来的计时器
+//                console.log(time);
+                mytime = setInterval('snake.movesnake()',time);//重新定义计时器
+                //从新定位后,调用绘制小蛇方法
+                this.showsnake();
+            }
+        }
+        //实现自动加载
+        window.onload = function () {
+            var map = new Map();
+            map.showmap();
+            food = new Food();
+            food.showfood();
+            snake = new Snake();//为了使用计时器,把snake变成一个全局变量,即去掉 var
+            snake.showsnake();
+            //给document设置键盘按下事件,通过键盘来设置小蛇的移动方向?为什么要再document设置鼠标按下事件,其他比如说小蛇可以吗?
+            document.onkeydown = function (evt) {
+                var num = evt.keyCode;
+                if(num == 72 && snake.fangxiang != 'right'){
+                    snake.fangxiang = 'left';
+                }
+                if(num == 75 && snake.fangxiang != 'down'){
+                    snake.fangxiang = 'up';
+                }
+                if(num == 76 && snake.fangxiang != 'left'){
+                    snake.fangxiang = 'right';
+                }
+                if(num == 74 && snake.fangxiang != 'up'){
+                    snake.fangxiang = 'down';
+                }
+            }
+            //使用计时器调用小蛇移动方法(tip:计时器的第一个属性必须是全局变量)
+            //这里想要让计时器随时变化必须要在snake.movesnake()方法中进行变动,因为只有该方法是改变的
+            mytime = setInterval('snake.movesnake()','200'); //这个函数第一次加载到内存中就固定了,而不是变动了
+        }
+    </script>
+</head>
+<body>
+
+</body>
+</html>
